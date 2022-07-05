@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:myspot/pages/mainPage/mainPage.dart';
 
 void main() {
   runApp(const MySpotApp());
@@ -17,11 +18,11 @@ class MySpotApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'MySpot',
-          initialRoute: "/LogIn",
+          initialRoute: "/Main",
           getPages: [
             // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
             //         () => Get.lazyPut<clientController>(() => clientController()))),
-            GetPage(name: "/LogIn", page: () => LogInPage(), transition: Transition.fadeIn),
+            GetPage(name: "/Main", page: () => mainPage(), transition: Transition.fadeIn),
           ],
         );
       }
