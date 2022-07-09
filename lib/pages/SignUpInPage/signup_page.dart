@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/utils/constants.dart';
@@ -34,6 +33,14 @@ class _SignUpPage extends State<SignUpPage> {
             nickname.value.text.isNotEmpty
         ? true
         : false;
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nicknameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -73,18 +80,31 @@ class _SignUpPage extends State<SignUpPage> {
                   label: '이메일 주소',
                   keyboardType: TextInputType.emailAddress,
                   hint: '이메일 주소 입력',
+                  // validator: (value) =>
+                  //       CheckValidate().validateEmail(_emailFocus, value, _emailCheck),
+                  // onSaved: (newValue) => _newUser.email = newValue,
+                  // To do: 중복확인
                 ),
                 InputForm(
                   controller: _passwordController,
                   label: '비밀번호',
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.visiblePassword,
                   hint: '영문 숫자 특수문자 포함 8자리 이상',
+                  obscureText: true,
+                  // validator: (value) =>
+                  //       CheckValidate().validatePassword(_passwordFocus, value),
+                  //   onSaved: (newValue) => _newUser.password = newValue,
                 ),
                 InputForm(
                   controller: _nicknameController,
                   label: '닉네임',
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   hint: '2자 이상',
+                  // focusNode: _nicknameFocus,
+                  //   validator: (value) =>
+                  //       CheckValidate().validateNickname(_nicknameFocus, value, _nicknameCheck),
+                  //   onSaved: (newValue) => _newUser.nickname = newValue,
+                  // To do: 중복확인
                 ),
               ],
             ),

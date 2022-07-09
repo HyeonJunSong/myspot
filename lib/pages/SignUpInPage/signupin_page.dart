@@ -46,7 +46,9 @@ class _SignUpInPageState extends State<SignUpInPage> {
                       ),
                       SizedBox(height: 7.h),
                       roundedButoon(
-                        () {},
+                        () {
+                          Get.toNamed('/signin');
+                        },
                         Container(),
                         '이메일로 로그인',
                         250.w,

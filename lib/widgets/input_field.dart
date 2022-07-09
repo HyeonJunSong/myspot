@@ -6,8 +6,8 @@ class InputForm extends StatefulWidget {
   const InputForm({
     Key? key,
     required this.controller,
-    required this.label,
     required this.keyboardType,
+    this.label,
     this.hint,
     this.helper,
     this.focusNode,
@@ -19,7 +19,7 @@ class InputForm extends StatefulWidget {
   }) : super(key: key);
 
   final TextEditingController? controller;
-  final String label;
+  final String? label;
   final TextInputType keyboardType;
   final String? hint;
   final String? helper;
@@ -38,13 +38,16 @@ class _InputFormState extends State<InputForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 25.h),
+      padding: widget.padding ?? EdgeInsets.only(bottom: 25.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.label,
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
-          SizedBox(height: 10.h),
+          (widget.label != null)
+              ? Text(widget.label!,
+                  style:
+                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500))
+              : Container(),
+          (widget.label != null) ? SizedBox(height: 10.h) : Container(),
           TextFormField(
             // autovalidateMode: AutovalidateMode.onUserInteraction,  //실시간 유효성 검사
             controller: widget.controller,
