@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:myspot/pages/SignUpInPage/signin_page.dart';
+import 'package:myspot/pages/SignUpInPage/signup_page.dart';
 import 'package:myspot/pages/SignUpInPage/signupin_page.dart';
 
 void main() {
@@ -26,6 +28,8 @@ class MySpotApp extends StatelessWidget {
                   name: "/Main",
                   page: () => const SignUpInPage(),
                   transition: Transition.fadeIn),
+              GetPage(name: '/signup', page: () => const SignUpPage()),
+              GetPage(name: '/signin', page: () => const SignInPage()),
             ],
             theme: ThemeData(
               fontFamily: 'Noto_Sans_KR',

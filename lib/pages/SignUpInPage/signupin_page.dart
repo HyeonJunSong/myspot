@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/route_manager.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/rounded_button.dart';
 
@@ -32,7 +33,7 @@ class _SignUpInPageState extends State<SignUpInPage> {
                   SizedBox(height: 80.h),
                   Column(
                     children: [
-                      buildRoundedButoon(
+                      roundedButoon(
                         () {},
                         Image.asset(
                           'assets/images/google.png',
@@ -44,7 +45,7 @@ class _SignUpInPageState extends State<SignUpInPage> {
                         colorPrimary,
                       ),
                       SizedBox(height: 7.h),
-                      buildRoundedButoon(
+                      roundedButoon(
                         () {},
                         Container(),
                         '이메일로 로그인',
@@ -58,10 +59,12 @@ class _SignUpInPageState extends State<SignUpInPage> {
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 20.h),
-                child: buildRoundedButoon(
-                  () {},
+                child: roundedButoon(
+                  () {
+                    Get.toNamed('/signup');
+                  },
                   Container(),
-                  '이메일로 로그인',
+                  '이메일로 회원가입',
                   250.w,
                   Colors.black,
                   Colors.white,

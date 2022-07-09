@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildRoundedButoon(
+Widget roundedButoon(
   Function()? onPressed,
   Widget icon,
   String label,
