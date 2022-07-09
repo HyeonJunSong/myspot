@@ -61,8 +61,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - images/circleButton_cross.png
-  - images/circleButton_dots.png
+  - assets/
+  - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -75,17 +75,21 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: Noto_Sans_KR
+      fonts:
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Black.otf
+          weight: 900
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Light.otf
+          weight: 300
+        - asset: assets/fonts/Noto_Sans_KR/NotoSansKR-Thin.otf
+          weight: 100
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
