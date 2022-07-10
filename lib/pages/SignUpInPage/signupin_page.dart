@@ -33,27 +33,24 @@ class _SignUpInPageState extends State<SignUpInPage> {
                   SizedBox(height: 80.h),
                   Column(
                     children: [
-                      roundedButoon(
-                        () {},
-                        Image.asset(
+                      RoundedButton(
+                        onPressed: () {},
+                        icon: Image.asset(
                           'assets/images/google.png',
                           width: 11.w,
                         ),
-                        'Google 계정으로 로그인',
-                        250.w,
-                        Colors.white,
-                        colorPrimary,
+                        label: 'Google 계정으로 로그인',
+                        width: 250.w,
                       ),
                       SizedBox(height: 7.h),
-                      roundedButoon(
-                        () {
+                      RoundedButton(
+                        onPressed: () {
                           Get.toNamed('/signin');
                         },
-                        Container(),
-                        '이메일로 로그인',
-                        250.w,
-                        Colors.black,
-                        colorInactive,
+                        label: '이메일로 로그인',
+                        width: 250.w,
+                        textColor: Colors.black,
+                        btnColor: colorInactive,
                       ),
                     ],
                   ),
@@ -61,15 +58,14 @@ class _SignUpInPageState extends State<SignUpInPage> {
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 20.h),
-                child: roundedButoon(
-                  () {
+                child: RoundedButton(
+                  onPressed: () {
                     Get.toNamed('/signup');
                   },
-                  Container(),
-                  '이메일로 회원가입',
-                  250.w,
-                  Colors.black,
-                  Colors.white,
+                  label: '이메일로 회원가입',
+                  width: 250.w,
+                  textColor: Colors.black,
+                  btnColor: Colors.white,
                 ),
               ),
             ],

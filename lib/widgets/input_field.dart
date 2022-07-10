@@ -15,6 +15,7 @@ class InputForm extends StatefulWidget {
     this.validator,
     this.onSaved,
     this.suffix,
+    this.suffixIcon,
     this.padding,
   }) : super(key: key);
 
@@ -28,6 +29,7 @@ class InputForm extends StatefulWidget {
   final String? Function(String?)? validator;
   final Function(String?)? onSaved;
   final Widget? suffix;
+  final Widget? suffixIcon;
   final EdgeInsetsGeometry? padding;
 
   @override
@@ -53,19 +55,20 @@ class _InputFormState extends State<InputForm> {
             controller: widget.controller,
             obscureText: widget.obscureText, //비밀번호 안보이게
             keyboardType: widget.keyboardType,
-            decoration:
-                _textFormDecoration(widget.hint, widget.helper, widget.suffix),
+            decoration: _textFormDecoration(
+                widget.hint, widget.suffix, widget.suffixIcon),
             focusNode: widget.focusNode,
             validator: widget.validator,
             onSaved: widget.onSaved,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: TextStyle(fontSize: 14.sp),
+            cursorColor: colorPrimary,
           ),
         ],
       ),
     );
   }
 
-  InputDecoration _textFormDecoration(hintText, helperText, suffix) {
+  InputDecoration _textFormDecoration(hintText, suffix, suffxIcon) {
     return InputDecoration(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -73,10 +76,11 @@ class _InputFormState extends State<InputForm> {
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(width: 2.w, color: colorPrimary)),
-      contentPadding: EdgeInsets.all(10.w),
+      contentPadding: EdgeInsets.all(8.w),
       hintText: hintText,
-      helperText: helperText,
+      errorStyle: TextStyle(fontSize: 11.sp),
       suffix: suffix,
+      suffixIcon: suffxIcon,
     );
   }
 }

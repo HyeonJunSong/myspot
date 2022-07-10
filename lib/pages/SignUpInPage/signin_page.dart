@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:myspot/models/user.dart';
+import 'package:myspot/pages/SignUpInPage/validate.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
@@ -13,16 +15,35 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+
+  bool _passwordObscure = true;
+  final _newUser = User();
+  // late ApiResponse _apiResponse;
+
   void _submit() {
-    // if (_formKey.currentState!.validate()) {
-    //   _formKey.currentState!.save();
-    //   _newUser.printProperties();
-    //   //다음 페이지
-    //   Get.toNamed('/signup2', id: 1);
-    //}
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      _newUser.printProperties();
+      Get.snackbar('로그인', '로그인 성공 ~ 🥳');
+      //백으로 데이터 전송!
+      // _apiResponse =
+      //     await authenticateUser(_newUser.email!, _newUser.password!);
+      // if (_apiResponse.ApiError == null) {
+      //   Get.snackbar('로그인', '로그인 성공 ~ 🥳');
+      //   // 유저 데이터 불러와서,,,,
+      //   // 홈으로,,,,
+      //   //_saveAndRedirectToHome();
+      // } else {
+      //   Get.snackbar('오류', (_apiResponse.ApiError as ApiError).error);
+      // }
+    }
   }
 
   bool _isNotFormEmpty(
@@ -66,89 +87,114 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(36.w, 80.h, 36.h, 0.h),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            InputForm(
-              padding: EdgeInsets.only(bottom: 15.h),
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              hint: '이메일 주소 입력',
-              // validator: (value) =>
-              //       CheckValidate().validateEmail(_emailFocus, value, _emailCheck),
-              // onSaved: (newValue) => _newUser.email = newValue,
-              // To do: 중복확인
-            ),
-            InputForm(
-              padding: EdgeInsets.only(bottom: 15.h),
-              controller: _passwordController,
-              keyboardType: TextInputType.visiblePassword,
-              hint: '비밀번호 입력',
-              obscureText: true,
-              // validator: (value) =>
-              //       CheckValidate().validatePassword(_passwordFocus, value),
-              //   onSaved: (newValue) => _newUser.password = newValue,
-            ),
-            roundedButoon(
-              _isNotFormEmpty(_emailController, _passwordController)
-                  ? () => _submit()
-                  : null,
-              Container(),
-              '로그인',
-              275.w,
-              Colors.white,
-              colorPrimary,
-            ),
-            SizedBox(height: 18.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '이메일 회원가입',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '|',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.black45,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '이메일 찾기',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '|',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.black45,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '비밀번호 찾기',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              InputForm(
+                padding: EdgeInsets.only(bottom: 15.h),
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                hint: '이메일 주소 입력',
+                focusNode: _emailFocus,
+                validator: (value) =>
+                    CheckValidate().validateEmail(_emailFocus, value, true),
+                onSaved: (newValue) => _newUser.email = newValue,
               ),
-            )
-          ],
+              InputForm(
+                padding: EdgeInsets.only(bottom: 15.h),
+                controller: _passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                hint: '비밀번호 입력',
+                focusNode: _passwordFocus,
+                obscureText: _passwordObscure,
+                validator: (value) =>
+                    CheckValidate().validatePassword(_passwordFocus, value),
+                onSaved: (newValue) => _newUser.password = newValue,
+                suffixIcon: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: Icon(
+                    _passwordObscure ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.black54,
+                  ),
+                  onPressed: _passwordController.value.text.isNotEmpty
+                      ? () {
+                          setState(() {
+                            _passwordObscure = !_passwordObscure;
+                          });
+                        }
+                      : null,
+                ),
+              ),
+              RoundedButton(
+                onPressed:
+                    _isNotFormEmpty(_emailController, _passwordController)
+                        ? () => _submit()
+                        : null,
+                label: '로그인',
+                width: 275.w,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.toNamed('/signup'),
+                      child: Text(
+                        '이메일 회원가입',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '|',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        '이메일 찾기',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '|',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        '비밀번호 찾기',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
