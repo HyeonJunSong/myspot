@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'package:myspot/pages/SignUpInPage/signin_page.dart';
 import 'package:myspot/pages/SignUpInPage/signup_page.dart';
 import 'package:myspot/pages/SignUpInPage/signupin_page.dart';
+import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/utils/constants.dart';
 
 void main() {
@@ -21,7 +23,7 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/Main",
+            initialRoute: "/MainPage",
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
@@ -32,6 +34,10 @@ class MySpotApp extends StatelessWidget {
               GetPage(name: '/signupin', page: () => const SignUpInPage()),
               GetPage(name: '/signup', page: () => const SignUpPage()),
               GetPage(name: '/signin', page: () => const SignInPage()),
+              GetPage(
+                  name: "/MainPage",
+                  page: () => const MainPage(),
+                  transition: Transition.fadeIn),
             ],
             theme: ThemeData(
               fontFamily: 'Noto_Sans_KR',
