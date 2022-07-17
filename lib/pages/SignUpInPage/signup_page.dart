@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/pages/SignUpInPage/validate.dart';
+import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
 
@@ -59,28 +60,7 @@ class _SignUpPage extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1.sp,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 12.h,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: Text(
-          '회원가입',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
+      appBar: buildAppbar('회원가입'),
       body: Padding(
         padding: EdgeInsets.fromLTRB(36.w, 56.h, 36.h, 0.h),
         child: Form(
