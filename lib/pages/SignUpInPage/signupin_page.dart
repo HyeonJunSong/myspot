@@ -45,7 +45,7 @@ class _SignUpInPageState extends State<SignUpInPage> {
                       SizedBox(height: 7.h),
                       RoundedButton(
                         onPressed: () {
-                          Get.toNamed('/signin');
+                          Get.toNamed('/SignIn');
                         },
                         label: '이메일로 로그인',
                         width: 250.w,
@@ -60,7 +60,7 @@ class _SignUpInPageState extends State<SignUpInPage> {
                 padding: EdgeInsets.only(bottom: 20.h),
                 child: RoundedButton(
                   onPressed: () {
-                    Get.toNamed('/signup');
+                    Get.toNamed('/SignUp');
                   },
                   label: '이메일로 회원가입',
                   width: 250.w,

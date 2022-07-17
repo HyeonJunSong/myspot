@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 User userFromJson(String str) => User.fromJson(json.decode(str));
 String userToJson(User data) => json.encode(data.toJson());
 enum Gender { male, female, none }
@@ -33,8 +35,8 @@ class User {
 
   // print properties for debug
   void printProperties() {
-    print("email: $email\n");
-    print("password: $password\n");
-    print("nickname: $nickname\n");
+    debugPrint("email: $email\n");
+    debugPrint("password: $password\n");
+    debugPrint("nickname: $nickname\n");
   }
 }

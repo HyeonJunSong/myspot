@@ -6,7 +6,6 @@ import 'package:myspot/pages/SignUpInPage/signin_page.dart';
 import 'package:myspot/pages/SignUpInPage/signup_page.dart';
 import 'package:myspot/pages/SignUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
-import 'package:myspot/utils/constants.dart';
 
 void main() {
   runApp(const MySpotApp());
@@ -23,21 +22,17 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/MainPage",
+            initialRoute: "/Main",
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
               GetPage(
                   name: "/Main",
-                  page: () => const SignUpInPage(),
-                  transition: Transition.fadeIn),
-              GetPage(name: '/signupin', page: () => const SignUpInPage()),
-              GetPage(name: '/signup', page: () => const SignUpPage()),
-              GetPage(name: '/signin', page: () => const SignInPage()),
-              GetPage(
-                  name: "/MainPage",
                   page: () => const MainPage(),
                   transition: Transition.fadeIn),
+              GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
+              GetPage(name: '/SignUp', page: () => const SignUpPage()),
+              GetPage(name: '/SignIn', page: () => const SignInPage()),
             ],
             theme: ThemeData(
               fontFamily: 'Noto_Sans_KR',

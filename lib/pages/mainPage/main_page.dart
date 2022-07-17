@@ -38,7 +38,7 @@ class MainPage extends StatelessWidget {
               ),
 
               //위치설정, 위치, 검색
-              Container(
+              SizedBox(
                 width: 317.w,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,12 +49,12 @@ class MainPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF737373),
+                          color: const Color(0xFF737373),
                           decoration: TextDecoration.underline,
                         ),
                       ),
                       onTap: () {
-                        Get.dialog(DialogLocationSetting());
+                        Get.dialog(const DialogLocationSetting());
                       },
                     ),
                     Text(
@@ -71,24 +71,31 @@ class MainPage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(height: 12.h,),
+                    SizedBox(
+                      height: 12.h,
+                    ),
                     Container(
                       padding: EdgeInsets.fromLTRB(23.w, 17.h, 17.w, 17.h),
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: colorInactive,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
+                          border: Border.all(
+                            color: colorInactive,
+                          ),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(20.r))),
                       child: Row(
                         children: [
-                          Text("분위기 좋은 식당", style: TextStyle(
-                            color: colorInactive,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500
-                          ),),
-                          Spacer(),
-                          Image.asset("assets/images/search.png",width: 16.w,),
+                          Text(
+                            "분위기 좋은 식당",
+                            style: TextStyle(
+                                color: colorInactive,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          const Spacer(),
+                          Image.asset(
+                            "assets/images/search.png",
+                            width: 16.w,
+                          ),
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myspot/models/user.dart';
 
@@ -69,11 +70,11 @@ Future<ApiResponse> getUserDetails(String email) async {
         apiResponse.data = User.fromJson(json.decode(response.body));
         break;
       case 401:
-        print((apiResponse.apiError as ApiError).error);
+        debugPrint((apiResponse.apiError as ApiError).error);
         apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
         break;
       default:
-        print((apiResponse.apiError as ApiError).error);
+        debugPrint((apiResponse.apiError as ApiError).error);
         apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
         break;
     }

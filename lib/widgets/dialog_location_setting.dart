@@ -11,10 +11,10 @@ class DialogLocationSetting extends StatelessWidget {
     return Dialog(
       backgroundColor: colorBackground,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
       ),
-      insetPadding: EdgeInsets.all(0),
-      child: Container(
+      insetPadding: EdgeInsets.all(0.w),
+      child: SizedBox(
         width: 354.w,
         height: 221.h,
         child: Column(
@@ -41,11 +41,11 @@ class DialogLocationSetting extends StatelessWidget {
               )
             ),
             Divider(
-              height: 0,
+              height: 0.h,
              thickness: 2,
               color: colorInactive,
             ),
-            Container(
+            SizedBox(
               height: 165.h,
               width: 354.w,
               child: Column(

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/pages/SignUpInPage/validate.dart';
-import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
 
@@ -142,7 +141,7 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      onPressed: () => Get.toNamed('/signup'),
+                      onPressed: () => Get.toNamed('/SignUp'),
                       child: Text(
                         '이메일 회원가입',
                         style: TextStyle(

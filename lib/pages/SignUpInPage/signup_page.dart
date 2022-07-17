@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/pages/SignUpInPage/validate.dart';
-import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
 
@@ -36,7 +35,7 @@ class _SignUpPage extends State<SignUpPage> {
       _formKey.currentState!.save();
       _newUser.printProperties();
       //다음 페이지
-      Get.toNamed('/signupin');
+      Get.toNamed('/SignUpIn');
     }
   }
 
