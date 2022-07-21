@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import 'package:myspot/pages/SignUpInPage/signin_page.dart';
-import 'package:myspot/pages/SignUpInPage/signup_page.dart';
-import 'package:myspot/pages/SignUpInPage/signupin_page.dart';
+import 'package:myspot/pages/signUpInPage/signin_page.dart';
+import 'package:myspot/pages/signUpInPage/signup_page.dart';
+import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
 
 void main() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
-import 'package:myspot/pages/SignUpInPage/validate.dart';
+import 'package:myspot/pages/signUpInPage/validate.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
