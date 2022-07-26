@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
+import 'package:myspot/services/api.dart';
 import 'package:myspot/services/validator.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
@@ -25,24 +26,21 @@ class _SignInPageState extends State<SignInPage> {
 
   bool _passwordObscure = true;
   final _newUser = User();
-  // late ApiResponse _apiResponse;
+  late ApiResponse _apiResponse;
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      _newUser.printProperties();
+  Future<void> _submit() async {
+    if (_formKey.currentState!.validate()) {}
+    _formKey.currentState!.save();
+    _newUser.printProperties();
+    Get.snackbar('로그인', '로그인 성공 ~ 🥳');
+    //백으로 데이터 전송!
+    _apiResponse = await signIn(_newUser.email!, _newUser.password!);
+    if (_apiResponse.apiError == null) {
       Get.snackbar('로그인', '로그인 성공 ~ 🥳');
-      //백으로 데이터 전송!
-      // _apiResponse =
-      //     await authenticateUser(_newUser.email!, _newUser.password!);
-      // if (_apiResponse.ApiError == null) {
-      //   Get.snackbar('로그인', '로그인 성공 ~ 🥳');
-      //   // 유저 데이터 불러와서,,,,
-      //   // 홈으로,,,,
-      //   //_saveAndRedirectToHome();
-      // } else {
-      //   Get.snackbar('오류', (_apiResponse.ApiError as ApiError).error);
-      // }
+      // 유저 데이터 불러와서,,,,
+      // 홈으로,,,,
+    } else {
+      Get.snackbar('오류', (_apiResponse.apiError as ApiError).error);
     }
   }
 

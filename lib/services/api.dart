@@ -30,15 +30,50 @@ class ApiError {
   }
 }
 
-String _baseUrl = "http://localhost:8000/";
-Future<ApiResponse> authenticateUser(String email, String password) async {
+String _baseUrl = "http://34.249.122.42:8080/";
+Future<ApiResponse> signUp(
+    String email, String password, String nickname, String social) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
     final response = await http.post(
-      Uri.parse('${_baseUrl}user/login/process'),
+      Uri.parse('${_baseUrl}user/signup'),
       body: {
-        'email': email,
+        'user_email': email,
+        'password': password,
+        'user_name': nickname,
+        'user_social': social,
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = User.fromJson(json.decode(response.body));
+        break;
+      case 401:
+        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        break;
+      default:
+        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        break;
+    }
+  } on SocketException {
+    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+  }
+  return apiResponse;
+}
+
+Future<ApiResponse> signIn(String email, String password) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    final response = await http.post(
+      Uri.parse('${_baseUrl}user/login'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'userEmail': email,
         'password': password,
       },
     );
@@ -119,7 +154,7 @@ Future<ApiResponse> checkNickname(String nickname) async {
     final response = await http.post(
       Uri.parse('${_baseUrl}user/join/nickname-check'),
       body: {
-        'nickname': nickname,
+        'user_name': nickname,
       },
     );
 
