@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:myspot/models/locations.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myspot/widgets/circle_button.dart';
@@ -54,6 +55,7 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
+                        getCityList();
                         Get.dialog(const DialogLocationSetting());
                       },
                     ),
