@@ -6,26 +6,38 @@ import 'package:myspot/services/api.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
 import 'package:myspot/widgets/drop_down_set_location_city.dart';
 
-class LocationList {
-  List<String> name;
-  List<String> code;
+class cityLists {
+//  Map<String, Map<String, List<String>>> cityList;
+  Map<String, Map<String, List<String>>> cityList = Map<String, Map<String, List<String>>>();
 
-  LocationList(this.name, this.code);
+  cityLists(this.cityList);
 
-  LocationList.fromJson(Map<String, dynamic> json)
-      : name = json['locationName'].cast<String>(),
-        code = json['locationCode'].cast<String>();
+  cityLists.fromJson(String json){
+    Map<String, dynamic> jsonCity = Map<String, dynamic>.from(jsonDecode(json));
 
-  Map<String, dynamic> toJson() =>
-      {
-        'locationName': name,
-        'locationCode': code,
-      };
+    cityList["선택없음"] = Map<String, List<String>>();
+    cityList["선택없음"]!["선택없음"] = ["선택없음"];
+    jsonCity.forEach((keyCity, valueCity) {
+      Map<String, dynamic> jsonGu = Map<String, dynamic>.from(valueCity);
+      cityList[keyCity] = Map<String, List<String>>();
+      cityList[keyCity]!["선택없음"] = ["선택없음"];
+      jsonGu.forEach((keyGu, valueGu) {
+        cityList[keyCity]![keyGu] = ["선택없음"] + List<String>.from(valueGu);
+      });
+    });
+  }
+  // : cityList = Map<String, Map<String, List<String>>>.from(jsonDecode(json));
+
+  // Map<String, dynamic> toJson() =>
+  //     {
+  //       'locationName': name,
+  //       'locationCode': code,
+  //     };
 }
 
 String _baseUrl = "http://34.249.122.42:8080/";
 
-Future<LocationList> GETLocationJSON(String query) async {
+Future<cityLists> GETLocationJSON(String query) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
@@ -35,8 +47,7 @@ Future<LocationList> GETLocationJSON(String query) async {
 
     switch (response.statusCode) {
       case 200:
-        return LocationList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-        break;
+       return cityLists.fromJson(utf8.decode(response.bodyBytes));
       case 401:
         apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
         break;
@@ -47,33 +58,11 @@ Future<LocationList> GETLocationJSON(String query) async {
   } on SocketException {
     apiResponse.apiError = ApiError(error: "Server error. Please retry");
   }
-  return LocationList([""], [""]);
+  return cityLists(Map<String, Map<String, List<String>>>());
 }
 
-LocationList locations_city = LocationList(["선택없음"], ["00"]);
-LocationList locations_gu = LocationList(["선택없음"], ["00"]);
-LocationList locations_dong = LocationList(["선택없음"], ["00"]);
-
-void updateCity() async{
-  LocationList response = await GETLocationJSON("location/city");
-  locations_city.name = response.name;
-  locations_city.code = response.code;
-
-  Get.find<CityViewController>().updateCity(response.name);
-}
-
-void updateGu(String code) async{
-  LocationList response = await GETLocationJSON("location/gu?code=${code}");
-  locations_gu.name = response.name;
-  locations_gu.code = response.code;
-
-  Get.find<CityViewController>().updateGu(response.name);
-}
-
-void updateDong(String code) async{
-  LocationList response = await GETLocationJSON("location/dong?code=${code}");
-  locations_dong.name = response.name;
-  locations_dong.code = response.code;
-
-  Get.find<CityViewController>().updateDong(response.name);
+void getCityList() async{
+  cityLists response = await GETLocationJSON("location/citylist");
+  Get.find<CityViewController>().updateCityList(response.cityList);
+//  print(response.cityList["울산광역시"].runtimeType);
 }

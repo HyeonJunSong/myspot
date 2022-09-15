@@ -55,7 +55,7 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        updateCity();
+                        getCityList();
                         Get.dialog(const DialogLocationSetting());
                       },
                     ),

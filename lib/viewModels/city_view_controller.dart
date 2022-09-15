@@ -1,19 +1,29 @@
 import 'package:get/get.dart';
 
 class CityViewController extends GetxController{
-  RxList<String> city = ["선택없음"].obs;
-  RxList<String> gu = ["선택없음"].obs;
-  RxList<String> dong = ["선택없음"].obs;
+  RxMap<String, Map<String, List<String>>> cityList = {"선택없음": {"선택없음" : ["선택없음"]}}.obs;
 
-  void updateCity(List<String> newCity){
-    city(newCity);
+  RxString city  = "선택없음".obs;
+  RxString gu  = "선택없음".obs;
+  RxString dong  = "선택없음".obs;
+
+  void updateCityList(Map<String, Map<String, List<String>>> newCityList){
+    cityList(newCityList);
   }
 
-  void updateGu(List<String> newGu){
-    gu(newGu);
+  void updateCity(String newValue){
+    city(newValue);
+    gu("선택없음");
+    dong("선택없음");
   }
 
-  void updateDong(List<String> newDong){
-    dong(newDong);
+  void updateGu(String newValue){
+    gu(newValue);
+    dong("선택없음");
   }
+
+  void updateDong(String newValue){
+    dong(newValue);
+  }
+
 }

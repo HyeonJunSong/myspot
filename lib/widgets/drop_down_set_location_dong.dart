@@ -15,11 +15,9 @@ class dropDownSetLocationDong extends StatefulWidget {
 }
 
 class _dropDownSetLocationDongState extends State<dropDownSetLocationDong> {
-  String dropdownValue = "";
   @override
   void initState() {
     super.initState();
-    dropdownValue = Get.find<CityViewController>().dong.value[0];
   }
 
   @override
@@ -36,7 +34,7 @@ class _dropDownSetLocationDongState extends State<dropDownSetLocationDong> {
       ),
       padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
       child: Obx(() => DropdownButton<String>(
-        value: dropdownValue,
+        value: Get.find<CityViewController>().dong.value,
         icon: Image.asset("assets/images/down.png"),
 //        elevation: 16,
         style: TextStyle(
@@ -48,12 +46,10 @@ class _dropDownSetLocationDongState extends State<dropDownSetLocationDong> {
         underline: const SizedBox(),
 
         onChanged: (String? newValue) {
-          setState(() {
-            dropdownValue = newValue!;
-          });
+          Get.find<CityViewController>().updateDong(newValue!);
         },
 
-        items: Get.find<CityViewController>().dong.value
+        items: Get.find<CityViewController>().cityList[Get.find<CityViewController>().city.value]![Get.find<CityViewController>().gu.value]!
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
