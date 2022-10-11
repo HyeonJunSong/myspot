@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/bindings/main_page_binding.dart';
-
+import 'package:myspot/pages/myPage/my_page.dart';
 import 'package:myspot/pages/signUpInPage/signin_page.dart';
 import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
+import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 
 void main() {
   runApp(const MySpotApp());
@@ -23,7 +24,7 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/Main",
+            initialRoute: "/SpotDetail",
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
@@ -36,6 +37,8 @@ class MySpotApp extends StatelessWidget {
               GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
               GetPage(name: '/SignUp', page: () => const SignUpPage()),
               GetPage(name: '/SignIn', page: () => const SignInPage()),
+              GetPage(name: '/SpotDetail', page: () => const SpotDetailPage()),
+              GetPage(name: '/MyPage', page: () => const MyPage()),
             ],
             theme: ThemeData(
               fontFamily: 'Noto_Sans_KR',
