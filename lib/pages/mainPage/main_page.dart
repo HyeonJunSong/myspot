@@ -24,13 +24,17 @@ class MainPage extends StatelessWidget {
                   const Spacer(),
                   CircleButton(
                       diameter: 48.w > 48.h ? 48.w : 48.h,
-                      image: "assets/images/circleButton_cross.png"),
+                      image: "assets/images/cross.png",
+                      color: colorPrimary,
+                  ),
                   SizedBox(
                     width: 9.w,
                   ),
                   CircleButton(
                       diameter: 48.w > 48.h ? 48.w : 48.h,
-                      image: "assets/images/circleButton_dots.png"),
+                      image: "assets/images/dots.png",
+                      color: colorInactive,
+                  ),
                 ],
               ),
 
