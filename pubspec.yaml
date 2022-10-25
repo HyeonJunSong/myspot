@@ -37,6 +37,7 @@ dependencies:
   get: ^4.6.5
   flutter_screenutil: ^5.5.3+2
   http: 
+  image_picker: 
 dev_dependencies:
   flutter_test:
     sdk: flutter
