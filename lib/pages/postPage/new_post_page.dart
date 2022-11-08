@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_tag_editor/tag_editor.dart';
 
 class NewPostPage extends StatefulWidget {
   const NewPostPage({super.key});
@@ -18,16 +20,24 @@ class _NewPostPageState extends State<NewPostPage> {
   List<bool> show = [false, false, false];
 
   List<XFile>? _imageFileList;
-  void _setImageFileListFromFile(XFile? value) {
-    _imageFileList = value == null ? null : <XFile>[value];
-  }
 
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
+  final TextEditingController locationController = TextEditingController();
   final TextEditingController maxWidthController = TextEditingController();
   final TextEditingController maxHeightController = TextEditingController();
   final TextEditingController qualityController = TextEditingController();
   String? _retrieveDataError;
+
+  final List<String> _tags = [];
+  final FocusNode focusNode = FocusNode();
+  final TextEditingController tagController = TextEditingController();
+
+  _onDelete(index) {
+    setState(() {
+      _tags.removeAt(index);
+    });
+  }
 
   @override
   void dispose() {
@@ -39,7 +49,6 @@ class _NewPostPageState extends State<NewPostPage> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
     return Scaffold(
       appBar: buildAppbar('spot 등록'),
       body: SafeArea(
@@ -50,7 +59,7 @@ class _NewPostPageState extends State<NewPostPage> {
               child: Column(
                 children: [
                   TextField(
-                    controller: textEditingController,
+                    controller: locationController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.r),
@@ -259,23 +268,37 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget _buildTagContent() {
     return Padding(
       padding: EdgeInsets.all(10.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            // controller: textEditingController,
-            maxLength: 20,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: colorInactive),
-              ),
-              contentPadding: EdgeInsets.all(10.w),
-              hintText: "#태그 (최대20자)",
-              hintStyle: TextStyle(fontSize: 14.sp),
-            ),
-          ),
-        ],
+      child: TagEditor(
+        length: _tags.length,
+        controller: tagController,
+        focusNode: focusNode,
+        autofocus: true,
+        delimiters: [',', ' '],
+        hasAddButton: true,
+        resetTextOnSubmitted: true,
+        // This is set to grey just to illustrate the `textStyle` prop
+        textStyle: const TextStyle(color: Colors.grey),
+        onSubmitted: (outstandingValue) {
+          setState(() {
+            _tags.add(outstandingValue);
+          });
+        },
+        inputDecoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: '#태그',
+        ),
+        onTagChanged: (newValue) {
+          setState(() {
+            _tags.add(newValue);
+          });
+        },
+        tagBuilder: (context, index) => _Chip(
+          index: index,
+          label: _tags[index],
+          onDeleted: _onDelete,
+        ),
+        // InputFormatters example, this disallow \ and /
+        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'[/\\]'))],
       ),
     );
   }
@@ -396,5 +419,32 @@ class _NewPostPageState extends State<NewPostPage> {
       return result;
     }
     return null;
+  }
+}
+
+class _Chip extends StatelessWidget {
+  const _Chip({
+    required this.label,
+    required this.onDeleted,
+    required this.index,
+  });
+
+  final String label;
+  final ValueChanged<int> onDeleted;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      labelPadding: const EdgeInsets.only(left: 8.0),
+      label: label.startsWith('#') ? Text(label) : Text("#$label"),
+      deleteIcon: const Icon(
+        Icons.close,
+        size: 18,
+      ),
+      onDeleted: () {
+        onDeleted(index);
+      },
+    );
   }
 }
