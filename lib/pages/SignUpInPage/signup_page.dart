@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/services/validator.dart';
+import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
@@ -116,7 +117,7 @@ class _SignUpPage extends State<SignUpPage> {
                         _passwordObscure
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: Colors.black54,
+                        color: colorInactive,
                       ),
                       onPressed: _passwordController.value.text.isNotEmpty
                           ? () {
