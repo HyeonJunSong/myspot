@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:myspot/widgets/app_bar.dart';
 
-class SearchResultPage extends StatelessWidget {
-  const SearchResultPage({Key? key}) : super(key: key);
+class SpotDetailPage extends StatelessWidget {
+  const SpotDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: searchResultPageAppbar(),
+      appBar: buildAppbar("스타벅스 경북대북문점"),
     );
   }
 }
