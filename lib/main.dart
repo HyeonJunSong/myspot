@@ -13,7 +13,6 @@ import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'models/locations.dart';
-import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 import 'package:myspot/utils/constants.dart';
 
 void main() {
