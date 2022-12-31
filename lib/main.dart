@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/bindings/main_page_binding.dart';
-import 'package:myspot/pages/SpotDetailPage/spot_detail_page.dart';
+import 'package:myspot/pages/searchMapPage/search_map_page.dart';
 import 'package:myspot/pages/searchPage/search_page.dart';
 import 'package:myspot/pages/searchResultPage/search_result_page.dart';
 import 'package:myspot/pages/myPage/my_page.dart';
@@ -11,6 +11,7 @@ import 'package:myspot/pages/signUpInPage/signin_page.dart';
 import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
+import 'package:myspot/viewModels/search_map_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'models/locations.dart';
 import 'package:myspot/pages/spotPage/spot_detail_page.dart';
@@ -53,8 +54,14 @@ class MySpotApp extends StatelessWidget {
                   Get.put(SearchPageViewController());
                 }),
               ),
+              GetPage(
+                name: '/SearchMap',
+                page: () => const SearchMapPage(),
+                binding: BindingsBuilder(() {
+                  Get.put(SearchMapViewController());
+                }),
+              ),
               GetPage(name: '/SearchResult', page: () => const SearchResultPage()),
-              GetPage(name: '/SpotDetail', page: () => const SpotDetailPage()),
               GetPage(name: '/MyPage', page: () => const MyPage()),
               GetPage(name: '/NewPost', page: () => const NewPostPage()),
             ],
