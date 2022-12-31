@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:myspot/models/category_and_mood.dart';
-import 'package:myspot/pages/searchResultPage/search_result_page.dart';
+import 'package:intl/intl.dart';
+import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/utils/constants.dart';
-import 'package:myspot/viewModels/search_map_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
-import 'package:myspot/widgets/categoryAndmood_block.dart';
+import 'package:myspot/widgets/app_bar.dart';
+import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
+
 
 class SearchMapPage extends StatelessWidget {
   const SearchMapPage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class SearchMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx( () => Scaffold(
+      appBar: searchResultPageAppbar(),
       resizeToAvoidBottomInset : false,
       body: Stack(
         children: [
@@ -30,10 +32,9 @@ class SearchMapPage extends StatelessWidget {
   );
 
   _drawer() => Positioned(
-    top: Get.find<SearchMapViewController>().drawer_topSpace.value,
+    top: Get.find<SearchPageViewController>().drawer_topSpace.value,
     child: Container(
       width: 390.w,
-      height: 844.h,
       padding: EdgeInsets.only(top: 10.h),
       decoration: BoxDecoration(
         color: colorWhite
@@ -42,9 +43,20 @@ class SearchMapPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _knob(),
-          _searchBoxAndTags(),
-          Divider(thickness: 1.h,),
-          _searchResultList()
+          Container(
+            height: 844.h,
+            child: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: [
+                    _searchBoxAndTags(),
+                    Divider(thickness: 1.h,),
+                    _searchResultList(),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     ),
@@ -52,11 +64,11 @@ class SearchMapPage extends StatelessWidget {
 
   _knob() => GestureDetector(
     onVerticalDragUpdate: (value){
-      Get.find<SearchMapViewController>().updateDrawerTopSpace(value.globalPosition.dy);
+      Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
     },
     child: Container(
       width: 50.w,
-      height: 5.h,
+      height: 7.h,
       padding: EdgeInsets.symmetric(vertical: 20.h),
       color: Colors.grey,
     ),
@@ -66,11 +78,12 @@ class SearchMapPage extends StatelessWidget {
   _searchBoxAndTags() => Container(
     padding: EdgeInsets.fromLTRB(21.w, 16.h, 21.w, 23.h),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _searchBox(),
         SizedBox(height: 23.h,),
         _categoryBox(),
-        _moodBox(),
+        _keyWordBox(),
       ],
     ),
   );
@@ -121,23 +134,16 @@ class SearchMapPage extends StatelessWidget {
     ),
   );
 
-  _categoryBox() => Container(
-    width: 310.w,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-            children: List<Widget>.from(<category>[
-              category(true, "🍽", "밥집"),
-              category(false, "☕", "카페"),
-              category(false, "🍺", "술집"),
-            ].map((element) =>
-                categoryBlock(element.inActivated, element.emoji, element.categoryName),
-            ))
-        ),
-      ],
-    ),
-  );
+  _categoryBox() => Wrap(
+    children: List<Widget>.from(Get.find<SearchPageViewController>().categorySelectList.map((element) =>
+      GestureDetector(
+        child: categoryBlock(element.ifActivated, element.category.emoji, element.category.categoryName),
+        onTapUp: (value){
+          Get.find<SearchPageViewController>().categoryChange(element);
+        },
+      ),
+    )
+  ));
 
   _categoryBlock(bool ifActivated, String emoji, String categoryName) {
     return GestureDetector(
@@ -181,22 +187,16 @@ class SearchMapPage extends StatelessWidget {
     );
   }
 
-  _moodBox() => Container(
-    width: 310.w,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-            children: List<Widget>.from([
-              tag(true, "✨", "분위기"),
-              tag(false, "💸", "가성비"),
-            ].map((element) =>
-                moodBlock(element.inActivated, element.emoji, element.moodName),
-            ))
-        ),
-      ],
-    ),
-  );
+  _keyWordBox() => Wrap(
+    children: List<Widget>.from(Get.find<SearchPageViewController>().keyWordSelectList.map((element) =>
+      GestureDetector(
+        child: keyWordBlock(element.ifActivated, element.keyWord.emoji, element.keyWord.keyWordName),
+        onTapUp: (value){
+          Get.find<SearchPageViewController>().keyWordChange(element);
+        },
+      ),
+    )
+  ));
 
   _moodBlock(bool ifActivated, String emoji, String moodName) {
     return GestureDetector(
@@ -205,7 +205,7 @@ class SearchMapPage extends StatelessWidget {
 //    height: 33.h,
         padding: EdgeInsets.symmetric(vertical: 6.5.h, horizontal: 20.w),
         decoration: BoxDecoration(
-          color: colorMoodBlock,
+          color: colorKeyWordBlock,
           borderRadius: BorderRadius.circular(20.w),
         ),
         child: FittedBox(
@@ -240,11 +240,34 @@ class SearchMapPage extends StatelessWidget {
     );
   }
 
-  _searchResultList() => Container();
-
-  _resultBlock(String place, String distance, String address, int likes) => Container(
-    width: 390.w,
+  _searchResultList() => Container(
     child: Column(
+      children: <Widget>[
+        _orderBolck(),
+      ]
+      + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
+        (element) => _resultBlock(element.place, element.distance, element.address, element.likes)
+      ).toList()),
+    ),
+  );
+
+  _orderBolck() => Container(
+    padding: EdgeInsets.fromLTRB(18.w, 28.h, 18.w, 21.h),
+  );
+
+  _resultBlock(String place, int distance, String address, int likes) => Container(
+    width: 390.w,
+    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          color: Color(0xFFE5E5E5),
+          width: 1.h,
+        ),
+      ),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(place, style: TextStyle(
           fontWeight: FontWeight.w700,
@@ -253,19 +276,45 @@ class SearchMapPage extends StatelessWidget {
         SizedBox(height: 6.h,),
         Row(
           children: [
-            Text(distance+'m', style: TextStyle(
+            Text(distance.toString() + 'm', style: TextStyle(
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF737373),
                 fontSize: 14.sp
             ),),
-            VerticalDivider(
-
+            Container(
+              width: 1.w,
+              height : 20.h,
+              margin: EdgeInsets.symmetric(horizontal: 8.w),
+              color: Color(0xFFBDBDBD),
             ),
+            Text(address, style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF737373),
+                fontSize: 14.sp
+            ),),
           ],
-        )
+        ),
+        SizedBox(height: 6.h,),
+        Row(
+          children: [
+            Icon(Icons.circle, color: _spotColor(likes), size: 11.w,),
+            SizedBox(width: 10.w,),
+            Text(NumberFormat("###,###,###").format(likes), style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: _spotColor(likes),
+                fontSize: 14.sp
+            ),),
+          ],
+        ),
       ],
     ),
   );
+
+  _spotColor(int likes){
+    if(likes > 1000) return Color(0xFFEA5252);
+    if(likes >  500) return Color(0xFF2BAE5F);
+    if(likes >    0) return Color(0xFF0789E8);
+  }
 
 }
 
