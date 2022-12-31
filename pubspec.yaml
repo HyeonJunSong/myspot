@@ -40,6 +40,7 @@ dependencies:
   http: ^0.13.5
   image_picker: ^0.8.6
   material_tag_editor: ^0.1.2
+  intl: ^0.18.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
