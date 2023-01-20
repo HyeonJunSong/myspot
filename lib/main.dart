@@ -53,9 +53,6 @@ class MySpotApp extends StatelessWidget {
                 }),
               ),
               GetPage(
-                  name: '/SearchResult', page: () => const SearchResultPage()),
-              GetPage(name: '/SpotDetail', page: () => const SpotDetailPage()),
-              GetPage(
                 name: '/SearchMap',
                 page: () => const SearchMapPage(),
                 binding: BindingsBuilder(() {
