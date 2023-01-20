@@ -35,24 +35,26 @@ class MySpotApp extends StatelessWidget {
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
               GetPage(
-                  name: "/Main",
-                  page: () {
-                    getCityList();
-                    return const MainPage();
-                  },
-                  binding: MainPageBinding(),
-                  transition: Transition.fadeIn,
-
+                name: "/Main",
+                page: () {
+                  getCityList();
+                  return const MainPage();
+                },
+                binding: MainPageBinding(),
+                transition: Transition.fadeIn,
               ),
               GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
               GetPage(name: '/SignUp', page: () => const SignUpPage()),
               GetPage(name: '/SignIn', page: () => const SignInPage()),
-              GetPage(name: '/Search', page: () => const SearchPage(),
+              GetPage(
+                name: '/Search',
+                page: () => const SearchPage(),
                 binding: BindingsBuilder(() {
                   Get.put(SearchPageViewController());
                 }),
               ),
-              GetPage(name: '/SearchResult', page: () => const SearchResultPage()),
+              GetPage(
+                  name: '/SearchResult', page: () => const SearchResultPage()),
               GetPage(name: '/SpotDetail', page: () => const SpotDetailPage()),
               GetPage(name: '/MyPage', page: () => const MyPage()),
               GetPage(name: '/NewPost', page: () => const NewPostPage()),

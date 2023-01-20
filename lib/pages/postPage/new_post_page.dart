@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_tag_editor/tag_editor.dart';
+
+import '../../viewModels/search_page_view_controller.dart';
+import '../../widgets/categoryAndmood_block.dart';
 
 class NewPostPage extends StatefulWidget {
   const NewPostPage({super.key});
@@ -17,7 +19,7 @@ class NewPostPage extends StatefulWidget {
 }
 
 class _NewPostPageState extends State<NewPostPage> {
-  List<bool> show = [false, false, false];
+  List<bool> show = [false, false];
 
   List<XFile>? _imageFileList;
 
@@ -29,15 +31,8 @@ class _NewPostPageState extends State<NewPostPage> {
   final TextEditingController qualityController = TextEditingController();
   String? _retrieveDataError;
 
-  final List<String> _tags = [];
   final FocusNode focusNode = FocusNode();
   final TextEditingController tagController = TextEditingController();
-
-  _onDelete(index) {
-    setState(() {
-      _tags.removeAt(index);
-    });
-  }
 
   @override
   void dispose() {
@@ -55,7 +50,7 @@ class _NewPostPageState extends State<NewPostPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(25.w, 45.h, 25.w, 45.h),
+              padding: EdgeInsets.fromLTRB(25.w, 45.h, 25.w, 25.h),
               child: Column(
                 children: [
                   TextField(
@@ -93,17 +88,14 @@ class _NewPostPageState extends State<NewPostPage> {
                 ],
               ),
             ),
-            Divider(
-              height: 1.h,
-            ),
             Expanded(
               child: SingleChildScrollView(
                 // padding: EdgeInsets.all(25.w),
                 child: Column(
                   children: [
-                    _buildReview(),
+                    _buildCategory(),
                     Divider(height: 1.h),
-                    _buildTag(),
+                    _buildReview(),
                     Divider(height: 1.h),
                     _buildImg(),
                     Divider(height: 1.h),
@@ -228,77 +220,50 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget _buildTag() {
+  Widget _buildCategory() {
     return Padding(
       padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 15.h),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '태그 추가',
+                "카테고리 선택",
                 style: TextStyle(
+                  color: colorBlack,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (show[1] == false) {
-                      show[1] = true;
-                    } else {
-                      show[1] = false;
-                    }
-                  });
-                },
-                icon: Icon(show[1]
-                    ? Icons.keyboard_arrow_up
-                    : Icons.keyboard_arrow_down),
-              )
+              SizedBox(
+                height: 16.sp,
+              ),
+              //
             ],
           ),
-          show[1] ? _buildTagContent() : Container(),
+          SizedBox(height: 10.h),
+          SizedBox(
+            width: 310.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "키워드 선택",
+                  style: TextStyle(
+                    color: colorBlack,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(
+                  height: 16.sp,
+                ),
+                //
+              ],
+            ),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTagContent() {
-    return Padding(
-      padding: EdgeInsets.all(10.w),
-      child: TagEditor(
-        length: _tags.length,
-        controller: tagController,
-        focusNode: focusNode,
-        autofocus: true,
-        delimiters: [',', ' '],
-        hasAddButton: true,
-        resetTextOnSubmitted: true,
-        // This is set to grey just to illustrate the `textStyle` prop
-        textStyle: const TextStyle(color: Colors.grey),
-        onSubmitted: (outstandingValue) {
-          setState(() {
-            _tags.add(outstandingValue);
-          });
-        },
-        inputDecoration: const InputDecoration(
-          border: InputBorder.none,
-          hintText: '#태그',
-        ),
-        onTagChanged: (newValue) {
-          setState(() {
-            _tags.add(newValue);
-          });
-        },
-        tagBuilder: (context, index) => _Chip(
-          index: index,
-          label: _tags[index],
-          onDeleted: _onDelete,
-        ),
-        // InputFormatters example, this disallow \ and /
-        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'[/\\]'))],
       ),
     );
   }
@@ -321,19 +286,19 @@ class _NewPostPageState extends State<NewPostPage> {
               IconButton(
                 onPressed: () {
                   setState(() {
-                    if (show[2] == false) {
-                      show[2] = true;
+                    if (show[1] == false) {
+                      show[1] = true;
                     } else {
-                      show[2] = false;
+                      show[1] = false;
                     }
                   });
                 },
                 icon:
-                    Icon(show[2] ? Icons.add_circle : Icons.add_circle_outline),
+                    Icon(show[1] ? Icons.add_circle : Icons.add_circle_outline),
               )
             ],
           ),
-          show[2] ? _buildImgContent(context) : Container(),
+          show[1] ? _buildImgContent(context) : Container(),
         ],
       ),
     );
