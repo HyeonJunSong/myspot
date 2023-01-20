@@ -13,15 +13,15 @@ class ApiResponse {
 }
 
 class ApiError {
-  late String error;
+  String? error;
 
-  ApiError({required String error}) {
-    error = this.error;
-  }
+  ApiError({
+    this.error,
+  });
 
-  ApiError.fromJson(Map<String, dynamic> json) {
-    error = json['error'];
-  }
+  factory ApiError.fromJson(Map<String, dynamic> json) => ApiError(
+        error: json["error"],
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -30,20 +30,23 @@ class ApiError {
   }
 }
 
-String _baseUrl = "http://34.249.122.42:8080/";
+String _baseUrl = "http://3.232.20.72:8080/";
 Future<ApiResponse> signUp(
-    String email, String password, String nickname, String social) async {
+    String email, String password, String nickname, int social) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
     final response = await http.post(
       Uri.parse('${_baseUrl}user/signup'),
-      body: {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
         'user_email': email,
         'password': password,
         'user_name': nickname,
         'user_social': social,
-      },
+      }),
     );
 
     switch (response.statusCode) {
@@ -68,12 +71,11 @@ Future<ApiResponse> signIn(String email, String password) async {
 
   try {
     final response = await http.post(
-      Uri.parse('${_baseUrl}user/login'),
+      Uri.parse('${_baseUrl}user/login/$email'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'userEmail': email,
         'password': password,
       },
     );
@@ -123,22 +125,17 @@ Future<ApiResponse> checkEmail(String email) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
-    final response = await http.post(
-      Uri.parse('${_baseUrl}user/join/email-check'),
-      body: {
-        'email': email,
-      },
+    final response = await http.get(
+      Uri.parse('${_baseUrl}user/check?email=$email'),
     );
+    debugPrint(response.body);
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
-        break;
-      case 401:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.data = "사용 가능한 이메일입니다.";
         break;
       default:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError = ApiError(error: "이미 사용중인 이메일입니다.");
         break;
     }
   } on SocketException {

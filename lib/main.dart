@@ -12,7 +12,6 @@ import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'models/locations.dart';
-import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 import 'package:myspot/utils/constants.dart';
 
 void main() {
@@ -35,24 +34,27 @@ class MySpotApp extends StatelessWidget {
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
               GetPage(
-                  name: "/Main",
-                  page: () {
-                    getCityList();
-                    return const MainPage();
-                  },
-                  binding: MainPageBinding(),
-                  transition: Transition.fadeIn,
-
+                name: "/Main",
+                page: () {
+                  getCityList();
+                  return const MainPage();
+                },
+                binding: MainPageBinding(),
+                transition: Transition.fadeIn,
               ),
               GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
               GetPage(name: '/SignUp', page: () => const SignUpPage()),
               GetPage(name: '/SignIn', page: () => const SignInPage()),
-              GetPage(name: '/Search', page: () => const SearchPage(),
+              GetPage(
+                name: '/Search',
+                page: () => const SearchPage(),
                 binding: BindingsBuilder(() {
                   Get.put(SearchPageViewController());
                 }),
               ),
               GetPage(
+                  name: '/SearchResult', page: () => const SearchResultPage()),
+              GetPage(name: '/SpotDetail', page: () => const SpotDetailPage()),
                 name: '/SearchMap',
                 page: () => const SearchMapPage(),
                 binding: BindingsBuilder(() {
