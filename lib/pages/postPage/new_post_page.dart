@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../viewModels/search_page_view_controller.dart';
-import '../../widgets/categoryAndmood_block.dart';
 
 class NewPostPage extends StatefulWidget {
   const NewPostPage({super.key});
