@@ -50,7 +50,6 @@ class MySpotApp extends StatelessWidget {
               GetPage(name: '/SignUp', page: () => const SignUpPage()),
               GetPage(name: '/SignIn', page: () => const SignInPage()),
               GetPage(name: '/Search', page: () => const SearchPage(),
-              GetPage(
                 binding: BindingsBuilder(() {
                   Get.put(SearchPageViewController());
                 }),
