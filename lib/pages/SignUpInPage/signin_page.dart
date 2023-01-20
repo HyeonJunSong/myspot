@@ -29,18 +29,19 @@ class _SignInPageState extends State<SignInPage> {
   late ApiResponse _apiResponse;
 
   Future<void> _submit() async {
-    if (_formKey.currentState!.validate()) {}
-    _formKey.currentState!.save();
-    _newUser.printProperties();
-    Get.snackbar('로그인', '로그인 성공 ~ 🥳');
-    //백으로 데이터 전송!
-    _apiResponse = await signIn(_newUser.email!, _newUser.password!);
-    if (_apiResponse.apiError == null) {
-      Get.snackbar('로그인', '로그인 성공 ~ 🥳');
-      // 유저 데이터 불러와서,,,,
-      // 홈으로,,,,
-    } else {
-      Get.snackbar('오류', (_apiResponse.apiError as ApiError).error);
+    if (_formKey.currentState!.validate()) {
+      //로그인 형식 통과
+      _formKey.currentState!.save();
+      _newUser.printProperties();
+      //백으로 데이터 전송! 로그인 시도
+      _apiResponse = await signIn(_newUser.email!, _newUser.password!);
+      if (_apiResponse.apiError == null) {
+        Get.snackbar('로그인', '로그인 성공 ~ 🥳');
+        // 유저 데이터 불러와서,,,,
+        // 홈으로,,,,
+      } else {
+        Get.snackbar('오류', (_apiResponse.apiError as ApiError).error!);
+      }
     }
   }
 
