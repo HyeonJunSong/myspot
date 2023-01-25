@@ -67,7 +67,31 @@ class MySpotApp extends StatelessWidget {
               primaryColor: colorPrimary,
               primarySwatch: MaterialColor(0xFF093386, materialPrimary),
             ),
-          );
-        });
+            GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
+            GetPage(name: '/SignUp', page: () => const SignUpPage()),
+            GetPage(name: '/SignIn', page: () => const SignInPage()),
+            GetPage(name: '/Search', page: () => const SearchPage(),
+              binding: BindingsBuilder(() {
+                Get.put(SearchPageViewController());
+              }),
+            ),
+            GetPage(
+              name: '/SearchMap',
+              page: () => const SearchMapPage(),
+              binding: BindingsBuilder(() {
+                Get.put(SearchPageViewController());
+              }),
+            ),
+            GetPage(name: '/MyPage', page: () => const MyPage()),
+            GetPage(name: '/NewPost', page: () => const NewPostPage()),
+          ],
+          theme: ThemeData(
+            fontFamily: 'Noto_Sans_KR',
+            primaryColor: colorPrimary,
+            primarySwatch: MaterialColor(0xFF093386, materialPrimary),
+          ),
+        );
+      }
+    );
   }
 }

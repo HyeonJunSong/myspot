@@ -35,14 +35,41 @@ class SearchPageViewController extends GetxController{
     keyWordSelectList.refresh();
   }
 
+  //orderButton
+  RxInt orderButtonIndex = 0.obs;
+  RxBool orderIfDescending = false.obs;
+
+  void increaseOrderIndex(){
+    orderButtonIndex((orderButtonIndex.value + 1) % sortBy.length);
+    sortSpotList();
+  }
+
+  void changeDescending(){
+    orderIfDescending.value ? orderIfDescending(false) : orderIfDescending(true);
+    sortSpotList();
+  }
+
+  void sortSpotList(){
+    spotList.sort((a, b){
+      switch(orderButtonIndex.value){
+        case 0:
+          return orderIfDescending.value ? a.distance - b.distance : b.distance - a.distance;
+        case 1:
+          return orderIfDescending.value ? a.likes - b.likes : b.likes - a.likes;
+        default:
+          return 0;
+      }
+    });
+  }
+
   //spot lists
-  RxList<SpotListElement> spotList = <SpotListElement>[
-    SpotListElement("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325),
-    SpotListElement("이디야커피 경북대북문점", 220, "산격동 1399-1", 756),
-    SpotListElement("커피와빵 경북대북문점", 220, "산격동 1331-6", 233),
-    SpotListElement("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325),
-    SpotListElement("이디야커피 경북대북문점", 220, "산격동 1399-1", 756),
-    SpotListElement("커피와빵 경북대북문점", 220, "산격동 1331-6", 233),
+  RxList<Spot> spotList = <Spot>[
+    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325),
+    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756),
+    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233),
+    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325),
+    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756),
+    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233),
   ].obs;
 
 }
@@ -60,3 +87,8 @@ class KeyWordSelect{
 
   KeyWordSelect(this.ifActivated, this.keyWord);
 }
+
+List<String> sortBy = [
+  "거리 순",
+  "스팟 순"
+];

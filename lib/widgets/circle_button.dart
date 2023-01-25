@@ -7,16 +7,18 @@ class CircleButton extends StatelessWidget {
     required this.diameter,
     required this.image,
     required this.color,
+    required this.onPressed,
   }) : super(key: key);
 
   final double diameter;
   final String image;
   final Color color;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         minimumSize: Size.zero,

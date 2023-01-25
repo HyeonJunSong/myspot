@@ -23,17 +23,19 @@ class MainPage extends StatelessWidget {
                 children: <Widget>[
                   const Spacer(),
                   CircleButton(
-                      diameter: 48.w > 48.h ? 48.w : 48.h,
-                      image: "assets/images/cross.png",
-                      color: colorPrimary,
+                    diameter: 48.w > 48.h ? 48.w : 48.h,
+                    image: "assets/images/cross.png",
+                    color: colorPrimary,
+                    onPressed: (){ Get.toNamed("/NewPost"); },
                   ),
                   SizedBox(
                     width: 9.w,
                   ),
                   CircleButton(
-                      diameter: 48.w > 48.h ? 48.w : 48.h,
-                      image: "assets/images/dots.png",
-                      color: colorInactive,
+                    diameter: 48.w > 48.h ? 48.w : 48.h,
+                    image: "assets/images/dots.png",
+                    color: colorInactive,
+                    onPressed: (){ Get.toNamed("/MyPage"); },
                   ),
                 ],
               ),
@@ -97,9 +99,14 @@ class MainPage extends StatelessWidget {
                                 fontWeight: FontWeight.w500),
                           ),
                           const Spacer(),
-                          Image.asset(
-                            "assets/images/search.png",
-                            width: 16.w,
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed("/Search");
+                            },
+                            child: Image.asset(
+                              "assets/images/search.png",
+                              width: 16.w,
+                            ),
                           ),
                         ],
                       ),
