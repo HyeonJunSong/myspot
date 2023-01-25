@@ -5,6 +5,7 @@ class SpotListElement{
   int distance;
   String address;
   int likes;
+//  int id;
 
   SpotListElement(
     this.place,

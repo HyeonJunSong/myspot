@@ -25,49 +25,50 @@ class MySpotApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(390, 844),
-        builder: (context, child) {
-          return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'MySpot',
-            initialRoute: "/Search",
-            getPages: [
-              // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
-              //         () => Get.lazyPut<clientController>(() => clientController()))),
-              GetPage(
-                  name: "/Main",
-                  page: () {
-                    getCityList();
-                    return const MainPage();
-                  },
-                  binding: MainPageBinding(),
-                  transition: Transition.fadeIn,
+      designSize: const Size(390, 844),
+      builder: (context, child) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'MySpot',
+          initialRoute: "/Search",
+          getPages: [
+            // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
+            //         () => Get.lazyPut<clientController>(() => clientController()))),
+            GetPage(
+              name: "/Main",
+              page: () {
+                getCityList();
+                return const MainPage();
+              },
+              binding: MainPageBinding(),
+              transition: Transition.fadeIn,
 
-              ),
-              GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
-              GetPage(name: '/SignUp', page: () => const SignUpPage()),
-              GetPage(name: '/SignIn', page: () => const SignInPage()),
-              GetPage(name: '/Search', page: () => const SearchPage(),
-                binding: BindingsBuilder(() {
-                  Get.put(SearchPageViewController());
-                }),
-              ),
-              GetPage(
-                name: '/SearchMap',
-                page: () => const SearchMapPage(),
-                binding: BindingsBuilder(() {
-                  Get.put(SearchPageViewController());
-                }),
-              ),
-              GetPage(name: '/MyPage', page: () => const MyPage()),
-              GetPage(name: '/NewPost', page: () => const NewPostPage()),
-            ],
-            theme: ThemeData(
-              fontFamily: 'Noto_Sans_KR',
-              primaryColor: colorPrimary,
-              primarySwatch: MaterialColor(0xFF093386, materialPrimary),
             ),
-          );
-        });
+            GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
+            GetPage(name: '/SignUp', page: () => const SignUpPage()),
+            GetPage(name: '/SignIn', page: () => const SignInPage()),
+            GetPage(name: '/Search', page: () => const SearchPage(),
+              binding: BindingsBuilder(() {
+                Get.put(SearchPageViewController());
+              }),
+            ),
+            GetPage(
+              name: '/SearchMap',
+              page: () => const SearchMapPage(),
+              binding: BindingsBuilder(() {
+                Get.put(SearchPageViewController());
+              }),
+            ),
+            GetPage(name: '/MyPage', page: () => const MyPage()),
+            GetPage(name: '/NewPost', page: () => const NewPostPage()),
+          ],
+          theme: ThemeData(
+            fontFamily: 'Noto_Sans_KR',
+            primaryColor: colorPrimary,
+            primarySwatch: MaterialColor(0xFF093386, materialPrimary),
+          ),
+        );
+      }
+    );
   }
 }
