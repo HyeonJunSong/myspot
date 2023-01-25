@@ -8,6 +8,8 @@ import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
 
+import '../../services/api.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -26,18 +28,26 @@ class _SignUpPage extends State<SignUpPage> {
   final _passwordFocus = FocusNode();
   final _nicknameFocus = FocusNode();
 
-  bool _emailCheck = false;
+  bool _emailCheck = true;
   bool _nicknameCheck = false;
   bool _passwordObscure = true;
   final _newUser = User();
-  // late ApiResponse _apiResponse;
+  late ApiResponse _apiResponse;
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _newUser.printProperties();
-      //다음 페이지
-      Get.toNamed('/SignUpIn');
+      //회원가입 시도
+      _apiResponse = await signUp(
+          _newUser.email!, _newUser.password!, _newUser.nickname!, 0);
+      if (_apiResponse.apiError == null) {
+        Get.snackbar('회원가입', '회원가입 성공 ~ 🥳');
+        // 홈으로,,,,
+        Get.toNamed('/SignUpIn');
+      } else {
+        Get.snackbar('오류', (_apiResponse.apiError as ApiError).error!);
+      }
     }
   }
 
@@ -84,14 +94,26 @@ class _SignUpPage extends State<SignUpPage> {
                       onPressed: _emailController.value.text.isNotEmpty
                           ? () async {
                               //중복 확인
-                              // _apiResponse = await checkEmail(_newUser.email!);
-                              // if (_apiResponse.ApiError == null) {
-                              //   _emailCheck = true;
-                              // } else {
-                              //   _emailCheck = false;
-                              //   print(
-                              //       (_apiResponse.ApiError as ApiError).error);
-                              // }
+                              debugPrint(_emailController.value.text);
+                              _apiResponse =
+                                  await checkEmail(_emailController.value.text);
+                              if (_apiResponse.apiError == null) {
+                                _emailCheck = true;
+                                debugPrint(_apiResponse.data as String?);
+                                Get.defaultDialog(
+                                  title: "이메일 중복 여부",
+                                  middleText: "사용 가능한 이메일입니다!☺️",
+                                );
+                              } else {
+                                //중복
+                                _emailCheck = false;
+                                debugPrint(
+                                    (_apiResponse.apiError as ApiError).error);
+                                Get.defaultDialog(
+                                  title: "이메일 중복 여부",
+                                  middleText: "이미 사용중인 이메일이네요😅",
+                                );
+                              }
                             }
                           : null,
                       label: '중복 확인',
