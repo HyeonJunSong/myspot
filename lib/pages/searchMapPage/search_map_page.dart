@@ -67,10 +67,14 @@ class SearchMapPage extends StatelessWidget {
       Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
     },
     child: Container(
-      width: 50.w,
-      height: 7.h,
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      color: Colors.grey,
+      color: Colors.transparent,
+      padding: EdgeInsets.all(10.h),
+      child: Container(
+        width: 50.w,
+        height: 7.h,
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        color: Colors.grey,
+      ),
     ),
   );
 
@@ -253,6 +257,43 @@ class SearchMapPage extends StatelessWidget {
 
   _orderBolck() => Container(
     padding: EdgeInsets.fromLTRB(18.w, 28.h, 18.w, 21.h),
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: (){
+            Get.find<SearchPageViewController>().increaseOrderIndex();
+          },
+          child: Container(
+            width: 129.w,
+            height: 33.h,
+            padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: colorInactive,
+                width: 2.w,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(sortBy[Get.find<SearchPageViewController>().orderButtonIndex.value]),
+                GestureDetector(
+                  child: Icon(
+                    Get.find<SearchPageViewController>().orderIfDescending.value ?
+                    Icons.keyboard_arrow_up :
+                    Icons.keyboard_arrow_down
+                  ),
+                  onTap: (){
+                    Get.find<SearchPageViewController>().changeDescending();
+                  },
+                )
+              ],
+            )
+          ),
+        ),
+      ],
+    ),
   );
 
   _resultBlock(String place, int distance, String address, int likes) => Container(

@@ -35,7 +35,7 @@ class cityLists {
   //     };
 }
 
-String _baseUrl = "http://34.249.122.42:8080/";
+String _baseUrl = "http://3.232.20.72:8080/";
 
 Future<cityLists> GETLocationJSON(String query) async {
   ApiResponse apiResponse = ApiResponse();

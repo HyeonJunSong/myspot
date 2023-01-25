@@ -30,7 +30,7 @@ class MySpotApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'MySpot',
-          initialRoute: "/Search",
+          initialRoute: "/Main",
           getPages: [
             // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
             //         () => Get.lazyPut<clientController>(() => clientController()))),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SpotListElement{
+class Spot{
   String place;
   int distance;
   String address;
   int likes;
 //  int id;
 
-  SpotListElement(
+  Spot(
     this.place,
     this.distance,
     this.address,
