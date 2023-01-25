@@ -4,33 +4,28 @@ import 'package:get/get.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
-import 'package:myspot/widgets/category_keyword_block.dart';
+import 'package:myspot/widgets/categoryAndmood_block.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
 
-  @override
-  State<SearchPage> createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: searchPageAppbar(),
-      body: SingleChildScrollView(
-        child: Obx(() => Column(
+      body: Center(
+        child: Column(
           children: [
             SizedBox(height: 40.h,),
             _searchBox(),
             Divider(height: 66.h, thickness: 1.h,),
             _categoryBox(),
             SizedBox(height: 38.h,),
-            _keyWordBox(),
+            _moodBox(),
             SizedBox(height: 50.h,),
             _button(),
           ],
-        )),
+        ),
       ),
     );
   }
@@ -105,20 +100,15 @@ _categoryBox() => Container(
       ),),
       SizedBox(height: 16.sp,),
       Wrap(
-        children: List<Widget>.from(Get.find<SearchPageViewController>().categorySelectList.map((element) =>
-          GestureDetector(
-            child: categoryBlock(element.ifActivated, element.category.emoji, element.category.categoryName),
-            onTapUp: (value){
-            Get.find<SearchPageViewController>().categoryChange(element);
-            },
-          ),
-        )
-      )),
+        children: List<Widget>.from(Get.find<SearchPageViewController>().categoryList.map((element) =>
+          categoryBlock(element.inActivated, element.emoji, element.categoryName),
+        ))
+      ),
     ],
   ),
 );
 
-_keyWordBox() => Container(
+_moodBox() => Container(
   width: 310.w,
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,23 +120,17 @@ _keyWordBox() => Container(
       ),),
       SizedBox(height: 16.sp,),
       Wrap(
-        children: List<Widget>.from(Get.find<SearchPageViewController>().keyWordSelectList.map((element) =>
-          GestureDetector(
-            child: keyWordBlock(element.ifActivated, element.keyWord.emoji, element.keyWord.keyWordName),
-            onTapUp: (value){
-              Get.find<SearchPageViewController>().keyWordChange(element);
-            },
-          ),
+        children: List<Widget>.from(Get.find<SearchPageViewController>().moodList.map((element) =>
+          moodBlock(element.inActivated, element.emoji, element.moodName),
         ))
       ),
     ],
   ),
+
 );
 
 _button() => ElevatedButton(
-    onPressed: (){
-      Get.toNamed("/SearchMap");
-    },
+    onPressed: (){},
     style: ElevatedButton.styleFrom(
       fixedSize: Size(275.w, 42.h),
       backgroundColor: colorPrimary,
