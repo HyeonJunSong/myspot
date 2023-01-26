@@ -28,7 +28,18 @@ class SearchMapPage extends StatelessWidget {
   }
 
   _map() => Positioned(
-    child: NaverMap(),
+    child: NaverMap(
+      initialCameraPosition: CameraPosition(
+        target: LatLng(35.89229637317734, 128.60856585746507)
+      ),
+      markers: Get.find<SearchPageViewController>()
+        .spotList()
+        .map((e) => Marker(
+          markerId: e.id.toString(),
+          position: e.coor
+      )).toList(),
+      onMapCreated: Get.find<SearchPageViewController>().onMapCreated,
+    ),
   );
 
   _drawer() => Positioned(
@@ -66,6 +77,9 @@ class SearchMapPage extends StatelessWidget {
     onVerticalDragUpdate: (value){
       Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
     },
+    // onVerticalDragEnd: (value){
+    //   Get.find<SearchPageViewController>().updateDrawerTopSpace(100.h);
+    // },
     child: Container(
       color: Colors.transparent,
       padding: EdgeInsets.all(10.h),

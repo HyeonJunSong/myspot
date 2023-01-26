@@ -25,5 +25,4 @@ class CityViewController extends GetxController{
   void updateDong(String newValue){
     dong(newValue);
   }
-
 }

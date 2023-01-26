@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/locations.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/circle_button.dart';
 import 'package:myspot/widgets/dialog_location_setting.dart';
 
@@ -45,7 +47,7 @@ class MainPage extends StatelessWidget {
               ),
 
               //위치설정, 위치, 검색
-              SizedBox(
+              Obx(() => SizedBox(
                 width: 317.w,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,14 +67,14 @@ class MainPage extends StatelessWidget {
                       },
                     ),
                     Text(
-                      "상세주소1",
+                      Get.find<UserController>().setAddressUpper.value,
                       style: TextStyle(
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
-                      "상세주소2",
+                      Get.find<UserController>().setAddressLower.value,
                       style: TextStyle(
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w700,
@@ -113,7 +115,7 @@ class MainPage extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              )),
 
               //HotSpot탐색바
             ],
