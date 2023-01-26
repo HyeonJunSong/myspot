@@ -7,13 +7,14 @@ class Spot{
   String address;
   int likes;
   LatLng coor;
-//  int id;
+  int id;
 
   Spot(
     this.place,
     this.distance,
     this.address,
     this.likes,
-    this.coor
+    this.coor,
+    this.id
   );
 }

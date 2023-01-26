@@ -46,3 +46,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/app/src/main/AndroidManifest.xml
+
+lib/utils/keyFiles.dart

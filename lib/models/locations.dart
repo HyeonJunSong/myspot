@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:myspot/services/api.dart';
+import 'package:myspot/utils/keyFiles.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
 import 'package:myspot/widgets/drop_down_set_location_city.dart';
 
@@ -35,14 +36,12 @@ class cityLists {
   //     };
 }
 
-String _baseUrl = "http://3.232.20.72:8080/";
-
 Future<cityLists> GETLocationJSON(String query) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
     final response = await http.get(
-      Uri.parse('${_baseUrl}${query}'),
+      Uri.parse('${baseUrl}${query}'),
     );
 
     switch (response.statusCode) {

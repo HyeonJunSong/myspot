@@ -11,6 +11,7 @@ import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'models/locations.dart';
 import 'package:myspot/utils/constants.dart';
 
@@ -29,7 +30,10 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/Search",
+            initialRoute: "/Main",
+            initialBinding: BindingsBuilder(() {
+              Get.put(UserController());
+            }),
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
               //         () => Get.lazyPut<clientController>(() => clientController()))),
@@ -37,6 +41,7 @@ class MySpotApp extends StatelessWidget {
                 name: "/Main",
                 page: () {
                   getCityList();
+                  Get.find<UserController>().getPosition();
                   return const MainPage();
                 },
                 binding: MainPageBinding(),
@@ -62,29 +67,6 @@ class MySpotApp extends StatelessWidget {
               GetPage(name: '/MyPage', page: () => const MyPage()),
               GetPage(name: '/NewPost', page: () => const NewPostPage()),
             ],
-            theme: ThemeData(
-              fontFamily: 'Noto_Sans_KR',
-              primaryColor: colorPrimary,
-              primarySwatch: MaterialColor(0xFF093386, materialPrimary),
-            ),
-            GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
-            GetPage(name: '/SignUp', page: () => const SignUpPage()),
-            GetPage(name: '/SignIn', page: () => const SignInPage()),
-            GetPage(name: '/Search', page: () => const SearchPage(),
-              binding: BindingsBuilder(() {
-                Get.put(SearchPageViewController());
-              }),
-            ),
-            GetPage(
-              name: '/SearchMap',
-              page: () => const SearchMapPage(),
-              binding: BindingsBuilder(() {
-                Get.put(SearchPageViewController());
-              }),
-            ),
-            GetPage(name: '/MyPage', page: () => const MyPage()),
-            GetPage(name: '/NewPost', page: () => const NewPostPage()),
-          ],
           theme: ThemeData(
             fontFamily: 'Noto_Sans_KR',
             primaryColor: colorPrimary,

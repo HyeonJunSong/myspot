@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/services/api.dart';
+import 'package:myspot/services/coor_to_address.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/models/locations.dart';
+import 'package:myspot/viewModels/city_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/drop_down_set_location_city.dart';
 import 'package:myspot/widgets/drop_down_set_location_gu.dart';
 import 'package:myspot/widgets/drop_down_set_location_dong.dart';
@@ -116,22 +120,28 @@ class DialogLocationSetting extends StatelessWidget {
                             width: 59.w,
                             height: 40.h,
                           ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/images/target.png",
-                                height: 16.h,
-                              ),
-                              SizedBox(width: 7.w),
-                              Text(
-                                "현재 위치로",
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
+                          GestureDetector(
+                            onTap: (){
+                              Get.find<UserController>().getPosition();
+                              Get.back();
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/target.png",
+                                  height: 16.h,
                                 ),
-                              )
-                            ],
+                                SizedBox(width: 7.w),
+                                Text(
+                                  "현재 위치로",
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 8.h, 0, 0),
@@ -149,7 +159,24 @@ class DialogLocationSetting extends StatelessWidget {
                                 elevation: 0.0,
                                 backgroundColor: colorPrimary,
                               ),
-                              onPressed: () async {},
+                              onPressed: () {
+                                String _city = Get.find<CityViewController>().city.value;
+                                String _gu = Get.find<CityViewController>().gu.value;
+                                String _dong = Get.find<CityViewController>().dong.value;
+
+                                _city = _city == "선택없음" ? " " : _city;
+                                _gu = _gu == "선택없음" ? " " : _gu;
+                                _dong = _dong == "선택없음" ? " " : _dong;
+
+                                Get.find<UserController>().setAddress(
+                                  CoorToAdd(
+                                    addressUpper: _city + ' ' + _gu,
+                                    addressLower: _dong,
+                                  ),
+                                );
+
+                                Get.back();
+                              },
                               child: Text(
                                 "완료",
                                 style: TextStyle(
