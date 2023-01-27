@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/services/api.dart';
-import 'package:myspot/services/validator.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
 import 'package:myspot/widgets/rounded_button.dart';
@@ -32,15 +31,25 @@ class _SignInPageState extends State<SignInPage> {
     if (_formKey.currentState!.validate()) {
       //로그인 형식 통과
       _formKey.currentState!.save();
-      _newUser.printProperties();
       //백으로 데이터 전송! 로그인 시도
       _apiResponse = await signIn(_newUser.email!, _newUser.password!);
       if (_apiResponse.apiError == null) {
-        Get.snackbar('로그인', '로그인 성공 ~ 🥳');
-        // 유저 데이터 불러와서,,,,
+        //로그인 성공시
+        //사용자 정보 불러오기!!
+        _apiResponse = await getUserDetails(_newUser.email!);
+
+        Get.defaultDialog(
+          radius: 10,
+          title: "로그인",
+          middleText: "@@님, 환영합니다. 🤩",
+        );
         // 홈으로,,,,
       } else {
-        Get.snackbar('오류', (_apiResponse.apiError as ApiError).error!);
+        Get.defaultDialog(
+          radius: 10,
+          title: "로그인",
+          middleText: (_apiResponse.apiError as ApiError).error ?? "null",
+        );
       }
     }
   }
@@ -76,8 +85,6 @@ class _SignInPageState extends State<SignInPage> {
                 keyboardType: TextInputType.emailAddress,
                 hint: '이메일 주소 입력',
                 focusNode: _emailFocus,
-                validator: (value) =>
-                    CheckValidate().validateEmail(_emailFocus, value, true),
                 onSaved: (newValue) => _newUser.email = newValue,
               ),
               InputForm(
@@ -87,10 +94,9 @@ class _SignInPageState extends State<SignInPage> {
                 hint: '비밀번호 입력',
                 focusNode: _passwordFocus,
                 obscureText: _passwordObscure,
-                validator: (value) =>
-                    CheckValidate().validatePassword(_passwordFocus, value),
                 onSaved: (newValue) => _newUser.password = newValue,
-                suffixIcon: IconButton(
+                suffix: IconButton(
+                  //suffixicon으로 하면 위에 공간 없음 근데 아이콘이 계속 보여
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   icon: Icon(

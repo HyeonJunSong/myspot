@@ -28,7 +28,7 @@ class _SignUpPage extends State<SignUpPage> {
   final _passwordFocus = FocusNode();
   final _nicknameFocus = FocusNode();
 
-  bool _emailCheck = true;
+  bool _emailCheck = false; //true면 중복
   bool _nicknameCheck = false;
   bool _passwordObscure = true;
   final _newUser = User();
@@ -42,11 +42,19 @@ class _SignUpPage extends State<SignUpPage> {
       _apiResponse = await signUp(
           _newUser.email!, _newUser.password!, _newUser.nickname!, 0);
       if (_apiResponse.apiError == null) {
-        Get.snackbar('회원가입', '회원가입 성공 ~ 🥳');
+        Get.defaultDialog(
+          radius: 10,
+          title: "회원가입",
+          middleText: "회원가입이 성공되었습니다 ~ 🥳",
+        );
         // 홈으로,,,,
-        Get.toNamed('/SignUpIn');
+        Get.back();
       } else {
-        Get.snackbar('오류', (_apiResponse.apiError as ApiError).error!);
+        Get.defaultDialog(
+          radius: 10,
+          title: "회원가입",
+          middleText: (_apiResponse.apiError as ApiError).toString(),
+        );
       }
     }
   }
@@ -94,31 +102,31 @@ class _SignUpPage extends State<SignUpPage> {
                       onPressed: _emailController.value.text.isNotEmpty
                           ? () async {
                               //중복 확인
-                              debugPrint(_emailController.value.text);
                               _apiResponse =
                                   await checkEmail(_emailController.value.text);
                               if (_apiResponse.apiError == null) {
-                                _emailCheck = true;
-                                debugPrint(_apiResponse.data as String?);
+                                _emailCheck = false;
                                 Get.defaultDialog(
+                                  radius: 10,
                                   title: "이메일 중복 여부",
-                                  middleText: "사용 가능한 이메일입니다!☺️",
+                                  middleText: _apiResponse.data.toString(),
                                 );
                               } else {
                                 //중복
-                                _emailCheck = false;
-                                debugPrint(
-                                    (_apiResponse.apiError as ApiError).error);
+                                _emailCheck = true;
                                 Get.defaultDialog(
+                                  radius: 10,
                                   title: "이메일 중복 여부",
-                                  middleText: "이미 사용중인 이메일이네요😅",
+                                  middleText:
+                                      (_apiResponse.apiError as ApiError)
+                                          .error!,
                                 );
                               }
                             }
                           : null,
                       label: '중복 확인',
                       radius: 25.r,
-                      width: 83.w,
+                      // width: 83.w,
                       height: 30.h,
                     ),
                   ),
@@ -132,14 +140,13 @@ class _SignUpPage extends State<SignUpPage> {
                     validator: (value) =>
                         CheckValidate().validatePassword(_passwordFocus, value),
                     onSaved: (newValue) => _newUser.password = newValue,
-                    suffixIcon: IconButton(
+                    suffix: IconButton(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       constraints: const BoxConstraints(),
                       icon: Icon(
                         _passwordObscure
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: colorInactive,
                       ),
                       onPressed: _passwordController.value.text.isNotEmpty
                           ? () {
@@ -159,25 +166,25 @@ class _SignUpPage extends State<SignUpPage> {
                     validator: (value) => CheckValidate().validateNickname(
                         _nicknameFocus, value, _nicknameCheck),
                     onSaved: (newValue) => _newUser.nickname = newValue,
-                    suffix: RoundedButton(
-                      onPressed: _nicknameController.value.text.isNotEmpty
-                          ? () async {
-                              //중복 확인
-                              // _apiResponse = await checkNickname(_newUser.nickname!);
-                              // if (_apiResponse.ApiError == null) {
-                              //   _nicknameCheck = true;
-                              // } else {
-                              //   _nicknameCheck = false;
-                              //   print(
-                              //       (_apiResponse.ApiError as ApiError).error);
-                              // }
-                            }
-                          : null,
-                      label: '중복 확인',
-                      radius: 25.r,
-                      width: 83.w,
-                      height: 30.h,
-                    ),
+                    // suffix: RoundedButton(
+                    //   onPressed: _nicknameController.value.text.isNotEmpty
+                    //       ? () async {
+                    //           //중복 확인
+                    //           _apiResponse = await checkNickname(_newUser.nickname!);
+                    //           if (_apiResponse.ApiError == null) {
+                    //             _nicknameCheck = true;
+                    //           } else {
+                    //             _nicknameCheck = false;
+                    //             print(
+                    //                 (_apiResponse.ApiError as ApiError).error);
+                    //           }
+                    //         }
+                    //       : null,
+                    //   label: '중복 확인',
+                    //   radius: 25.r,
+                    //   width: 83.w,
+                    //   height: 30.h,
+                    // ),
                   ),
                 ],
               ),

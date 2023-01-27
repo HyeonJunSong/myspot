@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myspot/models/post.dart';
 import 'package:myspot/models/user.dart';
 
 class ApiResponse {
@@ -51,13 +53,16 @@ Future<ApiResponse> signUp(
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
+        apiResponse.data =
+            User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       case 401:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       default:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
     }
   } on SocketException {
@@ -71,24 +76,28 @@ Future<ApiResponse> signIn(String email, String password) async {
 
   try {
     final response = await http.post(
-      Uri.parse('${_baseUrl}user/login/$email'),
+      Uri.parse('${_baseUrl}user/login'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
         'password': password,
+        'userEmail': email,
       },
     );
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
+        apiResponse.data = "success";
+        // apiResponse.data = User.fromJson(jsonDecode(utf8.decode(response.bodyBytes))); //한글깨짐 방지
         break;
       case 401:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       default:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
     }
   } on SocketException {
@@ -104,15 +113,18 @@ Future<ApiResponse> getUserDetails(String email) async {
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
+        apiResponse.data =
+            User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       case 401:
         debugPrint((apiResponse.apiError as ApiError).error);
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       default:
         debugPrint((apiResponse.apiError as ApiError).error);
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
     }
   } on SocketException {
@@ -128,14 +140,13 @@ Future<ApiResponse> checkEmail(String email) async {
     final response = await http.get(
       Uri.parse('${_baseUrl}user/check?email=$email'),
     );
-    debugPrint(response.body);
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = "사용 가능한 이메일입니다.";
+        apiResponse.data = "사용 가능한 이메일입니다☺️";
         break;
       default:
-        apiResponse.apiError = ApiError(error: "이미 사용중인 이메일입니다.");
+        apiResponse.apiError = ApiError(error: "이미 사용중인 이메일이네요😅");
         break;
     }
   } on SocketException {
@@ -157,13 +168,82 @@ Future<ApiResponse> checkNickname(String nickname) async {
 
     switch (response.statusCode) {
       case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
+        apiResponse.data =
+            User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       case 401:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
       default:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        break;
+    }
+  } on SocketException {
+    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+  }
+  return apiResponse;
+}
+
+Future<ApiResponse> addNewPost(Post post) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    final response = await http.post(
+      Uri.parse('${_baseUrl}spot/addspot'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'useremail': post.email,
+        'spotName': post.spotName,
+        'spotcategory': post.category,
+        'spotComment': post.comment,
+      }),
+    );
+    debugPrint(jsonDecode(utf8.decode(response.bodyBytes)).toString());
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = utf8.decode(response.bodyBytes);
+        break;
+      case 401:
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        break;
+      default:
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        break;
+    }
+  } on SocketException {
+    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+  }
+  return apiResponse;
+}
+
+Future<ApiResponse> getPost(String email) async {
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    final response =
+        await http.get(Uri.parse('${_baseUrl}spot/userSpot?email=$email'));
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = json.decode(response.body);
+        // apiResponse.data = jsonDecode(utf8.decode(response.bodyBytes));
+        // apiResponse.data = Post.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        break;
+      case 401:
+        debugPrint((apiResponse.apiError as ApiError).error);
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        break;
+      default:
+        debugPrint((apiResponse.apiError as ApiError).error);
+        apiResponse.apiError =
+            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         break;
     }
   } on SocketException {
