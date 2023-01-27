@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myspot/models/post.dart';
+import 'package:myspot/services/api.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:myspot/widgets/category_keyword_block.dart';
+import 'package:myspot/widgets/rounded_button.dart';
 import '../../viewModels/search_page_view_controller.dart';
 
 class NewPostPage extends StatefulWidget {
@@ -32,6 +35,9 @@ class _NewPostPageState extends State<NewPostPage> {
 
   final FocusNode focusNode = FocusNode();
   final TextEditingController tagController = TextEditingController();
+
+  late ApiResponse _apiResponse;
+  final Post _post = Post();
 
   @override
   void dispose() {
@@ -100,6 +106,44 @@ class _NewPostPageState extends State<NewPostPage> {
                     Divider(height: 1.h),
                   ],
                 ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.h),
+              child: RoundedButton(
+                onPressed: () async {
+                  _post.email = "test@test.com";
+                  _post.spotName = "newLocation";
+                  _post.category = "밥집";
+                  _post.comment = "연어초밥이 죽여줘요ㅠㅠ";
+
+                  _apiResponse = await addNewPost(_post);
+                  if (_apiResponse.apiError == null) {
+                    debugPrint(_apiResponse.data.toString());
+                    Get.defaultDialog(
+                      radius: 10,
+                      title: "spot 등록",
+                      middleText: "스팟이 등록되었습니다",
+                    );
+                  } else {
+                    debugPrint((_apiResponse.apiError as ApiError).error);
+                    Get.defaultDialog(
+                      radius: 10,
+                      title: "spot 등록",
+                      middleText: "스팟이 정상적으로 등록되지 못했습니다.\n다시 시도해주세요.",
+                    );
+                  }
+
+                  //게시물 확인
+                  // _apiResponse = await getPost(_post.email!);
+                  // if (_apiResponse.apiError == null) {
+                  //   debugPrint(_apiResponse.data.toString());
+                  // } else {
+                  //   debugPrint((_apiResponse.apiError as ApiError).error);
+                  // }
+                },
+                label: '등록 하기',
+                width: 275.w,
               ),
             ),
           ],
@@ -238,6 +282,22 @@ class _NewPostPageState extends State<NewPostPage> {
               SizedBox(
                 height: 16.sp,
               ),
+              Wrap(
+                  children: List<Widget>.from(
+                      Get.put(SearchPageViewController())
+                          .categorySelectList
+                          .map(
+                            (element) => GestureDetector(
+                              child: categoryBlock(
+                                  element.ifActivated,
+                                  element.category.emoji,
+                                  element.category.categoryName),
+                              onTapUp: (value) {
+                                Get.put(SearchPageViewController())
+                                    .categoryChange(element);
+                              },
+                            ),
+                          ))),
               //
             ],
           ),
@@ -258,6 +318,22 @@ class _NewPostPageState extends State<NewPostPage> {
                 SizedBox(
                   height: 16.sp,
                 ),
+                Wrap(
+                    children: List<Widget>.from(
+                        Get.put(SearchPageViewController())
+                            .keyWordSelectList
+                            .map(
+                              (element) => GestureDetector(
+                                child: keyWordBlock(
+                                    element.ifActivated,
+                                    element.keyWord.emoji,
+                                    element.keyWord.keyWordName),
+                                onTapUp: (value) {
+                                  Get.put(SearchPageViewController())
+                                      .keyWordChange(element);
+                                },
+                              ),
+                            ))),
                 //
               ],
             ),

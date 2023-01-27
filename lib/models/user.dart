@@ -22,15 +22,15 @@ class User {
   String? nickname;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        email: json["email"],
+        email: json["user_email"],
         password: json["password"],
-        nickname: json["nickname"],
+        nickname: json["user_name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "email": email,
+        "user_email": email,
         "password": password,
-        "nickname": nickname,
+        "user_name": nickname,
       };
 
   // print properties for debug
