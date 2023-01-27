@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:myspot/bindings/main_page_binding.dart';
 import 'package:myspot/pages/searchMapPage/search_map_page.dart';
 import 'package:myspot/pages/searchPage/search_page.dart';
 import 'package:myspot/pages/myPage/my_page.dart';
@@ -10,6 +9,7 @@ import 'package:myspot/pages/signUpInPage/signin_page.dart';
 import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
+import 'package:myspot/viewModels/city_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'models/locations.dart';
@@ -33,6 +33,7 @@ class MySpotApp extends StatelessWidget {
             initialRoute: "/Main",
             initialBinding: BindingsBuilder(() {
               Get.put(UserController());
+              Get.put(CityViewController());
             }),
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(
@@ -44,7 +45,6 @@ class MySpotApp extends StatelessWidget {
                   Get.find<UserController>().getPosition();
                   return const MainPage();
                 },
-                binding: MainPageBinding(),
                 transition: Transition.fadeIn,
               ),
               GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
@@ -53,16 +53,13 @@ class MySpotApp extends StatelessWidget {
               GetPage(
                 name: '/Search',
                 page: () => const SearchPage(),
-                binding: BindingsBuilder(() {
-                  Get.put(SearchPageViewController());
-                }),
+                  binding: BindingsBuilder(() {
+                    Get.put(SearchPageViewController());
+                  })
               ),
               GetPage(
                 name: '/SearchMap',
                 page: () => const SearchMapPage(),
-                binding: BindingsBuilder(() {
-                  Get.put(SearchPageViewController());
-                }),
               ),
               GetPage(name: '/MyPage', page: () => const MyPage()),
               GetPage(name: '/NewPost', page: () => const NewPostPage()),
