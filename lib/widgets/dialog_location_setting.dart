@@ -3,14 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/services/api.dart';
-import 'package:myspot/services/coor_to_address.dart';
+import 'package:myspot/services/coor_address_transition.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/models/locations.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
+import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/drop_down_set_location_city.dart';
 import 'package:myspot/widgets/drop_down_set_location_gu.dart';
 import 'package:myspot/widgets/drop_down_set_location_dong.dart';
+import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class DialogLocationSetting extends StatelessWidget {
   const DialogLocationSetting({Key? key}) : super(key: key);
@@ -121,8 +123,14 @@ class DialogLocationSetting extends StatelessWidget {
                             height: 40.h,
                           ),
                           GestureDetector(
-                            onTap: (){
-                              Get.find<UserController>().getPosition();
+                            onTap: () async {
+                              LatLng coor = await Get.find<UserController>().getPosition();
+                              try {
+                                Get.find<SearchPageViewController>().updateCurCamPostion(coor);
+                              }
+                              catch(error){
+                                print(error);
+                              }
                               Get.back();
                             },
                             child: Row(
@@ -169,12 +177,19 @@ class DialogLocationSetting extends StatelessWidget {
                                 _dong = _dong == "선택없음" ? " " : _dong;
 
                                 Get.find<UserController>().setAddress(
-                                  CoorToAdd(
+                                  CoorAndAddress(
                                     addressUpper: _city + ' ' + _gu,
                                     addressLower: _dong,
                                   ),
                                 );
 
+                                try {
+                                  Get.find<SearchPageViewController>()
+                                      .updateCurCamPositon(_city + _gu + _dong);
+                                }
+                                catch(error){
+                                  print(error);
+                                }
                                 Get.back();
                               },
                               child: Text(

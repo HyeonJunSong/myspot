@@ -2,6 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/models/spot_list_element.dart';
+import 'package:myspot/services/coor_address_transition.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SearchPageViewController extends GetxController{
@@ -14,6 +15,12 @@ class SearchPageViewController extends GetxController{
 
   void updateCurCamPostion(LatLng position){
     mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
+  }
+
+  void updateCurCamPositon(String address){
+    GETAddToCoorJSON(address).then((value) {
+      mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: value.coor)));
+    } );
   }
 
   //drawer
