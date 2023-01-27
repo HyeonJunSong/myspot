@@ -11,7 +11,7 @@ class CheckValidate {
     } else if (!regExp.hasMatch(value)) {
       focusNode.requestFocus(); //포커스를 해당 textformfield에 맞춘다.
       return '• 잘못된 이메일 형식입니다.';
-    } else if (check == false) {
+    } else if (check == true) {
       focusNode.requestFocus();
       return '• 이미 사용중인 이메일입니다.';
     }
