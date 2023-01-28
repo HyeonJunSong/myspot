@@ -16,7 +16,7 @@ class SearchMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx( () => Scaffold(
-      appBar: searchResultPageAppbar(),
+      appBar: searchMapPageAppbar(),
       resizeToAvoidBottomInset : false,
       body: Stack(
         children: [
@@ -46,6 +46,7 @@ class SearchMapPage extends StatelessWidget {
     top: Get.find<SearchPageViewController>().drawer_topSpace.value,
     child: Container(
       width: 390.w,
+      height: 900.h,
       padding: EdgeInsets.only(top: 10.h),
       decoration: BoxDecoration(
         color: colorWhite
@@ -163,48 +164,6 @@ class SearchMapPage extends StatelessWidget {
     )
   ));
 
-  _categoryBlock(bool ifActivated, String emoji, String categoryName) {
-    return GestureDetector(
-      child: ifActivated ? Container(
-        margin: EdgeInsets.only(right: 11.w, bottom: 5.h),
-//    height: 33.h,
-        padding: EdgeInsets.symmetric(vertical: 6.5.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: colorPrimary,
-          borderRadius: BorderRadius.circular(20.w),
-        ),
-        child: FittedBox(
-          child: Text(emoji + categoryName, style: TextStyle(
-            fontSize: 14.sp,
-            color: colorWhite,
-          ),),
-        ),
-      ) :
-      Container(
-//    height: 33.h,
-        margin: EdgeInsets.only(right: 11.w, bottom: 5.h),
-        padding: EdgeInsets.symmetric(vertical: 6.5.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-            color: colorBackground,
-            borderRadius: BorderRadius.circular(20.w),
-            border: Border.all(
-                width: 1.w,
-                color: colorInactive
-            )
-        ),
-        child: FittedBox(
-          child: Text(emoji + categoryName, style: TextStyle(
-            fontSize: 14.sp,
-            color: colorBlack,
-          ),),
-        ),
-      ),
-
-      onTap: (){
-      },
-    );
-  }
-
   _keyWordBox() => Wrap(
     children: List<Widget>.from(Get.find<SearchPageViewController>().keyWordSelectList.map((element) =>
       GestureDetector(
@@ -215,48 +174,6 @@ class SearchMapPage extends StatelessWidget {
       ),
     )
   ));
-
-  _moodBlock(bool ifActivated, String emoji, String moodName) {
-    return GestureDetector(
-      child: ifActivated ? Container(
-        margin: EdgeInsets.only(right: 11.w, bottom: 5.h),
-//    height: 33.h,
-        padding: EdgeInsets.symmetric(vertical: 6.5.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: colorKeyWordBlock,
-          borderRadius: BorderRadius.circular(20.w),
-        ),
-        child: FittedBox(
-          child: Text(emoji + moodName, style: TextStyle(
-            fontSize: 16.sp,
-            color: colorWhite,
-          ),),
-        ),
-      ) :
-      Container(
-//    height: 33.h,
-        margin: EdgeInsets.only(right: 11.w, bottom: 5.h),
-        padding: EdgeInsets.symmetric(vertical: 6.5.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-            color: colorBackground,
-            borderRadius: BorderRadius.circular(20.w),
-            border: Border.all(
-                width: 1.w,
-                color: colorInactive
-            )
-        ),
-        child: FittedBox(
-          child: Text(emoji + moodName, style: TextStyle(
-            fontSize: 16.sp,
-            color: colorBlack,
-          ),),
-        ),
-      ),
-
-      onTap: (){
-      },
-    );
-  }
 
   _searchResultList() => Container(
     child: Column(

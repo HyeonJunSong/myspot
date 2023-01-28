@@ -25,7 +25,4 @@ class UserController extends GetxController{
     setAddressUpper(newAddress.addressUpper);
     setAddressLower(newAddress.addressLower);
   }
-
-
-
 }

@@ -41,7 +41,7 @@ class DialogLocationSetting extends StatelessWidget {
                       "assets/images/close.png",
                     ),
                     onTap: () {
-                      Get.back();
+                      Get.back(result: null);
                     },
                   ),
                   SizedBox(width: 109.w),
@@ -125,13 +125,7 @@ class DialogLocationSetting extends StatelessWidget {
                           GestureDetector(
                             onTap: () async {
                               LatLng coor = await Get.find<UserController>().getPosition();
-                              try {
-                                Get.find<SearchPageViewController>().updateCurCamPostion(coor);
-                              }
-                              catch(error){
-                                print(error);
-                              }
-                              Get.back();
+                              Get.back(result: coor);
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,7 +161,7 @@ class DialogLocationSetting extends StatelessWidget {
                                 elevation: 0.0,
                                 backgroundColor: colorPrimary,
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 String _city = Get.find<CityViewController>().city.value;
                                 String _gu = Get.find<CityViewController>().gu.value;
                                 String _dong = Get.find<CityViewController>().dong.value;
@@ -183,14 +177,9 @@ class DialogLocationSetting extends StatelessWidget {
                                   ),
                                 );
 
-                                try {
-                                  Get.find<SearchPageViewController>()
-                                      .updateCurCamPositon(_city + _gu + _dong);
-                                }
-                                catch(error){
-                                  print(error);
-                                }
-                                Get.back();
+                                CoorAndAddress coor = await GETAddToCoorJSON(_city + _gu + _dong);
+
+                                Get.back(result: coor.coor);
                               },
                               child: Text(
                                 "완료",
