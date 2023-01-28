@@ -17,12 +17,6 @@ class SearchPageViewController extends GetxController{
     mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
   }
 
-  void updateCurCamPositon(String address){
-    GETAddToCoorJSON(address).then((value) {
-      mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: value.coor)));
-    } );
-  }
-
   //drawer
   RxDouble drawer_topSpace = 471.h.obs;
 
@@ -87,6 +81,8 @@ class SearchPageViewController extends GetxController{
     Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 1),
     Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 2),
     Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325, LatLng(35.89229637317734, 128.60856585746507), 3),
+    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
+    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
     Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
     Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
   ].obs;

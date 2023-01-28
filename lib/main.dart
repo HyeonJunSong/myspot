@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:myspot/pages/postMapPage/post_map_page.dart';
 import 'package:myspot/pages/searchMapPage/search_map_page.dart';
 import 'package:myspot/pages/searchPage/search_page.dart';
 import 'package:myspot/pages/myPage/my_page.dart';
@@ -10,6 +11,7 @@ import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
+import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'models/locations.dart';
@@ -63,6 +65,13 @@ class MySpotApp extends StatelessWidget {
               ),
               GetPage(name: '/MyPage', page: () => const MyPage()),
               GetPage(name: '/NewPost', page: () => const NewPostPage()),
+              GetPage(
+                name: '/PostMap',
+                page: () => PostMapPage(),
+                binding: BindingsBuilder(() {
+                  Get.put(PostPageViewController());
+                })
+              ),
             ],
           theme: ThemeData(
             fontFamily: 'Noto_Sans_KR',
