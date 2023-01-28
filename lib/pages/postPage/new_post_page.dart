@@ -58,20 +58,27 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: EdgeInsets.fromLTRB(25.w, 45.h, 25.w, 25.h),
               child: Column(
                 children: [
-                  TextField(
-                    controller: locationController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding:
+                  Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      return const Iterable<String>.empty();
+                    },
+                    fieldViewBuilder: (context, controller, focusNode, onEditingComplete){
+                      return TextField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding:
                           EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 14.h),
-                      hintText: "장소를 검색하세요",
-                      suffixIcon: const Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                    ),
+                          hintText: "장소를 검색하세요",
+                          suffixIcon: const Icon(Icons.search),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                        ),
+                      );
+                    },
                   ),
                   TextButton.icon(
                       onPressed: () {
