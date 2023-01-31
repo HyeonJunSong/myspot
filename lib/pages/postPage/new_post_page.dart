@@ -58,28 +58,53 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: EdgeInsets.fromLTRB(25.w, 45.h, 25.w, 25.h),
               child: Column(
                 children: [
-                  Autocomplete<String>(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      return const Iterable<String>.empty();
+                  GestureDetector(
+                    onTap: (){
+                      Get.toNamed("/PostMap");
                     },
-                    fieldViewBuilder: (context, controller, focusNode, onEditingComplete){
-                      return TextField(
-                        controller: locationController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.r),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding:
-                          EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 14.h),
-                          hintText: "장소를 검색하세요",
-                          suffixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                        ),
-                      );
-                    },
+                    child: Container(
+                      width: 335.w,
+                      height: 48.h,
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      decoration: BoxDecoration(
+                        color: colorInactive,
+                        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("장소를 검색하세요.", style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.sp,
+                          ),),
+                          Icon(Icons.search, size: 14.w,color: Colors.black,)
+                        ],
+                      ),
+                    ),
                   ),
+                  // Autocomplete<String>(
+                  //   optionsBuilder: (TextEditingValue textEditingValue) {
+                  //     return const Iterable<String>.empty();
+                  //   },
+                  //   fieldViewBuilder: (context, controller, focusNode, onEditingComplete){
+                  //     return TextField(
+                  //       controller: locationController,
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.circular(20.r),
+                  //           borderSide: BorderSide.none,
+                  //         ),
+                  //         contentPadding:
+                  //         EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 14.h),
+                  //         hintText: "장소를 검색하세요",
+                  //         suffixIcon: const Icon(Icons.search),
+                  //         filled: true,
+                  //         fillColor: Colors.grey[200],
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   TextButton.icon(
                       onPressed: () {
                         //실시간 위치 가져와서 텍스트에 넣기,,,
