@@ -1,12 +1,23 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
-import 'package:myspot/models/spot_list_element.dart';
+import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/coor_address_transition.dart';
 import 'package:myspot/services/keyword_location_search.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class PostPageViewController extends GetxController{
+
+  ////PostPage
+
+  Rx<LocationSearchResult> location = LocationSearchResult.nullInit().obs;
+
+  void updateLocation(LocationSearchResult location){
+    this.location(location);
+  }
+
+  ////PostMapPage
+
   //map
   late NaverMapController mapController;
 

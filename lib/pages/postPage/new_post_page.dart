@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:myspot/models/post.dart';
 import 'package:myspot/services/api.dart';
 import 'package:myspot/utils/constants.dart';
+import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,7 +50,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
       appBar: buildAppbar('spot 등록'),
       body: SafeArea(
         child: Column(
@@ -74,10 +75,14 @@ class _NewPostPageState extends State<NewPostPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("장소를 검색하세요.", style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14.sp,
-                          ),),
+                          Text(
+                            Get.find<PostPageViewController>().location.value.placeName.isEmpty ?
+                            "장소를 검색하세요." : Get.find<PostPageViewController>().location.value.placeName,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.sp,
+                            ),
+                          ),
                           Icon(Icons.search, size: 14.w,color: Colors.black,)
                         ],
                       ),
@@ -181,7 +186,7 @@ class _NewPostPageState extends State<NewPostPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildReview() {

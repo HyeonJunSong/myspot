@@ -123,7 +123,7 @@ _keyWordBox() => Container(
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("태그 선택", style: TextStyle(
+      Text("키워드 선택", style: TextStyle(
         color: colorBlack,
         fontSize: 16.sp,
         fontWeight: FontWeight.w700,

@@ -157,7 +157,8 @@ class PostMapPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: (){
-              Get.back(result: result.id);
+              Get.find<PostPageViewController>().updateLocation(result);
+              Get.back();
             },
             child: Text("선택"),
           ),
