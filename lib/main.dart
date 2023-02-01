@@ -64,14 +64,14 @@ class MySpotApp extends StatelessWidget {
                 page: () => const SearchMapPage(),
               ),
               GetPage(name: '/MyPage', page: () => const MyPage()),
-              GetPage(name: '/NewPost', page: () => const NewPostPage()),
               GetPage(
-                name: '/PostMap',
-                page: () => PostMapPage(),
+                name: '/NewPost',
+                page: () => const NewPostPage(),
                 binding: BindingsBuilder(() {
                   Get.put(PostPageViewController());
-                })
+                }),
               ),
+              GetPage(name: '/PostMap', page: () => PostMapPage(),),
             ],
           theme: ThemeData(
             fontFamily: 'Noto_Sans_KR',

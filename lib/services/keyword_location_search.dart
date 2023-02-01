@@ -21,6 +21,13 @@ class LocationSearchResult{
     required this.id
   });
 
+  LocationSearchResult.nullInit()
+      : this.coor = LatLng(0, 0),
+        this.placeName = "",
+        this.address = "",
+        this.id = ""
+  ;
+
   static List<LocationSearchResult> locationListFromJson(String json) {
     List<LocationSearchResult> result = [];
     List<dynamic>.from(Map<String, dynamic>.from(jsonDecode(json))["documents"]).forEach((element) {
