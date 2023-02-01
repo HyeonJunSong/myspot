@@ -24,7 +24,7 @@ class _SignInPageState extends State<SignInPage> {
   final _passwordFocus = FocusNode();
 
   bool _passwordObscure = true;
-  final _newUser = User();
+  late var _newUser = User();
   late ApiResponse _apiResponse;
 
   Future<void> _submit() async {
@@ -37,13 +37,14 @@ class _SignInPageState extends State<SignInPage> {
         //로그인 성공시
         //사용자 정보 불러오기!!
         _apiResponse = await getUserDetails(_newUser.email!);
-
+        _newUser = _apiResponse.data as User;
         Get.defaultDialog(
           radius: 10,
           title: "로그인",
-          middleText: "@@님, 환영합니다. 🤩",
+          middleText: "${_newUser.nickname}님, 환영합니다. 🤩",
         );
-        // 홈으로,,,,
+        // 홈으로
+        Get.toNamed("/Main");
       } else {
         Get.defaultDialog(
           radius: 10,

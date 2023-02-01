@@ -109,7 +109,7 @@ Future<ApiResponse> signIn(String email, String password) async {
 Future<ApiResponse> getUserDetails(String email) async {
   ApiResponse apiResponse = ApiResponse();
   try {
-    final response = await http.get(Uri.parse('${_baseUrl}user/$email'));
+    final response = await http.get(Uri.parse('${_baseUrl}user/login/$email'));
 
     switch (response.statusCode) {
       case 200:
