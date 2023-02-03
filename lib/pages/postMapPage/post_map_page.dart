@@ -79,7 +79,9 @@ class PostMapPage extends StatelessWidget {
     ),
   );
 
-  _drawer() => Positioned(
+  _drawer() => AnimatedPositioned(
+    curve: Curves.easeOut,
+    duration: Duration(milliseconds: 100),
     top: Get.find<PostPageViewController>().drawer_topSpace.value,
     child: Container(
       width: 390.w,
@@ -109,6 +111,9 @@ class PostMapPage extends StatelessWidget {
   _knob() => GestureDetector(
     onVerticalDragUpdate: (value){
       Get.find<PostPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
+    },
+    onVerticalDragEnd: (value){
+      Get.find<PostPageViewController>().calibrateDrawerTopSpace();
     },
     child: Container(
       color: Colors.transparent,

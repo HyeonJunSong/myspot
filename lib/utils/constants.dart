@@ -22,6 +22,6 @@ Map<int, Color> materialPrimary = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-const double drawer_bottom = 800;
-const double drawer_mid = 400;
+const double drawer_bottom = 740;
+const double drawer_mid = 420;
 const double drawer_top = 100;
