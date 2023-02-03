@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
@@ -10,6 +11,21 @@ import 'package:naver_map_plugin/naver_map_plugin.dart';
 class PostPageViewController extends GetxController{
   //map
   late NaverMapController mapController;
+  RxList<Marker> markers = <Marker>[].obs;
+
+  void updateMarker(BuildContext context){
+    OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
+        markers(searchResult().map((e) => Marker(
+          markerId: e.id,
+          position: e.coor,
+          icon: image,
+          height: 40,
+          width: 40
+        )).toList()
+      )
+    );
+    refresh();
+  }
 
   void onMapCreated(NaverMapController controller) {
     mapController = controller;
@@ -27,16 +43,17 @@ class PostPageViewController extends GetxController{
     searchKeyword(newKeyword);
   }
 
-  void updateSearchResult(List<LocationSearchResult> result){
+  void updateSearchResult(List<LocationSearchResult> result, BuildContext context){
     searchResult(result);
+    updateMarker(context);
   }
 
-  void keyWordSearch() async {
+  void keyWordSearch(BuildContext context) async {
     if(searchKeyword.isEmpty) return;
 
     CameraPosition curCamPos = await mapController.getCameraPosition();
     List<LocationSearchResult> result = await GETKeywordLocationSearchJSON(searchKeyword.value, curCamPos.target);
-    updateSearchResult(result);
+    updateSearchResult(result, context);
   }
 
   //drawer

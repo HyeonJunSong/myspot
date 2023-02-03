@@ -25,14 +25,14 @@ class PostMapPage extends StatelessWidget {
       body: Stack(
         children: [
           _map(),
-          _searchBox(),
+          _searchBox(context),
           _drawer()
         ],
       ),
     ));
   }
 
-  _searchBox() => Positioned(
+  _searchBox(BuildContext context) => Positioned(
     top: 30.h,
     left: 27.w,
     width: 335.w,
@@ -48,7 +48,7 @@ class PostMapPage extends StatelessWidget {
         suffixIcon: GestureDetector(
           child: const Icon(Icons.search, size: 20,),
           onTap: () async {
-            Get.find<PostPageViewController>().keyWordSearch();
+            Get.find<PostPageViewController>().keyWordSearch(context);
             textFocus.unfocus();
           },
         ),
@@ -59,7 +59,7 @@ class PostMapPage extends StatelessWidget {
         Get.find<PostPageViewController>().updateSearchKeyword(value);
       },
       onSubmitted: (value){
-        Get.find<PostPageViewController>().keyWordSearch();
+        Get.find<PostPageViewController>().keyWordSearch(context);
       },
     )
   );
@@ -69,12 +69,7 @@ class PostMapPage extends StatelessWidget {
       initialCameraPosition: CameraPosition(
           target: LatLng(35.89229637317734, 128.60856585746507)
       ),
-      markers: Get.find<PostPageViewController>()
-          .searchResult()
-          .map((e) => Marker(
-          markerId: e.id,
-          position: e.coor
-      )).toList(),
+      markers: Get.find<PostPageViewController>().markers,
       onMapCreated: Get.find<PostPageViewController>().onMapCreated,
     ),
   );

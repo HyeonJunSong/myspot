@@ -52,7 +52,6 @@ Future<List<LocationSearchResult>> GETKeywordLocationSearchJSON(String keyword, 
 
     switch (response.statusCode) {
       case 200:
-        print(utf8.decode(response.bodyBytes));
         return LocationSearchResult.locationListFromJson(utf8.decode(response.bodyBytes));
       case 401:
         apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
