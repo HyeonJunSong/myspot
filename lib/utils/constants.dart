@@ -20,3 +20,8 @@ Map<int, Color> materialPrimary = {
   800: Color.fromRGBO(9, 51, 134, .9),
   900: Color.fromRGBO(9, 51, 134, 1),
 };
+
+////////////////////////////////////////////////////////////////////////////////
+const double drawer_bottom = 805;
+const double drawer_mid = 485;
+const double drawer_top = 165;
