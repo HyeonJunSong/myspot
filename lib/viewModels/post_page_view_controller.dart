@@ -20,7 +20,10 @@ class PostPageViewController extends GetxController{
           position: e.coor,
           icon: image,
           height: 40,
-          width: 40
+          width: 40,
+          onMarkerTab: (marker, map){
+            updateCurCamPostion(marker.position);
+          }
         )).toList()
       )
     );
@@ -53,11 +56,13 @@ class PostPageViewController extends GetxController{
 
     CameraPosition curCamPos = await mapController.getCameraPosition();
     List<LocationSearchResult> result = await GETKeywordLocationSearchJSON(searchKeyword.value, curCamPos.target);
+
     updateSearchResult(result, context);
+    setDrawerMid();
   }
 
   //drawer
-  RxDouble drawer_topSpace = 471.h.obs;
+  RxDouble drawer_topSpace = drawer_bottom.h.obs;
 
   void updateDrawerTopSpace(double newVal) {
     drawer_topSpace(newVal);
@@ -70,5 +75,14 @@ class PostPageViewController extends GetxController{
         drawer_topSpace(drawer_mid.h);
       else
         drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerTop(){
+    drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerMid(){
+    drawer_topSpace(drawer_mid.h);
+  }
+  void setDrawerBottom(){
+    drawer_topSpace(drawer_bottom.h);
   }
 }

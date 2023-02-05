@@ -20,6 +20,7 @@ class PostMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx( () => Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: postMapPageAppbar(),
       resizeToAvoidBottomInset : false,
       body: Stack(
@@ -33,7 +34,7 @@ class PostMapPage extends StatelessWidget {
   }
 
   _searchBox(BuildContext context) => Positioned(
-    top: 30.h,
+    top: 95.h,
     left: 27.w,
     width: 335.w,
     child: TextField(
@@ -105,7 +106,10 @@ class PostMapPage extends StatelessWidget {
 
   _knob() => GestureDetector(
     onVerticalDragUpdate: (value){
-      Get.find<PostPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
+      if(value.globalPosition.dy >= 65.h)
+        Get.find<PostPageViewController>().updateDrawerTopSpace(value.globalPosition.dy);
+      else
+        Get.find<PostPageViewController>().updateDrawerTopSpace(65.h);
     },
     onVerticalDragEnd: (value){
       Get.find<PostPageViewController>().calibrateDrawerTopSpace();

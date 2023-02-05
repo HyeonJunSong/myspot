@@ -13,6 +13,7 @@ PreferredSizeWidget buildAppbar(String label) {
     backgroundColor: Colors.white,
     elevation: 1.sp,
     leading: _leading(),
+    toolbarHeight: 65.h,
     title: Text(
       label,
       style: _textStyle(TextDecoration.none)
@@ -26,6 +27,7 @@ searchPageAppbar() => AppBar(
   backgroundColor: Colors.white,
   elevation: 1.sp,
   leading: _leading(),
+  toolbarHeight: 65.h,
   title: GestureDetector(
     child: Text("대학로 80", style: _textStyle(TextDecoration.underline)),
     onTap: (){Get.dialog(DialogLocationSetting());},
@@ -37,6 +39,7 @@ searchMapPageAppbar() => AppBar(
   backgroundColor: Colors.white,
   elevation: 1.sp,
   leading: _leading(),
+  toolbarHeight: 65.h,
   title: Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -57,6 +60,7 @@ postMapPageAppbar() => AppBar(
   backgroundColor: Colors.white,
   elevation: 1.sp,
   leading: _leading(),
+  toolbarHeight: 65.h,
   title: GestureDetector(
     child: Text("대학로 80", style: _textStyle(TextDecoration.underline)),
     onTap: () async {
