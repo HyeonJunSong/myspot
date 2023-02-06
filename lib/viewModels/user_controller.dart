@@ -5,8 +5,10 @@ import 'package:myspot/services/coor_address_transition.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class UserController extends GetxController{
+  ////
+  String email = "test@google.com";
 
-  //location
+  ////location
   Rx<LatLng> curPosition = LatLng(0, 0).obs;
 
   Future<LatLng> getPosition() async {
@@ -17,7 +19,7 @@ class UserController extends GetxController{
     return LatLng(curPos.latitude, curPos.longitude);
   }
 
-  //설정 된 주소
+  ////설정 된 주소
   RxString setAddressUpper = " ".obs;
   RxString setAddressLower = " ".obs;
 

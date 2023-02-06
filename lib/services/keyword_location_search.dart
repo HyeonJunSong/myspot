@@ -15,18 +15,11 @@ class LocationSearchResult{
   String id;
 
   LocationSearchResult({
-    required this.coor,
-    required this.placeName,
-    required this.address,
-    required this.id
+    this.coor = const LatLng(0, 0),
+    this.placeName = "",
+    this.address = "",
+    this.id = ""
   });
-
-  LocationSearchResult.nullInit()
-      : this.coor = LatLng(0, 0),
-        this.placeName = "",
-        this.address = "",
-        this.id = ""
-  ;
 
   static List<LocationSearchResult> locationListFromJson(String json) {
     List<LocationSearchResult> result = [];
