@@ -186,42 +186,42 @@ Future<ApiResponse> checkNickname(String nickname) async {
   return apiResponse;
 }
 
-Future<ApiResponse> addNewPost(Post post) async {
-  ApiResponse apiResponse = ApiResponse();
-
-  try {
-    final response = await http.post(
-      Uri.parse('${_baseUrl}spot/addspot'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'useremail': post.email,
-        'spotName': post.spotName,
-        'spotcategory': post.category,
-        'spotComment': post.comment,
-      }),
-    );
-    debugPrint(jsonDecode(utf8.decode(response.bodyBytes)).toString());
-
-    switch (response.statusCode) {
-      case 200:
-        apiResponse.data = utf8.decode(response.bodyBytes);
-        break;
-      case 401:
-        apiResponse.apiError =
-            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-        break;
-      default:
-        apiResponse.apiError =
-            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-        break;
-    }
-  } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
-  }
-  return apiResponse;
-}
+// Future<ApiResponse> addNewPost(Post post) async {
+//   ApiResponse apiResponse = ApiResponse();
+//
+//   try {
+//     final response = await http.post(
+//       Uri.parse('${_baseUrl}spot/addspot'),
+//       headers: {
+//         'Content-Type': 'application/json; charset=UTF-8',
+//       },
+//       body: jsonEncode({
+//         'useremail': post.email,
+//         'spotName': post.spotName,
+//         'spotcategory': post.category,
+//         'spotComment': post.comment,
+//       }),
+//     );
+//     debugPrint(jsonDecode(utf8.decode(response.bodyBytes)).toString());
+//
+//     switch (response.statusCode) {
+//       case 200:
+//         apiResponse.data = utf8.decode(response.bodyBytes);
+//         break;
+//       case 401:
+//         apiResponse.apiError =
+//             ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+//         break;
+//       default:
+//         apiResponse.apiError =
+//             ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+//         break;
+//     }
+//   } on SocketException {
+//     apiResponse.apiError = ApiError(error: "Server error. Please retry");
+//   }
+//   return apiResponse;
+// }
 
 Future<ApiResponse> getPost(String email) async {
   ApiResponse apiResponse = ApiResponse();

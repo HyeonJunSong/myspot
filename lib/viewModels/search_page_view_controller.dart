@@ -28,13 +28,17 @@ class SearchPageViewController extends GetxController{
   RxList<CategorySelect> categorySelectList = List<CategorySelect>.from(categoryList.map((e) => CategorySelect(false, e))).obs;
   RxList<KeyWordSelect> keyWordSelectList = List<KeyWordSelect>.from(keyWordList.map((e) => KeyWordSelect(false, e))).obs;
 
+  int curCategoryInd = 0;
+
   void categoryChange(CategorySelect element){
+    categorySelectList[curCategoryInd].ifActivated = false;
     int ind = categorySelectList.indexOf(element);
-    if(categorySelectList[ind].ifActivated) {
-      categorySelectList[ind].ifActivated = false;
-    } else {
+
+    if(ind != curCategoryInd) {
       categorySelectList[ind].ifActivated = true;
+      curCategoryInd = ind;
     }
+
     categorySelectList.refresh();
   }
 
@@ -87,20 +91,6 @@ class SearchPageViewController extends GetxController{
     Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
   ].obs;
 
-}
-
-class CategorySelect{
-  bool ifActivated;
-  Category category;
-
-  CategorySelect(this.ifActivated, this.category);
-}
-
-class KeyWordSelect{
-  bool ifActivated;
-  KeyWord keyWord;
-
-  KeyWordSelect(this.ifActivated, this.keyWord);
 }
 
 List<String> sortBy = [
