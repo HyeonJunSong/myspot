@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/post.dart';
 import 'package:myspot/services/api.dart';
@@ -127,36 +128,22 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: EdgeInsets.symmetric(vertical: 15.h),
               child: RoundedButton(
                 onPressed: () async {
-                  Get.find<PostPageViewController>().post();
-                  // _post.email = "test@test.com";
-                  // _post.spotName = "newLocation";
-                  // _post.category = "밥집";
-                  // _post.comment = "연어초밥이 죽여줘요ㅠㅠ";
-                  //
-                  // _apiResponse = await addNewPost(_post);
-                  // if (_apiResponse.apiError == null) {
-                  //   debugPrint(_apiResponse.data.toString());
-                  //   Get.defaultDialog(
-                  //     radius: 10,
-                  //     title: "spot 등록",
-                  //     middleText: "스팟이 등록되었습니다",
-                  //   );
-                  // } else {
-                  //   debugPrint((_apiResponse.apiError as ApiError).error);
-                  //   Get.defaultDialog(
-                  //     radius: 10,
-                  //     title: "spot 등록",
-                  //     middleText: "스팟이 정상적으로 등록되지 못했습니다.\n다시 시도해주세요.",
-                  //   );
-                  // }
-                  //
-                  // //게시물 확인
-                  // // _apiResponse = await getPost(_post.email!);
-                  // // if (_apiResponse.apiError == null) {
-                  // //   debugPrint(_apiResponse.data.toString());
-                  // // } else {
-                  // //   debugPrint((_apiResponse.apiError as ApiError).error);
-                  // // }
+                  PostRespond respond = await Get.find<PostPageViewController>().post();
+                  if(respond.result.compareTo("success") == 0){
+                    Fluttertoast.showToast(
+                        msg: "스팟 등록 완료 😄",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: colorPrimary,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                    Get.back();
+                  }
+                  else{
+
+                  }
                 },
                 label: '등록 하기',
                 width: 275.w,
