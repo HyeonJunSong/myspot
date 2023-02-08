@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/dialog_location_setting.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
@@ -44,7 +45,7 @@ searchMapPageAppbar() => AppBar(
     mainAxisSize: MainAxisSize.min,
     children: [
       GestureDetector(
-        child: Text("대학로 80", style: _textStyle(TextDecoration.underline)),
+        child: Text(Get.find<UserController>().setAddressUpper.value + ' ' + Get.find<UserController>().setAddressLower.value, style: _textStyle(TextDecoration.underline)),
         onTap: () async{
           LatLng coor = await Get.dialog(DialogLocationSetting());
           coor == null ? null : Get.find<SearchPageViewController>().updateCurCamPostion(coor);
@@ -62,7 +63,7 @@ postMapPageAppbar() => AppBar(
   leading: _leading(),
   toolbarHeight: 65.h,
   title: GestureDetector(
-    child: Text("대학로 80", style: _textStyle(TextDecoration.underline)),
+    child: Text(Get.find<UserController>().setAddressUpper.value + ' ' + Get.find<UserController>().setAddressLower.value, style: _textStyle(TextDecoration.underline)),
     onTap: () async {
       LatLng coor = await Get.dialog(DialogLocationSetting());
       coor == null ? null : Get.find<PostPageViewController>().updateCurCamPostion(coor);
