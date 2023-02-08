@@ -100,6 +100,9 @@ Future<PostRespond> POSTnewSpotPost(Post post) async {
   try {
     final response = await http.post(
       Uri.parse('${baseUrl}${spotPostUrl}'),
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: jsonEncode({
         "user_email" : post.user_email,
         "locationMapCode" : post.locationMapCode,
@@ -114,24 +117,9 @@ Future<PostRespond> POSTnewSpotPost(Post post) async {
       })
     );
 
-    print(jsonEncode({
-      "user_email" : post.user_email,
-      "locationMapCode" : post.locationMapCode,
-      "locationAddress" : post.locationAddress,
-      "locationLongtitude" : post.locationLongtitude,
-      "locationLatitude" : post.locationLatitude,
-      "locationName" : post.locationName,
-      "spotCategory" : post.spotCategory,
-      "spotComment" : post.spotComment,
-      "spotFolder" : post.spotFolder,
-      "spotTag" : post.spotTag,
-    })
-    );
-
     print(utf8.decode(response.bodyBytes));
     switch (response.statusCode) {
       case 200:
-        print(utf8.decode(response.bodyBytes));
         return PostRespond.fromJson((utf8.decode(response.bodyBytes)));
       case 401:
         apiResponse.apiError = ApiError.fromJson(json.decode(response.body));

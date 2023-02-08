@@ -8,6 +8,7 @@ import 'package:myspot/services/keyword_location_search.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -68,7 +69,7 @@ class PostMapPage extends StatelessWidget {
   _map() => Positioned(
     child: NaverMap(
       initialCameraPosition: CameraPosition(
-          target: LatLng(35.89229637317734, 128.60856585746507)
+          target: Get.find<UserController>().curPosition.value,
       ),
       markers: Get.find<PostPageViewController>().markers,
       onMapCreated: Get.find<PostPageViewController>().onMapCreated,

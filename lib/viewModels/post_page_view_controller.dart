@@ -59,10 +59,9 @@ class PostPageViewController extends GetxController{
     keyWordSelectList.refresh();
   }
 
-  //PostRespond
-  PostRespond? postRespond;
-  void post() async {
-    postRespond = await POSTnewSpotPost(
+  //Post
+  Future<PostRespond> post() async {
+    return POSTnewSpotPost(
       Post(
         user_email: Get.find<UserController>().email,
         locationMapCode: location.value.id,
@@ -74,7 +73,6 @@ class PostPageViewController extends GetxController{
         spotTag: [],
       )
     );
-    print(postRespond!.result);
   }
 
   ////PostMapPage
