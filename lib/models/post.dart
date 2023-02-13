@@ -54,18 +54,6 @@ class PostRespond {
   late String spot_Photo;
   late String spot_Folder;
 
-  // PostRespond({
-  //   required this.result,
-  //   required this.spotNumber,
-  //   required this.useremail,
-  //   required this.locationnum,
-  //   required this.spot_name,
-  //   required this.spot_category,
-  //   required this.spot_Comment,
-  //   required this.spot_Photo,
-  //   required this.spot_Folder,
-  // });
-
   PostRespond.fromJson(String json){
     Map<String, dynamic> respond = Map<String, dynamic>.from(jsonDecode(json));
     result = respond["result"];

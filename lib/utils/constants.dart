@@ -25,3 +25,9 @@ Map<int, Color> materialPrimary = {
 const double drawer_bottom = 805;
 const double drawer_mid = 485;
 const double drawer_top = 165;
+
+////////////////////////////////////////////////////////////////////////////////정렬기준
+List<String> sortBy = [
+  "거리 순",
+  "스팟 순"
+];

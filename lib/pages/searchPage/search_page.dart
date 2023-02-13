@@ -86,6 +86,7 @@ _inputBox() => Container(
           ),
           textAlignVertical: TextAlignVertical.center,
           cursorColor: colorInactive,
+          controller: Get.find<SearchPageViewController>().searchWordTextEditController,
         ),
       ),
       Image.asset("assets/images/search.png", width: 14.w, height: 14.h, color: colorInactive,)
@@ -145,6 +146,7 @@ _keyWordBox() => Container(
 
 _button() => ElevatedButton(
     onPressed: (){
+      Get.find<SearchPageViewController>().searchSpots();
       Get.toNamed("/SearchMap");
     },
     style: ElevatedButton.styleFrom(
