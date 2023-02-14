@@ -1,44 +1,44 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/models/spot.dart';
-import 'package:myspot/services/coor_address_transition.dart';
+import 'package:myspot/utils/constants.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SearchPageViewController extends GetxController{
-  //map
-  late NaverMapController mapController;
 
-  void onMapCreated(NaverMapController controller) {
-    mapController = controller;
-  }
+  //////////////////////////////////////////////////////////////////////////////search page
 
-  void updateCurCamPostion(LatLng position){
-    mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
-  }
-
-  //drawer
-  RxDouble drawer_topSpace = 471.h.obs;
-
-  void updateDrawerTopSpace(double newVal){
-    drawer_topSpace(newVal);
-  }
+  TextEditingController searchWordTextEditController = TextEditingController();
 
   //category & keyword
   RxList<CategorySelect> categorySelectList = List<CategorySelect>.from(categoryList.map((e) => CategorySelect(false, e))).obs;
   RxList<KeyWordSelect> keyWordSelectList = List<KeyWordSelect>.from(keyWordList.map((e) => KeyWordSelect(false, e))).obs;
 
-  int curCategoryInd = 0;
+  int curCategoryInd = -1;
 
   void categoryChange(CategorySelect element){
-    categorySelectList[curCategoryInd].ifActivated = false;
+
     int ind = categorySelectList.indexOf(element);
 
-    if(ind != curCategoryInd) {
+    if(curCategoryInd == -1){
       categorySelectList[ind].ifActivated = true;
       curCategoryInd = ind;
     }
+    else{
 
+      if(categorySelectList[ind].ifActivated == true){
+        categorySelectList[ind].ifActivated = false;
+        curCategoryInd = -1;
+      }
+      else{
+        categorySelectList[curCategoryInd].ifActivated = false;
+        categorySelectList[ind].ifActivated = true;
+        curCategoryInd = ind;
+      }
+    }
     categorySelectList.refresh();
   }
 
@@ -51,6 +51,72 @@ class SearchPageViewController extends GetxController{
     }
     keyWordSelectList.refresh();
   }
+
+  void searchSpots() async {
+    updateSpotList(await GETSpotList(
+      searchWord: searchWordTextEditController.text,
+      category: categorySelectList,
+      keyWord: keyWordSelectList,
+      coor: Get.find<UserController>().curPosition.value,
+    ));
+  }
+
+  //////////////////////////////////////////////////////////////////////////////search map page
+
+  //map
+  late NaverMapController mapController;
+  RxList<Marker> markers = <Marker>[].obs;
+
+  void updateMarker(BuildContext context){
+    OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
+        markers(spotList().map((e) => Marker(
+            markerId: e.id,
+            position: e.coor,
+            icon: image,
+            height: 40,
+            width: 40,
+            onMarkerTab: (marker, map){
+              updateCurCamPostion(marker.position);
+            }
+        )).toList()
+        )
+    );
+    refresh();
+  }
+
+  void onMapCreated(NaverMapController controller) {
+    mapController = controller;
+  }
+
+  void updateCurCamPostion(LatLng position){
+    mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
+  }
+
+  //drawer
+  RxDouble drawer_topSpace = drawer_bottom.h.obs;
+
+  void updateDrawerTopSpace(double newVal) {
+    drawer_topSpace(newVal);
+  }
+  void calibrateDrawerTopSpace(){
+    if((drawer_topSpace.value - drawer_bottom.h).abs() < (drawer_topSpace.value - drawer_mid.h).abs())
+      drawer_topSpace(drawer_bottom.h);
+    else
+    if ((drawer_topSpace.value - drawer_mid.h).abs() < (drawer_topSpace.value - drawer_top.h).abs())
+      drawer_topSpace(drawer_mid.h);
+    else
+      drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerTop(){
+    drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerMid(){
+    drawer_topSpace(drawer_mid.h);
+  }
+  void setDrawerBottom(){
+    drawer_topSpace(drawer_bottom.h);
+  }
+
 
   //orderButton
   RxInt orderButtonIndex = 0.obs;
@@ -81,19 +147,51 @@ class SearchPageViewController extends GetxController{
 
   //spot lists
   RxList<Spot> spotList = <Spot>[
-    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325, LatLng(35.89229637317734, 128.60856585746507), 0),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 1),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 2),
-    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325, LatLng(35.89229637317734, 128.60856585746507), 3),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
+    Spot(
+      place: "스타벅스 경북대북문점",
+      address: "산격동 1399-2",
+      likes: 1325,
+      coor: LatLng(35.89229637317734, 128.60856585746507),
+      id: "0",
+    ),
+    Spot(
+      place: "이디야커피 경북대북문점",
+      address: "산격동 1399-1",
+      likes: 756,
+      coor: LatLng(35.8929148936863, 128.608742276315),
+      id: "2",
+    ),
+    Spot(
+        place: "커피와빵 경북대북문점",
+        address: "산격동 1331-6",
+        likes: 220,
+        coor: LatLng(35.8937633273376, 128.609716301503),
+        id: "3"
+    ),
+    Spot(
+      place: "스타벅스 경북대북문점",
+      address: "산격동 1399-2",
+      likes: 1325,
+      coor: LatLng(35.89229637317734, 128.60856585746507),
+      id: "4",
+    ),
+    Spot(
+      place: "이디야커피 경북대북문점",
+      address: "산격동 1399-1",
+      likes: 756,
+      coor: LatLng(35.8929148936863, 128.608742276315),
+      id: "5",
+    ),
+    Spot(
+        place: "커피와빵 경북대북문점",
+        address: "산격동 1331-6",
+        likes: 220,
+        coor: LatLng(35.8937633273376, 128.609716301503),
+        id: "6"
+    ),
   ].obs;
 
+  void updateSpotList(List<Spot> newSpotList){
+    spotList(newSpotList);
+  }
 }
-
-List<String> sortBy = [
-  "거리 순",
-  "스팟 순"
-];
