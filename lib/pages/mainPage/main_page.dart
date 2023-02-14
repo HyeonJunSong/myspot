@@ -91,26 +91,26 @@ class MainPage extends StatelessWidget {
                           ),
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.r))),
-                      child: Row(
-                        children: [
-                          Text(
-                            "분위기 좋은 식당",
-                            style: TextStyle(
-                                color: colorInactive,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: (){
-                              Get.toNamed("/Search");
-                            },
-                            child: Image.asset(
+                      child: GestureDetector(
+                        onTap: (){
+                          Get.toNamed("/Search");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "분위기 좋은 식당",
+                              style: TextStyle(
+                                  color: colorInactive,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            Image.asset(
                               "assets/images/search.png",
                               width: 16.w,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

@@ -15,7 +15,9 @@ class SearchMapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<SearchPageViewController>().updateMarker(context);
     return Obx( () => Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: searchMapPageAppbar(),
       resizeToAvoidBottomInset : false,
       body: Stack(
@@ -32,17 +34,14 @@ class SearchMapPage extends StatelessWidget {
       initialCameraPosition: CameraPosition(
         target: LatLng(35.89229637317734, 128.60856585746507)
       ),
-      markers: Get.find<SearchPageViewController>()
-        .spotList()
-        .map((e) => Marker(
-          markerId: e.id.toString(),
-          position: e.coor
-      )).toList(),
+      markers: Get.find<SearchPageViewController>().markers,
       onMapCreated: Get.find<SearchPageViewController>().onMapCreated,
     ),
   );
 
-  _drawer() => Positioned(
+  _drawer() => AnimatedPositioned(
+    curve: Curves.easeOut,
+    duration: Duration(milliseconds: 100),
     top: Get.find<SearchPageViewController>().drawer_topSpace.value,
     child: Container(
       width: 390.w,
@@ -76,11 +75,14 @@ class SearchMapPage extends StatelessWidget {
 
   _knob() => GestureDetector(
     onVerticalDragUpdate: (value){
-      Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
+      if(value.globalPosition.dy >= 65.h)
+        Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy);
+      else
+        Get.find<SearchPageViewController>().updateDrawerTopSpace(65.h);
     },
-    // onVerticalDragEnd: (value){
-    //   Get.find<SearchPageViewController>().updateDrawerTopSpace(100.h);
-    // },
+    onVerticalDragEnd: (value){
+      Get.find<SearchPageViewController>().calibrateDrawerTopSpace();
+    },
     child: Container(
       color: Colors.transparent,
       padding: EdgeInsets.all(10.h),
