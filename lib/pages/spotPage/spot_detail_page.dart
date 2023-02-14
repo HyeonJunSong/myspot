@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class SpotDetailPage extends StatefulWidget {
   const SpotDetailPage({Key? key}) : super(key: key);
@@ -13,27 +16,34 @@ class SpotDetailPage extends StatefulWidget {
 class _SpotDetailPageState extends State<SpotDetailPage> {
   @override
   Widget build(BuildContext context) {
+    final Spot spot = Get.arguments as Spot;
     return Scaffold(
       // backgroundColor: Colors.white,
-      appBar: buildAppbar('스타벅스 경대북문점'),
+      appBar: buildAppbar(spot.place),
       body: Column(
         children: [
-          Container(
-            height: 167.h,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/detail_background.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          _buildDetail(),
+          _spotSection(spot),
           SizedBox(height: 20.h),
           _buildReviewList(),
         ],
       ),
     );
   }
+
+  _spotSection(Spot spot) => Column(
+    children: [
+      Container(
+        height: 167.h,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/detail_background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      _buildDetail(spot),
+    ],
+  );
 }
 
 Widget _buildReviewList() {
@@ -109,9 +119,10 @@ Widget _buildReviewList() {
   ));
 }
 
-Widget _buildDetail() {
+Widget _buildDetail(Spot spot) {
   return Container(
     width: double.infinity,
+    padding: EdgeInsets.all(21.w),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
@@ -122,98 +133,79 @@ Widget _buildDetail() {
         ),
       ],
     ),
-    child: Padding(
-      padding: EdgeInsets.all(21.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            '스타벅스 경북대북문점',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 20.sp,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          spot.place,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 20.sp,
+          ),
+        ),
+        Row(
+          children: [
+            Text(
+              '${spot.distance}m',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.sp,
+                color: Colors.black54,
+              ),
             ),
-          ),
-          Row(
-            children: [
-              Text(
-                '200m',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Colors.black54,
-                ),
+            Text(
+              ' | ',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.sp,
+                color: Colors.black45,
               ),
-              Text(
-                ' | ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Colors.black45,
-                ),
+            ),
+            Text(
+              spot.address,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.sp,
+                color: Colors.black54,
               ),
-              Text(
-                '산격동 1399-1',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Colors.black54,
-                ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Icon(Icons.circle, color: _spotColor(spot.likes), size: 11.w,),
+            SizedBox(width: 10.w,),
+            Text(NumberFormat("###,###,###").format(spot.likes), style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: _spotColor(spot.likes),
+                fontSize: 14.sp
+            ),),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              margin: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
+              child: Icon(
+                Icons.place,
+                color: colorPrimary,
+                size: 15.w,
               ),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 2.w),
-                child: Container(
-                  height: 11.h,
-                  width: 11.w,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                      color: Colors.red, shape: BoxShape.circle),
-                ),
+            ),
+            SizedBox(width: 5.w),
+            Text(
+              '영연님, 명주님 외 ${spot.likes}명이 spot! 하였습니다.',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+                color: Colors.black45,
               ),
-              SizedBox(width: 10.w),
-              Padding(
-                padding: EdgeInsets.only(bottom: 3.h),
-                child: Text(
-                  '1,325',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.zero,
-                padding: EdgeInsets.zero,
-                child: Icon(
-                  Icons.place,
-                  color: colorPrimary,
-                  size: 15.w,
-                ),
-              ),
-              SizedBox(width: 5.w),
-              Text(
-                '영연님, 명주님 외 1,323명이 spot! 하였습니다.',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12.sp,
-                  color: Colors.black45,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     ),
   );
 }
@@ -244,3 +236,10 @@ List<Widget> _buildKeyword() {
           ))
       .toList();
 }
+
+_spotColor(int likes){
+  if(likes > 1000) return Color(0xFFEA5252);
+  if(likes >  500) return Color(0xFF2BAE5F);
+  if(likes >    0) return Color(0xFF0789E8);
+}
+
