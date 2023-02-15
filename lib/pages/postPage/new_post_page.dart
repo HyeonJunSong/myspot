@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/models/review.dart';
 import 'package:myspot/services/api.dart';
 import 'package:myspot/utils/constants.dart';
@@ -231,36 +232,26 @@ class _NewPostPageState extends State<NewPostPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "카테고리 선택",
-                style: TextStyle(
-                  color: colorBlack,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
+              Text("카테고리 선택", style: TextStyle(
+                color: colorBlack,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+              ),),
+              SizedBox(height: 16.sp,),
               Wrap(
-                children: List<Widget>.from(
-                  Get.find<PostPageViewController>()
-                  .categorySelectList
-                  .map(
-                    (element) => GestureDetector(
-                      child: categoryBlock(
-                        element.ifActivated,
-                        element.category.emoji,
-                        element.category.categoryName),
-                      onTap: () {
-                        Get.find<PostPageViewController>()
-                        .categoryChange(element);
-                      },
-                    ),
+                  children: List<Widget>.from(categoryList.map((category) =>
+                      GestureDetector(
+                        child: categoryBlock(
+                            Get.find<PostPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                            category.emoji,
+                            category.categoryName
+                        ),
+                        onTapUp: (value){
+                          Get.find<PostPageViewController>().categoryChange(categoryList.indexOf(category));
+                        },
+                      ),
                   )
-                )
-              ),
-              //
+                  )),
             ],
           ),
           SizedBox(height: 10.h),
@@ -269,34 +260,25 @@ class _NewPostPageState extends State<NewPostPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "키워드 선택",
-                  style: TextStyle(
-                    color: colorBlack,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(
-                  height: 16.sp,
-                ),
-                Wrap(
-                  children: List<Widget>.from(
-                    Get.find<PostPageViewController>()
-                    .keyWordSelectList
-                    .map(
-                      (element) => GestureDetector(
-                        child: keyWordBlock(
-                            element.ifActivated,
-                            element.keyWord.emoji,
-                            element.keyWord.keyWordName),
-                        onTap: () {
-                          Get.find<PostPageViewController>()
-                            .keyWordChange(element);
-                        },
-                      ),
-                    )
-                  )
+                Text("키워드 선택", style: TextStyle(
+                  color: colorBlack,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                ),),
+                SizedBox(height: 16.sp,),
+                Get.find<PostPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+                    children: List<Widget>.from(keyWordList[Get.find<PostPageViewController>().categoryInd.value].map((keyWord) =>
+                        GestureDetector(
+                          child: keyWordBlock(
+                              Get.find<PostPageViewController>().keyWordIndList.contains(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord)),
+                              keyWord.emoji,
+                              keyWord.keyWordName
+                          ),
+                          onTapUp: (value){
+                            Get.find<PostPageViewController>().keyWordChange(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord));
+                          },
+                        ),
+                    ))
                 ),
               ],
             ),

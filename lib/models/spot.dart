@@ -25,11 +25,12 @@ class Spot{
     this.coor = const LatLng(0, 0),
     this.placeId = ""
   }){
-    print(Get.find<UserController>().curPosition.value);
-    print(coor);
     distance = distanceInMBetweenEarthCoordinates(Get.find<UserController>().curPosition.value, coor);
   }
 
+  static Spot errorSpotInit(){
+    return Spot();
+  }
 
   static List<Spot> SpotListFromJSON(String json){
     List<Spot> newSpotList = [];
@@ -46,33 +47,43 @@ class Spot{
     });
     return newSpotList;
   }
+
+  static List<Spot> errorSpotListInit(){
+    return [Spot.errorSpotInit()];
+  }
+
+  static bool ifErrorList(List<Spot> spotList) {
+    if (spotList.first.placeId.isEmpty) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 }
 
 Future<List<Spot>> GETSpotList({
   required String searchWord,
-  required List<CategorySelect> category,
-  required List<KeyWordSelect> keyWord,
+  required int categoryInd,
+  required List<int> keyWordIndList,
   required LatLng coor
 }) async {
   ApiResponse apiResponse = ApiResponse();
 
   String _category = "";
-  category
-    .forEach((element) {
-      _category += element.category.categoryName;
-      if(element != category.last)
-        _category += ",";
-    });
-  print(_category);
+  if(categoryInd != -1) {
+    _category = categoryList[categoryInd].categoryName;
+  }
 
   String _keyWord = "";
-  keyWord
-    .forEach((element) {
-    _keyWord += element.keyWord.keyWordName;
-      if(element != keyWord.last)
+  if(categoryInd != -1) {
+    keyWordIndList
+        .forEach((keyWordInd) {
+      _keyWord += keyWordList[categoryInd][keyWordInd].keyWordName;
+      if (keyWordInd != keyWordIndList.last)
         _keyWord += ",";
     });
-  print(_keyWord);
+  }
 
   try {
     final response = await http.get(
@@ -94,5 +105,5 @@ Future<List<Spot>> GETSpotList({
     apiResponse.apiError = ApiError(error: "Server error. Please retry");
   }
 
-  return <Spot>[];
+  return Spot.errorSpotListInit();
 }
