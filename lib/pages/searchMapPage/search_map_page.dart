@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myspot/models/category_and_keyword.dart';
+import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
@@ -183,7 +184,7 @@ class SearchMapPage extends StatelessWidget {
         _orderBolck(),
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
-        (element) => _resultBlock(element.place, element.distance, element.address, element.likes)
+        (element) => _resultBlock(element)
       ).toList()),
     ),
   );
@@ -229,58 +230,68 @@ class SearchMapPage extends StatelessWidget {
     ),
   );
 
-  _resultBlock(String place, int distance, String address, int likes) => Container(
-    width: 390.w,
-    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-    decoration: BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          color: Color(0xFFE5E5E5),
-          width: 1.h,
+  _resultBlock(Spot spot) => GestureDetector(
+    onTap: () async{
+      if(await Get.find<SearchPageViewController>().searchReview(spot.placeId)){
+        Get.toNamed(
+            '/SpotDetail',
+            arguments: spot
+        );
+      }
+    },
+    child: Container(
+      width: 390.w,
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFFE5E5E5),
+            width: 1.h,
+          ),
         ),
       ),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(place, style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 16.sp
-        ),),
-        SizedBox(height: 6.h,),
-        Row(
-          children: [
-            Text(distance.toString() + 'm', style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF737373),
-                fontSize: 14.sp
-            ),),
-            Container(
-              width: 1.w,
-              height : 20.h,
-              margin: EdgeInsets.symmetric(horizontal: 8.w),
-              color: Color(0xFFBDBDBD),
-            ),
-            Text(address, style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF737373),
-                fontSize: 14.sp
-            ),),
-          ],
-        ),
-        SizedBox(height: 6.h,),
-        Row(
-          children: [
-            Icon(Icons.circle, color: _spotColor(likes), size: 11.w,),
-            SizedBox(width: 10.w,),
-            Text(NumberFormat("###,###,###").format(likes), style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: _spotColor(likes),
-                fontSize: 14.sp
-            ),),
-          ],
-        ),
-      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(spot.placeName, style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.sp
+          ),),
+          SizedBox(height: 6.h,),
+          Row(
+            children: [
+              Text('${spot.distance}m', style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF737373),
+                  fontSize: 14.sp
+              ),),
+              Container(
+                width: 1.w,
+                height : 20.h,
+                margin: EdgeInsets.symmetric(horizontal: 8.w),
+                color: Color(0xFFBDBDBD),
+              ),
+              Text(spot.address, style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF737373),
+                  fontSize: 14.sp
+              ),),
+            ],
+          ),
+          SizedBox(height: 6.h,),
+          Row(
+            children: [
+              Icon(Icons.circle, color: _spotColor(spot.spotNum), size: 11.w,),
+              SizedBox(width: 10.w,),
+              Text(NumberFormat("###,###,###").format(spot.spotNum), style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: _spotColor(spot.spotNum),
+                  fontSize: 14.sp
+              ),),
+            ],
+          ),
+        ],
+      ),
     ),
   );
 

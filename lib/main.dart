@@ -10,6 +10,7 @@ import 'package:myspot/pages/signUpInPage/signin_page.dart';
 import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
+import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
@@ -44,7 +45,6 @@ class MySpotApp extends StatelessWidget {
                 name: "/Main",
                 page: () {
                   getCityList();
-                  Get.find<UserController>().getPosition();
                   return const MainPage();
                 },
                 transition: Transition.fadeIn,
@@ -72,6 +72,7 @@ class MySpotApp extends StatelessWidget {
                 }),
               ),
               GetPage(name: '/PostMap', page: () => PostMapPage(),),
+              GetPage(name: '/SpotDetail', page: () => SpotDetailPage()),
             ],
           theme: ThemeData(
             fontFamily: 'Noto_Sans_KR',

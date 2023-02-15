@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
-import 'package:myspot/models/post.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/coor_address_transition.dart';
 import 'package:myspot/services/keyword_location_search.dart';
@@ -60,16 +60,16 @@ class PostPageViewController extends GetxController{
   }
 
   //Post
-  Future<PostRespond> post() async {
-    return POSTnewSpotPost(
-      Post(
+  Future<bool> post() async {
+    return POSTnewReview(
+      Review(
         user_email: Get.find<UserController>().email,
-        locationMapCode: location.value.id,
-        locationAddress: location.value.address,
+        placeId: location.value.id,
+        address: location.value.address,
         locationLongtitude: location.value.coor.longitude.toString(),
         locationLatitude: location.value.coor.latitude.toString(),
-        locationName: location.value.placeName,
-        spotComment: "",
+        placeName: location.value.placeName,
+        comment: "",
         spotTag: [],
       )
     );

@@ -5,6 +5,13 @@ import 'package:myspot/services/coor_address_transition.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class UserController extends GetxController{
+
+  @override
+  void onInit() {
+    super.onInit();
+    getPosition();
+  }
+
   ////
   String email = "test@google.com";
 

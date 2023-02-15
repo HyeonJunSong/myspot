@@ -11,42 +11,36 @@ import 'package:myspot/viewModels/user_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class Spot{
-  String place; // locationname
+  String placeName; // locationname
   late int distance;
   String address; // locationAddress
-  int likes; // location_num
+  int spotNum; // location_num
   LatLng coor; // locationLatitude, locationLongitude
-  String id; // locationmapcode
+  String placeId; // locationmapcode
 
   Spot({
-    required this.place,
-    required this.address,
-    required this.likes,
-    required this.coor,
-    required this.id
+    this.placeName = "",
+    this.address = "",
+    this.spotNum = 0,
+    this.coor = const LatLng(0, 0),
+    this.placeId = ""
   }){
+    print(Get.find<UserController>().curPosition.value);
+    print(coor);
     distance = distanceInMBetweenEarthCoordinates(Get.find<UserController>().curPosition.value, coor);
   }
 
-  Spot.nullInit({
-    this.place = "",
-    this.distance = 0,
-    this.address = "",
-    this.likes = 0,
-    this.coor = const LatLng(0, 0),
-    this.id = ""
-  });
 
   static List<Spot> SpotListFromJSON(String json){
     List<Spot> newSpotList = [];
     List<dynamic>.from(Map<String, dynamic>.from(jsonDecode(json))["data"]).forEach((element) {
       newSpotList.add(
         Spot(
-          place: element["locationName"],
+          placeName: element["locationName"],
           address: element["locationAddress"],
-          likes: int.parse(element["spotCount"]),
+          spotNum: int.parse(element["spotCount"]),
           coor: LatLng(double.parse(element["locationLatitude"]), double.parse(element["locationLongitude"])),
-          id: element["locationCode"]
+          placeId: element["locationCode"]
         )
       );
     });
