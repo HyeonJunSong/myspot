@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myspot/models/category_and_keyword.dart';
-import 'package:myspot/models/post.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/services/keyword_location_search.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';

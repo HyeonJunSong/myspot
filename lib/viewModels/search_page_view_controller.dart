@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/user_controller.dart';
@@ -70,7 +71,7 @@ class SearchPageViewController extends GetxController{
   void updateMarker(BuildContext context){
     OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
         markers(spotList().map((e) => Marker(
-            markerId: e.id,
+            markerId: e.placeId,
             position: e.coor,
             icon: image,
             height: 40,
@@ -138,7 +139,7 @@ class SearchPageViewController extends GetxController{
         case 0:
           return orderIfDescending.value ? a.distance - b.distance : b.distance - a.distance;
         case 1:
-          return orderIfDescending.value ? a.likes - b.likes : b.likes - a.likes;
+          return orderIfDescending.value ? a.spotNum - b.spotNum : b.spotNum - a.spotNum;
         default:
           return 0;
       }
@@ -148,50 +149,67 @@ class SearchPageViewController extends GetxController{
   //spot lists
   RxList<Spot> spotList = <Spot>[
     Spot(
-      place: "스타벅스 경북대북문점",
+      placeName: "스타벅스 경북대북문점",
       address: "산격동 1399-2",
-      likes: 1325,
+      spotNum: 1325,
       coor: LatLng(35.89229637317734, 128.60856585746507),
-      id: "0",
+      placeId: "0",
     ),
     Spot(
-      place: "이디야커피 경북대북문점",
+      placeName: "이디야커피 경북대북문점",
       address: "산격동 1399-1",
-      likes: 756,
+      spotNum: 756,
       coor: LatLng(35.8929148936863, 128.608742276315),
-      id: "2",
+      placeId: "2",
     ),
     Spot(
-        place: "커피와빵 경북대북문점",
+        placeName: "커피와빵 경북대북문점",
         address: "산격동 1331-6",
-        likes: 220,
+        spotNum: 220,
         coor: LatLng(35.8937633273376, 128.609716301503),
-        id: "3"
+        placeId: "3"
     ),
     Spot(
-      place: "스타벅스 경북대북문점",
+      placeName: "스타벅스 경북대북문점",
       address: "산격동 1399-2",
-      likes: 1325,
+      spotNum: 1325,
       coor: LatLng(35.89229637317734, 128.60856585746507),
-      id: "4",
+      placeId: "4",
     ),
     Spot(
-      place: "이디야커피 경북대북문점",
+      placeName: "이디야커피 경북대북문점",
       address: "산격동 1399-1",
-      likes: 756,
+      spotNum: 756,
       coor: LatLng(35.8929148936863, 128.608742276315),
-      id: "5",
+      placeId: "5",
     ),
     Spot(
-        place: "커피와빵 경북대북문점",
+        placeName: "커피와빵 경북대북문점",
         address: "산격동 1331-6",
-        likes: 220,
+        spotNum: 220,
         coor: LatLng(35.8937633273376, 128.609716301503),
-        id: "6"
+        placeId: "6"
     ),
   ].obs;
 
   void updateSpotList(List<Spot> newSpotList){
     spotList(newSpotList);
+  }
+
+  //Review List
+  RxList<Review> reviewList = <Review>[].obs;
+
+  void updateReviewList(List<Review> newReviewList){
+    reviewList(newReviewList);
+  }
+
+  Future<bool> searchReview(String placeId) async{
+    List<Review> newReviewList = await GETReviewList(placeId: placeId);
+    if(newReviewList.isEmpty) {
+      return false;
+    } else {
+      updateReviewList(newReviewList);
+      return true;
+    }
   }
 }

@@ -33,7 +33,7 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/SpotDetail",
+            initialRoute: "/Main",
             initialBinding: BindingsBuilder(() {
               Get.put(UserController());
               Get.put(CityViewController());
@@ -45,7 +45,6 @@ class MySpotApp extends StatelessWidget {
                 name: "/Main",
                 page: () {
                   getCityList();
-                  Get.find<UserController>().getPosition();
                   return const MainPage();
                 },
                 transition: Transition.fadeIn,

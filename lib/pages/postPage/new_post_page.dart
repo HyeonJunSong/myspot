@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:myspot/models/post.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/services/api.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
@@ -128,8 +128,7 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: EdgeInsets.symmetric(vertical: 15.h),
               child: RoundedButton(
                 onPressed: () async {
-                  PostRespond respond = await Get.find<PostPageViewController>().post();
-                  if(respond.result.compareTo("success") == 0){
+                  if(await Get.find<PostPageViewController>().post()){
                     Fluttertoast.showToast(
                         msg: "스팟 등록 완료 😄",
                         toastLength: Toast.LENGTH_SHORT,

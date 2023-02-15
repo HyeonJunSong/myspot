@@ -184,7 +184,7 @@ class SearchMapPage extends StatelessWidget {
         _orderBolck(),
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
-        (element) => _resultBlock(element.place, element.distance, element.address, element.likes)
+        (element) => _resultBlock(element)
       ).toList()),
     ),
   );
@@ -230,17 +230,14 @@ class SearchMapPage extends StatelessWidget {
     ),
   );
 
-  _resultBlock(String place, int distance, String address, int likes) => GestureDetector(
-    onTap: (){
-      Get.toNamed(
-        '/DetailPage',
-        arguments: Spot(
-          place,
-          distance,
-          address,
-          likes
-        )
-      );
+  _resultBlock(Spot spot) => GestureDetector(
+    onTap: () async{
+      if(await Get.find<SearchPageViewController>().searchReview(spot.placeId)){
+        Get.toNamed(
+            '/SpotDetail',
+            arguments: spot
+        );
+      }
     },
     child: Container(
       width: 390.w,
@@ -256,14 +253,14 @@ class SearchMapPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(place, style: TextStyle(
+          Text(spot.placeName, style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16.sp
           ),),
           SizedBox(height: 6.h,),
           Row(
             children: [
-              Text(distance.toString() + 'm', style: TextStyle(
+              Text('${spot.distance}m', style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF737373),
                   fontSize: 14.sp
@@ -274,7 +271,7 @@ class SearchMapPage extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 8.w),
                 color: Color(0xFFBDBDBD),
               ),
-              Text(address, style: TextStyle(
+              Text(spot.address, style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF737373),
                   fontSize: 14.sp
@@ -284,11 +281,11 @@ class SearchMapPage extends StatelessWidget {
           SizedBox(height: 6.h,),
           Row(
             children: [
-              Icon(Icons.circle, color: _spotColor(likes), size: 11.w,),
+              Icon(Icons.circle, color: _spotColor(spot.spotNum), size: 11.w,),
               SizedBox(width: 10.w,),
-              Text(NumberFormat("###,###,###").format(likes), style: TextStyle(
+              Text(NumberFormat("###,###,###").format(spot.spotNum), style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: _spotColor(likes),
+                  color: _spotColor(spot.spotNum),
                   fontSize: 14.sp
               ),),
             ],
