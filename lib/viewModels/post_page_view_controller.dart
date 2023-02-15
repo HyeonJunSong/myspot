@@ -21,42 +21,27 @@ class PostPageViewController extends GetxController{
   }
 
   //category & keyword
-  RxList<CategorySelect> categorySelectList = List<CategorySelect>.from(categoryList.map((e) => CategorySelect(false, e))).obs;
-  RxList<KeyWordSelect> keyWordSelectList = List<KeyWordSelect>.from(keyWordList.map((e) => KeyWordSelect(false, e))).obs;
+  RxInt categoryInd = (-1).obs;
+  RxList<int> keyWordIndList = <int>[].obs;
 
-  int curCategoryInd = -1;
-
-  void categoryChange(CategorySelect element){
-
-    int ind = categorySelectList.indexOf(element);
-
-    if(curCategoryInd == -1){
-      categorySelectList[ind].ifActivated = true;
-      curCategoryInd = ind;
+  void categoryChange(int newCategory){
+    if(newCategory == categoryInd.value){
+      categoryInd(-1);
     }
     else{
-
-      if(categorySelectList[ind].ifActivated == true){
-        categorySelectList[ind].ifActivated = false;
-        curCategoryInd = -1;
-      }
-      else{
-        categorySelectList[curCategoryInd].ifActivated = false;
-        categorySelectList[ind].ifActivated = true;
-        curCategoryInd = ind;
-      }
+      categoryInd(newCategory);
     }
-    categorySelectList.refresh();
+    keyWordIndList(<int>[]);
   }
 
-  void keyWordChange(KeyWordSelect element){
-    int ind = keyWordSelectList.indexOf(element);
-    if(keyWordSelectList[ind].ifActivated) {
-      keyWordSelectList[ind].ifActivated = false;
-    } else {
-      keyWordSelectList[ind].ifActivated = true;
+  void keyWordChange(int newKeyWord){
+    if(keyWordIndList.contains(newKeyWord)){
+      keyWordIndList.remove(newKeyWord);
     }
-    keyWordSelectList.refresh();
+    else{
+      keyWordIndList.add(newKeyWord);
+    }
+    keyWordIndList.refresh();
   }
 
   //Post

@@ -15,51 +15,51 @@ class SearchPageViewController extends GetxController{
   TextEditingController searchWordTextEditController = TextEditingController();
 
   //category & keyword
-  RxList<CategorySelect> categorySelectList = List<CategorySelect>.from(categoryList.map((e) => CategorySelect(false, e))).obs;
-  RxList<KeyWordSelect> keyWordSelectList = List<KeyWordSelect>.from(keyWordList.map((e) => KeyWordSelect(false, e))).obs;
 
-  int curCategoryInd = -1;
+  RxInt categoryInd = (-1).obs;
+  RxList<int> keyWordIndList = <int>[].obs;
 
-  void categoryChange(CategorySelect element){
-
-    int ind = categorySelectList.indexOf(element);
-
-    if(curCategoryInd == -1){
-      categorySelectList[ind].ifActivated = true;
-      curCategoryInd = ind;
+  void categoryChange(int newCategory){
+    if(newCategory == categoryInd.value){
+      categoryInd(-1);
     }
     else{
-
-      if(categorySelectList[ind].ifActivated == true){
-        categorySelectList[ind].ifActivated = false;
-        curCategoryInd = -1;
-      }
-      else{
-        categorySelectList[curCategoryInd].ifActivated = false;
-        categorySelectList[ind].ifActivated = true;
-        curCategoryInd = ind;
-      }
+      categoryInd(newCategory);
     }
-    categorySelectList.refresh();
+    keyWordIndList(<int>[]);
   }
 
-  void keyWordChange(KeyWordSelect element){
-    int ind = keyWordSelectList.indexOf(element);
-    if(keyWordSelectList[ind].ifActivated) {
-      keyWordSelectList[ind].ifActivated = false;
-    } else {
-      keyWordSelectList[ind].ifActivated = true;
+  void keyWordChange(int newKeyWord){
+    if(keyWordIndList.contains(newKeyWord)){
+      keyWordIndList.remove(newKeyWord);
     }
-    keyWordSelectList.refresh();
+    else{
+      keyWordIndList.add(newKeyWord);
+    }
+    keyWordIndList.refresh();
   }
 
-  void searchSpots() async {
-    updateSpotList(await GETSpotList(
-      searchWord: searchWordTextEditController.text,
-      category: categorySelectList,
-      keyWord: keyWordSelectList,
-      coor: Get.find<UserController>().curPosition.value,
-    ));
+  //spot lists
+  RxList<Spot> spotList = <Spot>[].obs;
+
+  void updateSpotList(List<Spot> newSpotList){
+    spotList(newSpotList);
+  }
+
+  Future<bool> searchSpots() async {
+    List<Spot> newSpotList = await GETSpotList(
+        searchWord: searchWordTextEditController.text,
+        categoryInd: categoryInd.value,
+        keyWordIndList: keyWordIndList,
+        coor: Get.find<UserController>().curPosition.value,
+    );
+    if(Spot.ifErrorList(newSpotList)){
+      return false;
+    }
+    else{
+      updateSpotList(newSpotList);
+      return true;
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////search map page
@@ -82,7 +82,7 @@ class SearchPageViewController extends GetxController{
         )).toList()
         )
     );
-    refresh();
+    markers.refresh();
   }
 
   void onMapCreated(NaverMapController controller) {
@@ -144,56 +144,6 @@ class SearchPageViewController extends GetxController{
           return 0;
       }
     });
-  }
-
-  //spot lists
-  RxList<Spot> spotList = <Spot>[
-    Spot(
-      placeName: "스타벅스 경북대북문점",
-      address: "산격동 1399-2",
-      spotNum: 1325,
-      coor: LatLng(35.89229637317734, 128.60856585746507),
-      placeId: "0",
-    ),
-    Spot(
-      placeName: "이디야커피 경북대북문점",
-      address: "산격동 1399-1",
-      spotNum: 756,
-      coor: LatLng(35.8929148936863, 128.608742276315),
-      placeId: "2",
-    ),
-    Spot(
-        placeName: "커피와빵 경북대북문점",
-        address: "산격동 1331-6",
-        spotNum: 220,
-        coor: LatLng(35.8937633273376, 128.609716301503),
-        placeId: "3"
-    ),
-    Spot(
-      placeName: "스타벅스 경북대북문점",
-      address: "산격동 1399-2",
-      spotNum: 1325,
-      coor: LatLng(35.89229637317734, 128.60856585746507),
-      placeId: "4",
-    ),
-    Spot(
-      placeName: "이디야커피 경북대북문점",
-      address: "산격동 1399-1",
-      spotNum: 756,
-      coor: LatLng(35.8929148936863, 128.608742276315),
-      placeId: "5",
-    ),
-    Spot(
-        placeName: "커피와빵 경북대북문점",
-        address: "산격동 1331-6",
-        spotNum: 220,
-        coor: LatLng(35.8937633273376, 128.609716301503),
-        placeId: "6"
-    ),
-  ].obs;
-
-  void updateSpotList(List<Spot> newSpotList){
-    spotList(newSpotList);
   }
 
   //Review List
