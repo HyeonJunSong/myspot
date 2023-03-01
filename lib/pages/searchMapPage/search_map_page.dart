@@ -231,7 +231,12 @@ class SearchMapPage extends StatelessWidget {
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
         (element) => _resultBlock(element)
-      ).toList()),
+      ).toList())
+      + [
+        SizedBox(
+          height: Get.find<SearchPageViewController>().drawer_topSpace.value + 900.h - 844.h - 20.h,
+        ),
+      ],
     ),
   );
 
