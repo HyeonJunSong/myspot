@@ -14,6 +14,9 @@ class UserController extends GetxController{
 
   ////
   String email = "test@google.com";
+  void updateEmail(String newEmail){
+    email = newEmail;
+  }
 
   ////location
   Rx<LatLng> curPosition = LatLng(0, 0).obs;
