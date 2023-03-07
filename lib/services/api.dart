@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:myspot/models/post.dart';
@@ -51,14 +50,15 @@ Future<ApiResponse> signUp(
       }),
     );
 
+    debugPrint(response.body);
+    debugPrint(response.statusCode.toString());
     switch (response.statusCode) {
       case 200:
-        apiResponse.data =
-            User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        apiResponse.data = "회원가입이 성공되었습니다 ~ 🥳";
         break;
-      case 401:
+      case 400:
         apiResponse.apiError =
-            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+            ApiError(error: "회원가입이 실패했습니다.\n 다시 시도해주세요.");
         break;
       default:
         apiResponse.apiError =
@@ -66,7 +66,7 @@ Future<ApiResponse> signUp(
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -101,7 +101,7 @@ Future<ApiResponse> signIn(String email, String password) async {
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -128,7 +128,7 @@ Future<ApiResponse> getUserDetails(String email) async {
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -137,9 +137,8 @@ Future<ApiResponse> checkEmail(String email) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
-    final response = await http.get(
-      Uri.parse('${_baseUrl}user/check?email=$email'),
-    );
+    final response =
+        await http.get(Uri.parse('${_baseUrl}user/checkEmail?email=$email'));
 
     switch (response.statusCode) {
       case 200:
@@ -150,7 +149,7 @@ Future<ApiResponse> checkEmail(String email) async {
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -159,29 +158,20 @@ Future<ApiResponse> checkNickname(String nickname) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
-    final response = await http.post(
-      Uri.parse('${_baseUrl}user/join/nickname-check'),
-      body: {
-        'user_name': nickname,
-      },
-    );
+    final response =
+        await http.get(Uri.parse('${_baseUrl}user/checkName?name=$nickname'));
 
+    debugPrint(response.body);
     switch (response.statusCode) {
       case 200:
-        apiResponse.data =
-            User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-        break;
-      case 401:
-        apiResponse.apiError =
-            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        apiResponse.data = apiResponse.data = "사용 가능한 닉네임입니다☺️";
         break;
       default:
-        apiResponse.apiError =
-            ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        apiResponse.apiError = ApiError(error: "이미 사용중인 닉네임이네요😅");
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -218,7 +208,7 @@ Future<ApiResponse> addNewPost(Post post) async {
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }
@@ -247,7 +237,7 @@ Future<ApiResponse> getPost(String email) async {
         break;
     }
   } on SocketException {
-    apiResponse.apiError = ApiError(error: "Server error. Please retry");
+    apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
   }
   return apiResponse;
 }

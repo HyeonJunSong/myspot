@@ -44,9 +44,9 @@ class CheckValidate {
     } else if (!regExp.hasMatch(value)) {
       focusNode.requestFocus(); //포커스를 해당 textformfield에 맞춘다.
       return '• 특수문자 제외 2~20자 이내로 입력해주세요.';
-    } else if (check == false) {
-      // focusNode.requestFocus();
-      // return '• 이미 사용중인 닉네임입니다!';
+    } else if (check == true) {
+      focusNode.requestFocus();
+      return '• 이미 사용중인 닉네임입니다!';
     }
     return null;
   }

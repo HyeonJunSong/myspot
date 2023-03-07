@@ -42,18 +42,18 @@ class _SignUpPage extends State<SignUpPage> {
       _apiResponse = await signUp(
           _newUser.email!, _newUser.password!, _newUser.nickname!, 0);
       if (_apiResponse.apiError == null) {
+        debugPrint("회원가입 성공!!!");
         Get.defaultDialog(
           radius: 10,
           title: "회원가입",
-          middleText: "회원가입이 성공되었습니다 ~ 🥳",
+          middleText: _apiResponse.data.toString(),
         );
         // 홈으로,,,,
-        Get.back();
       } else {
         Get.defaultDialog(
           radius: 10,
           title: "회원가입",
-          middleText: (_apiResponse.apiError as ApiError).toString(),
+          middleText: (_apiResponse.apiError as ApiError).error ?? "null",
         );
       }
     }
@@ -119,7 +119,8 @@ class _SignUpPage extends State<SignUpPage> {
                                   title: "이메일 중복 여부",
                                   middleText:
                                       (_apiResponse.apiError as ApiError)
-                                          .error!,
+                                              .error ??
+                                          "null",
                                 );
                               }
                             }
@@ -166,25 +167,36 @@ class _SignUpPage extends State<SignUpPage> {
                     validator: (value) => CheckValidate().validateNickname(
                         _nicknameFocus, value, _nicknameCheck),
                     onSaved: (newValue) => _newUser.nickname = newValue,
-                    // suffix: RoundedButton(
-                    //   onPressed: _nicknameController.value.text.isNotEmpty
-                    //       ? () async {
-                    //           //중복 확인
-                    //           _apiResponse = await checkNickname(_newUser.nickname!);
-                    //           if (_apiResponse.ApiError == null) {
-                    //             _nicknameCheck = true;
-                    //           } else {
-                    //             _nicknameCheck = false;
-                    //             print(
-                    //                 (_apiResponse.ApiError as ApiError).error);
-                    //           }
-                    //         }
-                    //       : null,
-                    //   label: '중복 확인',
-                    //   radius: 25.r,
-                    //   width: 83.w,
-                    //   height: 30.h,
-                    // ),
+                    suffix: RoundedButton(
+                      onPressed: _nicknameController.value.text.isNotEmpty
+                          ? () async {
+                              //중복 확인
+                              _apiResponse = await checkNickname(
+                                  _nicknameController.value.text);
+                              if (_apiResponse.apiError == null) {
+                                _nicknameCheck = false;
+                                Get.defaultDialog(
+                                  radius: 10,
+                                  title: "닉네임 중복 여부",
+                                  middleText: _apiResponse.data.toString(),
+                                );
+                              } else {
+                                _nicknameCheck = true;
+                                Get.defaultDialog(
+                                  radius: 10,
+                                  title: "닉네임 중복 여부",
+                                  middleText:
+                                      (_apiResponse.apiError as ApiError)
+                                              .error ??
+                                          "null",
+                                );
+                              }
+                            }
+                          : null,
+                      label: '중복 확인',
+                      radius: 25.r,
+                      height: 30.h,
+                    ),
                   ),
                 ],
               ),
