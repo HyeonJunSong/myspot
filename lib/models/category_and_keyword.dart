@@ -19,7 +19,36 @@ List<Category> categoryList = [
   Category("🍺", "술집"),
 ];
 
-List<KeyWord> keyWordList = [
-  KeyWord("✨", "분위기"),
-  KeyWord("💸", "가성비"),
+List<List<KeyWord>> keyWordList = [
+  [
+    KeyWord("✨", "한식"),
+    KeyWord("💸", "양식"),
+    KeyWord("✨", "중식"),
+    KeyWord("💸", "일식"),
+  ],
+  [
+    KeyWord("✨", "분위기"),
+    KeyWord("💸", "가성비"),
+    KeyWord("✨", "친절"),
+  ],
+  [
+    KeyWord("✨", "분위기"),
+    KeyWord("💸", "가성비"),
+    KeyWord("✨", "콘센트"),
+    KeyWord("✨", "고양이"),
+  ]
 ];
+
+class CategorySelect{
+  bool ifActivated;
+  Category category;
+
+  CategorySelect(this.ifActivated, this.category);
+}
+
+class KeyWordSelect{
+  bool ifActivated;
+  KeyWord keyWord;
+
+  KeyWordSelect(this.ifActivated, this.keyWord);
+}

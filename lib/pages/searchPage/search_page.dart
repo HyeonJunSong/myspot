@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
@@ -58,7 +59,7 @@ _inputBox() => Container(
   height: 48.h,
   decoration: BoxDecoration(
     borderRadius: BorderRadius.circular(20.w),
-    color: Color(0xFFFBFBFB),
+    color: const Color(0xFFFBFBFB),
   ),
   padding: EdgeInsets.fromLTRB(23.w, 0, 17.w, 0),
   child: Row(
@@ -68,7 +69,7 @@ _inputBox() => Container(
         height: 48.h,
         width: 260.w,
         child: TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             hintText: "가게명, 메뉴 검색",
             hintStyle: TextStyle(
@@ -86,6 +87,7 @@ _inputBox() => Container(
           ),
           textAlignVertical: TextAlignVertical.center,
           cursorColor: colorInactive,
+          controller: Get.find<SearchPageViewController>().searchWordTextEditController,
         ),
       ),
       Image.asset("assets/images/search.png", width: 14.w, height: 14.h, color: colorInactive,)
@@ -105,11 +107,15 @@ _categoryBox() => Container(
       ),),
       SizedBox(height: 16.sp,),
       Wrap(
-        children: List<Widget>.from(Get.find<SearchPageViewController>().categorySelectList.map((element) =>
+        children: List<Widget>.from(categoryList.map((category) =>
           GestureDetector(
-            child: categoryBlock(element.ifActivated, element.category.emoji, element.category.categoryName),
+            child: categoryBlock(
+              Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                category.emoji,
+                category.categoryName
+            ),
             onTapUp: (value){
-            Get.find<SearchPageViewController>().categoryChange(element);
+              Get.find<SearchPageViewController>().categoryChange(categoryList.indexOf(category));
             },
           ),
         )
@@ -129,12 +135,16 @@ _keyWordBox() => Container(
         fontWeight: FontWeight.w700,
       ),),
       SizedBox(height: 16.sp,),
-      Wrap(
-        children: List<Widget>.from(Get.find<SearchPageViewController>().keyWordSelectList.map((element) =>
+      Get.find<SearchPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+        children: List<Widget>.from(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].map((keyWord) =>
           GestureDetector(
-            child: keyWordBlock(element.ifActivated, element.keyWord.emoji, element.keyWord.keyWordName),
+            child: keyWordBlock(
+              Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
+                keyWord.emoji,
+                keyWord.keyWordName
+            ),
             onTapUp: (value){
-              Get.find<SearchPageViewController>().keyWordChange(element);
+              Get.find<SearchPageViewController>().keyWordChange(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord));
             },
           ),
         ))
@@ -145,12 +155,16 @@ _keyWordBox() => Container(
 
 _button() => ElevatedButton(
     onPressed: (){
-      Get.toNamed("/SearchMap");
+      Get.find<SearchPageViewController>().searchSpots().then((value) {
+        if(value) {
+          Get.toNamed("/SearchMap");
+        }
+      });
     },
     style: ElevatedButton.styleFrom(
       fixedSize: Size(275.w, 42.h),
       backgroundColor: colorPrimary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.w)),
     ),
-    child: Text("필터 설정 완료!")
+    child: const Text("필터 설정 완료!")
 );

@@ -1,13 +1,89 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/category_and_keyword.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
-import 'package:myspot/services/coor_address_transition.dart';
+import 'package:myspot/utils/constants.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SearchPageViewController extends GetxController{
+
+  //////////////////////////////////////////////////////////////////////////////search page
+
+  TextEditingController searchWordTextEditController = TextEditingController();
+
+  //category & keyword
+
+  RxInt categoryInd = (-1).obs;
+  RxList<int> keyWordIndList = <int>[].obs;
+
+  void categoryChange(int newCategory){
+    if(newCategory == categoryInd.value){
+      categoryInd(-1);
+    }
+    else{
+      categoryInd(newCategory);
+    }
+    keyWordIndList(<int>[]);
+  }
+
+  void keyWordChange(int newKeyWord){
+    if(keyWordIndList.contains(newKeyWord)){
+      keyWordIndList.remove(newKeyWord);
+    }
+    else{
+      keyWordIndList.add(newKeyWord);
+    }
+    keyWordIndList.refresh();
+  }
+
+  //spot lists
+  RxList<Spot> spotList = <Spot>[].obs;
+
+  void updateSpotList(List<Spot> newSpotList){
+    spotList(newSpotList);
+  }
+
+  Future<bool> searchSpots() async {
+    List<Spot> newSpotList = await GETSpotList(
+        searchWord: searchWordTextEditController.text,
+        categoryInd: categoryInd.value,
+        keyWordIndList: keyWordIndList,
+        coor: Get.find<UserController>().curPosition.value,
+    );
+    if(Spot.ifErrorList(newSpotList)){
+      return false;
+    }
+    else{
+      updateSpotList(newSpotList);
+      return true;
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////search map page
+
   //map
   late NaverMapController mapController;
+  RxList<Marker> markers = <Marker>[].obs;
+
+  void updateMarker(BuildContext context){
+    OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
+        markers(spotList().map((e) => Marker(
+            markerId: e.placeId,
+            position: e.coor,
+            icon: image,
+            height: 40,
+            width: 40,
+            onMarkerTab: (marker, map){
+              updateCurCamPostion(marker.position);
+            }
+        )).toList()
+        )
+    );
+    markers.refresh();
+  }
 
   void onMapCreated(NaverMapController controller) {
     mapController = controller;
@@ -18,35 +94,30 @@ class SearchPageViewController extends GetxController{
   }
 
   //drawer
-  RxDouble drawer_topSpace = 471.h.obs;
+  RxDouble drawer_topSpace = drawer_bottom.h.obs;
 
-  void updateDrawerTopSpace(double newVal){
+  void updateDrawerTopSpace(double newVal) {
     drawer_topSpace(newVal);
   }
-
-  //category & keyword
-  RxList<CategorySelect> categorySelectList = List<CategorySelect>.from(categoryList.map((e) => CategorySelect(false, e))).obs;
-  RxList<KeyWordSelect> keyWordSelectList = List<KeyWordSelect>.from(keyWordList.map((e) => KeyWordSelect(false, e))).obs;
-
-  void categoryChange(CategorySelect element){
-    int ind = categorySelectList.indexOf(element);
-    if(categorySelectList[ind].ifActivated) {
-      categorySelectList[ind].ifActivated = false;
-    } else {
-      categorySelectList[ind].ifActivated = true;
-    }
-    categorySelectList.refresh();
+  void calibrateDrawerTopSpace(){
+    if((drawer_topSpace.value - drawer_bottom.h).abs() < (drawer_topSpace.value - drawer_mid.h).abs())
+      drawer_topSpace(drawer_bottom.h);
+    else
+    if ((drawer_topSpace.value - drawer_mid.h).abs() < (drawer_topSpace.value - drawer_top.h).abs())
+      drawer_topSpace(drawer_mid.h);
+    else
+      drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerTop(){
+    drawer_topSpace(drawer_top.h);
+  }
+  void setDrawerMid(){
+    drawer_topSpace(drawer_mid.h);
+  }
+  void setDrawerBottom(){
+    drawer_topSpace(drawer_bottom.h);
   }
 
-  void keyWordChange(KeyWordSelect element){
-    int ind = keyWordSelectList.indexOf(element);
-    if(keyWordSelectList[ind].ifActivated) {
-      keyWordSelectList[ind].ifActivated = false;
-    } else {
-      keyWordSelectList[ind].ifActivated = true;
-    }
-    keyWordSelectList.refresh();
-  }
 
   //orderButton
   RxInt orderButtonIndex = 0.obs;
@@ -68,42 +139,27 @@ class SearchPageViewController extends GetxController{
         case 0:
           return orderIfDescending.value ? a.distance - b.distance : b.distance - a.distance;
         case 1:
-          return orderIfDescending.value ? a.likes - b.likes : b.likes - a.likes;
+          return orderIfDescending.value ? a.spotNum - b.spotNum : b.spotNum - a.spotNum;
         default:
           return 0;
       }
     });
   }
 
-  //spot lists
-  RxList<Spot> spotList = <Spot>[
-    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325, LatLng(35.89229637317734, 128.60856585746507), 0),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 1),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 2),
-    Spot("스타벅스 경북대북문점", 220, "산격동 1399-2", 1325, LatLng(35.89229637317734, 128.60856585746507), 3),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
-    Spot("이디야커피 경북대북문점", 220, "산격동 1399-1", 756, LatLng(35.8929148936863, 128.608742276315), 4),
-    Spot("커피와빵 경북대북문점", 220, "산격동 1331-6", 233, LatLng(35.8937633273376, 128.609716301503), 5),
-  ].obs;
+  //Review List
+  RxList<Review> reviewList = <Review>[].obs;
 
+  void updateReviewList(List<Review> newReviewList){
+    reviewList(newReviewList);
+  }
+
+  Future<bool> searchReview(String placeId) async{
+    List<Review> newReviewList = await GETReviewList(placeId: placeId);
+    if(newReviewList.isEmpty) {
+      return false;
+    } else {
+      updateReviewList(newReviewList);
+      return true;
+    }
+  }
 }
-
-class CategorySelect{
-  bool ifActivated;
-  Category category;
-
-  CategorySelect(this.ifActivated, this.category);
-}
-
-class KeyWordSelect{
-  bool ifActivated;
-  KeyWord keyWord;
-
-  KeyWordSelect(this.ifActivated, this.keyWord);
-}
-
-List<String> sortBy = [
-  "거리 순",
-  "스팟 순"
-];

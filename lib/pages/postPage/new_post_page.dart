@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:myspot/models/post.dart';
+import 'package:myspot/models/category_and_keyword.dart';
+import 'package:myspot/models/review.dart';
 import 'package:myspot/services/api.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
@@ -38,7 +40,6 @@ class _NewPostPageState extends State<NewPostPage> {
   final TextEditingController tagController = TextEditingController();
 
   late ApiResponse _apiResponse;
-  final Post _post = Post();
 
   @override
   void dispose() {
@@ -88,45 +89,24 @@ class _NewPostPageState extends State<NewPostPage> {
                       ),
                     ),
                   ),
-                  // Autocomplete<String>(
-                  //   optionsBuilder: (TextEditingValue textEditingValue) {
-                  //     return const Iterable<String>.empty();
-                  //   },
-                  //   fieldViewBuilder: (context, controller, focusNode, onEditingComplete){
-                  //     return TextField(
-                  //       controller: locationController,
-                  //       decoration: InputDecoration(
-                  //         border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.circular(20.r),
-                  //           borderSide: BorderSide.none,
-                  //         ),
-                  //         contentPadding:
-                  //         EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 14.h),
-                  //         hintText: "장소를 검색하세요",
-                  //         suffixIcon: const Icon(Icons.search),
-                  //         filled: true,
-                  //         fillColor: Colors.grey[200],
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                   TextButton.icon(
-                      onPressed: () {
-                        //실시간 위치 가져와서 텍스트에 넣기,,,
-                      },
-                      icon: Icon(
-                        Icons.my_location,
-                        size: 16.w,
+                    onPressed: () {
+                      //실시간 위치 가져와서 텍스트에 넣기,,,
+                    },
+                    icon: Icon(
+                      Icons.my_location,
+                      size: 16.w,
+                      color: Colors.black,
+                    ),
+                    label: Text(
+                      "현재 위치로",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
-                      label: Text(
-                        "현재 위치로",
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ))
+                    )
+                  )
                 ],
               ),
             ),
@@ -149,35 +129,21 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: EdgeInsets.symmetric(vertical: 15.h),
               child: RoundedButton(
                 onPressed: () async {
-                  _post.email = "test@test.com";
-                  _post.spotName = "newLocation";
-                  _post.category = "밥집";
-                  _post.comment = "연어초밥이 죽여줘요ㅠㅠ";
-
-                  _apiResponse = await addNewPost(_post);
-                  if (_apiResponse.apiError == null) {
-                    debugPrint(_apiResponse.data.toString());
-                    Get.defaultDialog(
-                      radius: 10,
-                      title: "spot 등록",
-                      middleText: "스팟이 등록되었습니다",
+                  if(await Get.find<PostPageViewController>().post()){
+                    Fluttertoast.showToast(
+                        msg: "스팟 등록 완료 😄",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: colorPrimary,
+                        textColor: Colors.white,
+                        fontSize: 16.0
                     );
-                  } else {
-                    debugPrint((_apiResponse.apiError as ApiError).error);
-                    Get.defaultDialog(
-                      radius: 10,
-                      title: "spot 등록",
-                      middleText: "스팟이 정상적으로 등록되지 못했습니다.\n다시 시도해주세요.",
-                    );
+                    Get.back();
                   }
+                  else{
 
-                  //게시물 확인
-                  // _apiResponse = await getPost(_post.email!);
-                  // if (_apiResponse.apiError == null) {
-                  //   debugPrint(_apiResponse.data.toString());
-                  // } else {
-                  //   debugPrint((_apiResponse.apiError as ApiError).error);
-                  // }
+                  }
                 },
                 label: '등록 하기',
                 width: 275.w,
@@ -194,33 +160,33 @@ class _NewPostPageState extends State<NewPostPage> {
       padding: EdgeInsets.fromLTRB(25.w, 15.h, 25.w, 15.h),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '한줄평 작성',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (show[0] == false) {
-                      show[0] = true;
-                    } else {
-                      show[0] = false;
-                    }
-                  });
-                },
-                icon: Icon(show[0]
-                    ? Icons.keyboard_arrow_up
-                    : Icons.keyboard_arrow_down),
-              )
-            ],
-          ),
-          show[0] ? _buildReviewContent() : Container(),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       '한줄평 작성',
+          //       style: TextStyle(
+          //         fontSize: 16.sp,
+          //         fontWeight: FontWeight.w700,
+          //       ),
+          //     ),
+          //     IconButton(
+          //       onPressed: () {
+          //         setState(() {
+          //           if (show[0] == false) {
+          //             show[0] = true;
+          //           } else {
+          //             show[0] = false;
+          //           }
+          //         });
+          //       },
+          //       icon: Icon(show[0]
+          //           ? Icons.keyboard_arrow_up
+          //           : Icons.keyboard_arrow_down),
+          //     )
+          //   ],
+          // ),
+          _buildReviewContent(),
         ],
       ),
     );
@@ -253,48 +219,6 @@ class _NewPostPageState extends State<NewPostPage> {
               hintStyle: TextStyle(fontSize: 14.sp),
             ),
           ),
-          Text(
-            '👍 좋았던 점은 무엇인가요?',
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 10.h),
-          TextField(
-            // controller: textEditingController,
-            maxLength: 20,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: colorInactive),
-              ),
-              contentPadding: EdgeInsets.all(10.w),
-              hintText: "좋았던 점을 간략히 알려주세요. (최대20자)",
-              hintStyle: TextStyle(fontSize: 14.sp),
-            ),
-          ),
-          Text(
-            '👎 아쉬웠던 점은 무엇인가요?',
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 10.h),
-          TextField(
-            // controller: textEditingController,
-            maxLength: 20,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: colorInactive),
-              ),
-              contentPadding: EdgeInsets.all(10.w),
-              hintText: "아쉬웠던 점을 간략히 알려주세요. (최대20자)",
-              hintStyle: TextStyle(fontSize: 14.sp),
-            ),
-          ),
         ],
       ),
     );
@@ -308,34 +232,26 @@ class _NewPostPageState extends State<NewPostPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "카테고리 선택",
-                style: TextStyle(
-                  color: colorBlack,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
+              Text("카테고리 선택", style: TextStyle(
+                color: colorBlack,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+              ),),
+              SizedBox(height: 16.sp,),
               Wrap(
-                  children: List<Widget>.from(
-                      Get.put(SearchPageViewController())
-                          .categorySelectList
-                          .map(
-                            (element) => GestureDetector(
-                              child: categoryBlock(
-                                  element.ifActivated,
-                                  element.category.emoji,
-                                  element.category.categoryName),
-                              onTapUp: (value) {
-                                Get.put(SearchPageViewController())
-                                    .categoryChange(element);
-                              },
-                            ),
-                          ))),
-              //
+                  children: List<Widget>.from(categoryList.map((category) =>
+                      GestureDetector(
+                        child: categoryBlock(
+                            Get.find<PostPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                            category.emoji,
+                            category.categoryName
+                        ),
+                        onTapUp: (value){
+                          Get.find<PostPageViewController>().categoryChange(categoryList.indexOf(category));
+                        },
+                      ),
+                  )
+                  )),
             ],
           ),
           SizedBox(height: 10.h),
@@ -344,34 +260,26 @@ class _NewPostPageState extends State<NewPostPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "키워드 선택",
-                  style: TextStyle(
-                    color: colorBlack,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
+                Text("키워드 선택", style: TextStyle(
+                  color: colorBlack,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                ),),
+                SizedBox(height: 16.sp,),
+                Get.find<PostPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+                    children: List<Widget>.from(keyWordList[Get.find<PostPageViewController>().categoryInd.value].map((keyWord) =>
+                        GestureDetector(
+                          child: keyWordBlock(
+                              Get.find<PostPageViewController>().keyWordIndList.contains(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord)),
+                              keyWord.emoji,
+                              keyWord.keyWordName
+                          ),
+                          onTapUp: (value){
+                            Get.find<PostPageViewController>().keyWordChange(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord));
+                          },
+                        ),
+                    ))
                 ),
-                SizedBox(
-                  height: 16.sp,
-                ),
-                Wrap(
-                    children: List<Widget>.from(
-                        Get.put(SearchPageViewController())
-                            .keyWordSelectList
-                            .map(
-                              (element) => GestureDetector(
-                                child: keyWordBlock(
-                                    element.ifActivated,
-                                    element.keyWord.emoji,
-                                    element.keyWord.keyWordName),
-                                onTapUp: (value) {
-                                  Get.put(SearchPageViewController())
-                                      .keyWordChange(element);
-                                },
-                              ),
-                            ))),
-                //
               ],
             ),
           ),

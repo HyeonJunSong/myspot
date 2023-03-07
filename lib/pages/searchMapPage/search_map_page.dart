@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myspot/models/category_and_keyword.dart';
+import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
@@ -15,13 +16,15 @@ class SearchMapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<SearchPageViewController>().updateMarker(context);
     return Obx( () => Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: searchMapPageAppbar(),
       resizeToAvoidBottomInset : false,
       body: Stack(
         children: [
           _map(),
-          _drawer()
+          _drawer(context)
         ],
       ),
     ));
@@ -29,26 +32,23 @@ class SearchMapPage extends StatelessWidget {
 
   _map() => Positioned(
     child: NaverMap(
-      initialCameraPosition: CameraPosition(
+      initialCameraPosition: const CameraPosition(
         target: LatLng(35.89229637317734, 128.60856585746507)
       ),
-      markers: Get.find<SearchPageViewController>()
-        .spotList()
-        .map((e) => Marker(
-          markerId: e.id.toString(),
-          position: e.coor
-      )).toList(),
+      markers: Get.find<SearchPageViewController>().markers,
       onMapCreated: Get.find<SearchPageViewController>().onMapCreated,
     ),
   );
 
-  _drawer() => Positioned(
+  _drawer(BuildContext context) => AnimatedPositioned(
+    curve: Curves.easeOut,
+    duration: const Duration(milliseconds: 100),
     top: Get.find<SearchPageViewController>().drawer_topSpace.value,
     child: Container(
       width: 390.w,
       height: 900.h,
       padding: EdgeInsets.only(top: 10.h),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: colorWhite
       ),
       child: Column(
@@ -61,7 +61,7 @@ class SearchMapPage extends StatelessWidget {
               child: Container(
                 child: Column(
                   children: [
-                    _searchBoxAndTags(),
+                    _searchBoxAndTags(context),
                     Divider(thickness: 1.h,),
                     _searchResultList(),
                   ],
@@ -76,11 +76,14 @@ class SearchMapPage extends StatelessWidget {
 
   _knob() => GestureDetector(
     onVerticalDragUpdate: (value){
-      Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy - 100.h);
+      if(value.globalPosition.dy >= 65.h)
+        Get.find<SearchPageViewController>().updateDrawerTopSpace(value.globalPosition.dy);
+      else
+        Get.find<SearchPageViewController>().updateDrawerTopSpace(65.h);
     },
-    // onVerticalDragEnd: (value){
-    //   Get.find<SearchPageViewController>().updateDrawerTopSpace(100.h);
-    // },
+    onVerticalDragEnd: (value){
+      Get.find<SearchPageViewController>().calibrateDrawerTopSpace();
+    },
     child: Container(
       color: Colors.transparent,
       padding: EdgeInsets.all(10.h),
@@ -94,12 +97,12 @@ class SearchMapPage extends StatelessWidget {
   );
 
   //////////////////////////////////////////////////////////////////////////////searchBox and Tags
-  _searchBoxAndTags() => Container(
+  _searchBoxAndTags(BuildContext context) => Container(
     padding: EdgeInsets.fromLTRB(21.w, 16.h, 21.w, 23.h),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _searchBox(),
+        _searchBox(context),
         SizedBox(height: 23.h,),
         _categoryBox(),
         _keyWordBox(),
@@ -107,18 +110,18 @@ class SearchMapPage extends StatelessWidget {
     ),
   );
 
-  _searchBox() => Container(
+  _searchBox(BuildContext context) => Container(
     width: 317.w,
     height: 48.h,
-    child: _inputBox(),
+    child: _inputBox(context),
   );
 
-  _inputBox() => Container(
+  _inputBox(BuildContext context) => Container(
     width: 317.w,
     height: 48.h,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20.w),
-      color: Color(0xFFFBFBFB),
+      color: const Color(0xFFFBFBFB),
     ),
     padding: EdgeInsets.fromLTRB(23.w, 0, 17.w, 0),
     child: Row(
@@ -128,7 +131,7 @@ class SearchMapPage extends StatelessWidget {
           height: 48.h,
           width: 260.w,
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               isDense: true,
               hintText: "가게명, 메뉴 검색",
               hintStyle: TextStyle(
@@ -146,34 +149,80 @@ class SearchMapPage extends StatelessWidget {
             ),
             textAlignVertical: TextAlignVertical.center,
             cursorColor: colorInactive,
+            controller: Get.find<SearchPageViewController>().searchWordTextEditController,
+            onSubmitted: (value){
+              Get.find<SearchPageViewController>().searchSpots()
+                  .then((value) => value ? Get.find<SearchPageViewController>().updateMarker(context) : null);
+            },
           ),
         ),
-        Image.asset("assets/images/search.png", width: 14.w, height: 14.h, color: colorInactive,)
+        GestureDetector(
+          child: Image.asset("assets/images/search.png", width: 14.w, height: 14.h, color: colorInactive,),
+          onTap: (){
+            Get.find<SearchPageViewController>().searchSpots().then((value) => value ? Get.find<SearchPageViewController>().updateMarker(context) : null);
+          },
+        )
       ],
     ),
   );
 
-  _categoryBox() => Wrap(
-    children: List<Widget>.from(Get.find<SearchPageViewController>().categorySelectList.map((element) =>
-      GestureDetector(
-        child: categoryBlock(element.ifActivated, element.category.emoji, element.category.categoryName),
-        onTapUp: (value){
-          Get.find<SearchPageViewController>().categoryChange(element);
-        },
-      ),
-    )
-  ));
+  _categoryBox() => Container(
+    width: 310.w,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("카테고리 선택", style: TextStyle(
+          color: colorBlack,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w700,
+        ),),
+        SizedBox(height: 16.sp,),
+        Wrap(
+            children: List<Widget>.from(categoryList.map((category) =>
+                GestureDetector(
+                  child: categoryBlock(
+                      Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                      category.emoji,
+                      category.categoryName
+                  ),
+                  onTapUp: (value){
+                    Get.find<SearchPageViewController>().categoryChange(categoryList.indexOf(category));
+                  },
+                ),
+            )
+            )),
+      ],
+    ),
+  );
 
-  _keyWordBox() => Wrap(
-    children: List<Widget>.from(Get.find<SearchPageViewController>().keyWordSelectList.map((element) =>
-      GestureDetector(
-        child: keyWordBlock(element.ifActivated, element.keyWord.emoji, element.keyWord.keyWordName),
-        onTapUp: (value){
-          Get.find<SearchPageViewController>().keyWordChange(element);
-        },
-      ),
-    )
-  ));
+  _keyWordBox() => Container(
+    width: 310.w,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("키워드 선택", style: TextStyle(
+          color: colorBlack,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w700,
+        ),),
+        SizedBox(height: 16.sp,),
+        Get.find<SearchPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+            children: List<Widget>.from(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].map((keyWord) =>
+                GestureDetector(
+                  child: keyWordBlock(
+                      Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
+                      keyWord.emoji,
+                      keyWord.keyWordName
+                  ),
+                  onTapUp: (value){
+                    Get.find<SearchPageViewController>().keyWordChange(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord));
+                  },
+                ),
+            ))
+        ),
+      ],
+    ),
+  );
 
   _searchResultList() => Container(
     child: Column(
@@ -181,8 +230,13 @@ class SearchMapPage extends StatelessWidget {
         _orderBolck(),
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
-        (element) => _resultBlock(element.place, element.distance, element.address, element.likes)
-      ).toList()),
+        (element) => _resultBlock(element)
+      ).toList())
+      + [
+        SizedBox(
+          height: Get.find<SearchPageViewController>().drawer_topSpace.value + 900.h - 844.h - 20.h,
+        ),
+      ],
     ),
   );
 
@@ -227,65 +281,75 @@ class SearchMapPage extends StatelessWidget {
     ),
   );
 
-  _resultBlock(String place, int distance, String address, int likes) => Container(
-    width: 390.w,
-    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-    decoration: BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          color: Color(0xFFE5E5E5),
-          width: 1.h,
+  _resultBlock(Spot spot) => GestureDetector(
+    onTap: () async{
+      if(await Get.find<SearchPageViewController>().searchReview(spot.placeId)){
+        Get.toNamed(
+            '/SpotDetail',
+            arguments: spot
+        );
+      }
+    },
+    child: Container(
+      width: 390.w,
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: const Color(0xFFE5E5E5),
+            width: 1.h,
+          ),
         ),
       ),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(place, style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 16.sp
-        ),),
-        SizedBox(height: 6.h,),
-        Row(
-          children: [
-            Text(distance.toString() + 'm', style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF737373),
-                fontSize: 14.sp
-            ),),
-            Container(
-              width: 1.w,
-              height : 20.h,
-              margin: EdgeInsets.symmetric(horizontal: 8.w),
-              color: Color(0xFFBDBDBD),
-            ),
-            Text(address, style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF737373),
-                fontSize: 14.sp
-            ),),
-          ],
-        ),
-        SizedBox(height: 6.h,),
-        Row(
-          children: [
-            Icon(Icons.circle, color: _spotColor(likes), size: 11.w,),
-            SizedBox(width: 10.w,),
-            Text(NumberFormat("###,###,###").format(likes), style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: _spotColor(likes),
-                fontSize: 14.sp
-            ),),
-          ],
-        ),
-      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(spot.placeName, style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.sp
+          ),),
+          SizedBox(height: 6.h,),
+          Row(
+            children: [
+              Text('${spot.distance}m', style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF737373),
+                  fontSize: 14.sp
+              ),),
+              Container(
+                width: 1.w,
+                height : 20.h,
+                margin: EdgeInsets.symmetric(horizontal: 8.w),
+                color: const Color(0xFFBDBDBD),
+              ),
+              Text(spot.address, style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF737373),
+                  fontSize: 14.sp
+              ),),
+            ],
+          ),
+          SizedBox(height: 6.h,),
+          Row(
+            children: [
+              Icon(Icons.circle, color: _spotColor(spot.spotNum), size: 11.w,),
+              SizedBox(width: 10.w,),
+              Text(NumberFormat("###,###,###").format(spot.spotNum), style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: _spotColor(spot.spotNum),
+                  fontSize: 14.sp
+              ),),
+            ],
+          ),
+        ],
+      ),
     ),
   );
 
   _spotColor(int likes){
-    if(likes > 1000) return Color(0xFFEA5252);
-    if(likes >  500) return Color(0xFF2BAE5F);
-    if(likes >    0) return Color(0xFF0789E8);
+    if(likes > 1000) return const Color(0xFFEA5252);
+    if(likes >  500) return const Color(0xFF2BAE5F);
+    if(likes >    0) return const Color(0xFF0789E8);
   }
 
 }

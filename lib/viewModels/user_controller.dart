@@ -6,7 +6,19 @@ import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class UserController extends GetxController{
 
-  //location
+  @override
+  void onInit() {
+    super.onInit();
+    getPosition();
+  }
+
+  ////
+  String email = "test@google.com";
+  void updateEmail(String newEmail){
+    email = newEmail;
+  }
+
+  ////location
   Rx<LatLng> curPosition = LatLng(0, 0).obs;
 
   Future<LatLng> getPosition() async {
@@ -17,7 +29,7 @@ class UserController extends GetxController{
     return LatLng(curPos.latitude, curPos.longitude);
   }
 
-  //설정 된 주소
+  ////설정 된 주소
   RxString setAddressUpper = " ".obs;
   RxString setAddressLower = " ".obs;
 
