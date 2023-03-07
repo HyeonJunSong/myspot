@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:myspot/models/user.dart';
+import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/services/api.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/input_field.dart';
@@ -44,7 +45,9 @@ class _SignInPageState extends State<SignInPage> {
           middleText: "${_newUser.nickname}님, 환영합니다. 🤩",
         );
         // 홈으로
-        Get.toNamed("/Main");
+        Future.delayed(const Duration(milliseconds: 500), () { 
+          Get.offAllNamed('/Main', arguments: _newUser);
+        });
       } else {
         Get.defaultDialog(
           radius: 10,
