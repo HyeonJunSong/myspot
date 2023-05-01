@@ -23,11 +23,12 @@ class _SearchPageState extends State<SearchPage> {
         child: Obx(() => Column(
           children: [
             SizedBox(height: 40.h,),
-            _searchBox(),
-            Divider(height: 66.h, thickness: 1.h,),
             _categoryBox(),
             SizedBox(height: 38.h,),
             _keyWordBox(),
+            Divider(height: 66.h, thickness: 1.h,),
+            _searchBox(),
+            Divider(height: 66.h, thickness: 1.h,),
             SizedBox(height: 50.h,),
             _button(),
           ],

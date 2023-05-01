@@ -8,7 +8,7 @@ import 'package:myspot/services/coor_address_transition.dart';
 import 'package:myspot/services/keyword_location_search.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/user_controller.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class PostPageViewController extends GetxController{
 
@@ -64,31 +64,31 @@ class PostPageViewController extends GetxController{
 
   //map
   late NaverMapController mapController;
-  RxList<Marker> markers = <Marker>[].obs;
+  RxList<NMarker> markers = <NMarker>[].obs;
 
   void updateMarker(BuildContext context){
-    OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
-        markers(searchResult().map((e) => Marker(
-          markerId: e.id,
-          position: e.coor,
-          icon: image,
-          height: 40,
-          width: 40,
-          onMarkerTab: (marker, map){
-            updateCurCamPostion(marker.position);
-          }
-        )).toList()
-      )
-    );
-    refresh();
+    // OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
+    //     markers(searchResult().map((e) => Marker(
+    //       markerId: e.id,
+    //       position: e.coor,
+    //       icon: image,
+    //       height: 40,
+    //       width: 40,
+    //       onMarkerTab: (marker, map){
+    //         updateCurCamPostion(marker.position);
+    //       }
+    //     )).toList()
+    //   )
+    // );
+    // refresh();
   }
 
-  void onMapCreated(NaverMapController controller) {
+  void onMapReady(NaverMapController controller) {
     mapController = controller;
   }
 
-  void updateCurCamPostion(LatLng position){
-    mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
+  void updateCurCamPostion(NLatLng position){
+    mapController.updateCamera(NCameraUpdate.fromCameraPosition((NCameraPosition(target: position, zoom: 15))));
   }
 
   ////LocationSearchResult
@@ -107,7 +107,7 @@ class PostPageViewController extends GetxController{
   void keyWordSearch(BuildContext context) async {
     if(searchKeyword.isEmpty) return;
 
-    CameraPosition curCamPos = await mapController.getCameraPosition();
+    NCameraPosition curCamPos = await mapController.getCameraPosition();
     List<LocationSearchResult> result = await GETKeywordLocationSearchJSON(searchKeyword.value, curCamPos.target);
 
     updateSearchResult(result, context);

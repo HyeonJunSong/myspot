@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myspot/utils/keyFiles.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 import 'api.dart';
 
 class LocationSearchResult{
-  LatLng coor;
+  NLatLng coor;
   String placeName;
   String address;
   String id;
 
   LocationSearchResult({
-    this.coor = const LatLng(0, 0),
+    this.coor = const NLatLng(0, 0),
     this.placeName = "",
     this.address = "",
     this.id = ""
@@ -27,7 +27,7 @@ class LocationSearchResult{
       Map<String, dynamic> e = Map<String, dynamic>.from(element);
       result.add(
         LocationSearchResult(
-          coor: LatLng(double.parse(e["y"]), double.parse(e["x"])),
+          coor: NLatLng(double.parse(e["y"]), double.parse(e["x"])),
           placeName: e["place_name"],
           address: e["road_address_name"],
           id: e["id"]
@@ -39,7 +39,7 @@ class LocationSearchResult{
   }
 }
 
-Future<List<LocationSearchResult>> GETKeywordLocationSearchJSON(String keyword, LatLng coor) async {
+Future<List<LocationSearchResult>> GETKeywordLocationSearchJSON(String keyword, NLatLng coor) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {

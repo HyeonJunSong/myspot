@@ -17,6 +17,7 @@ class InputForm extends StatefulWidget {
     this.suffix,
     this.suffixIcon,
     this.padding,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -31,6 +32,7 @@ class InputForm extends StatefulWidget {
   final Widget? suffix;
   final Widget? suffixIcon;
   final EdgeInsetsGeometry? padding;
+  final Function(String)? onChanged;
 
   @override
   State<InputForm> createState() => _InputFormState();
@@ -62,6 +64,7 @@ class _InputFormState extends State<InputForm> {
             onSaved: widget.onSaved,
             style: TextStyle(fontSize: 14.sp),
             cursorColor: colorPrimary,
+            onChanged: widget.onChanged,
           ),
         ],
       ),

@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   flutter_screenutil: ^5.5.3+2
-  naver_map_plugin: ^0.9.6
+  flutter_naver_map: ^1.0.0
   http: ^0.13.5
   image_picker: ^0.8.6
   intl: ^0.18.0

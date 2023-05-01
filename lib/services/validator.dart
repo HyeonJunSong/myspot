@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CheckValidate {
-  String? validateEmail(FocusNode focusNode, String? value, bool check) {
+  static String? validateEmail(FocusNode focusNode, String? value, bool check) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
@@ -18,7 +18,7 @@ class CheckValidate {
     return null;
   }
 
-  String? validatePassword(FocusNode focusNode, String? value) {
+  static String? validatePassword(FocusNode focusNode, String? value) {
     String pattern =
         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
     RegExp regExp = RegExp(pattern);
@@ -35,7 +35,7 @@ class CheckValidate {
     return null;
   }
 
-  String? validateNickname(FocusNode focusNode, String? value, bool check) {
+  static String? validateNickname(FocusNode focusNode, String? value, bool check) {
     String pattern = r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9a-z]{2,6}$';
     RegExp regExp = RegExp(pattern);
     if (value == null || value.isEmpty) {

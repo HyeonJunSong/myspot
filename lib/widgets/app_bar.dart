@@ -6,7 +6,7 @@ import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/dialog_location_setting.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 PreferredSizeWidget buildAppbar(String label) {
   return AppBar(
@@ -47,7 +47,7 @@ searchMapPageAppbar() => AppBar(
       GestureDetector(
         child: Text(Get.find<UserController>().setAddressUpper.value + ' ' + Get.find<UserController>().setAddressLower.value, style: _textStyle(TextDecoration.underline)),
         onTap: () async{
-          LatLng coor = await Get.dialog(DialogLocationSetting());
+          NLatLng coor = await Get.dialog(DialogLocationSetting());
           coor == null ? null : Get.find<SearchPageViewController>().updateCurCamPostion(coor);
         },
       ),
@@ -65,8 +65,8 @@ postMapPageAppbar() => AppBar(
   title: GestureDetector(
     child: Text(Get.find<UserController>().setAddressUpper.value + ' ' + Get.find<UserController>().setAddressLower.value, style: _textStyle(TextDecoration.underline)),
     onTap: () async {
-      LatLng coor = await Get.dialog(DialogLocationSetting());
-      coor == null ? null : Get.find<PostPageViewController>().updateCurCamPostion(coor);
+      NLatLng coor = await Get.dialog(DialogLocationSetting());
+      Get.find<PostPageViewController>().updateCurCamPostion(coor);
     },
   ),
 );
