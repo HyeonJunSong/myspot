@@ -44,6 +44,8 @@ dependencies:
   kakao_flutter_sdk: ^1.4.0
   kakao_flutter_sdk_user: ^1.4.0
   fluttertoast: ^8.1.2
+  gradient_borders: ^1.0.0
+  carousel_slider: ^4.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
