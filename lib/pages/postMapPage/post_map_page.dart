@@ -11,7 +11,7 @@ import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class PostMapPage extends StatelessWidget {
   PostMapPage({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class PostMapPage extends StatelessWidget {
   }
 
   _searchBox(BuildContext context) => Positioned(
-    top: 95.h,
+    top: 105.h,
     left: 27.w,
     width: 335.w,
     child: TextField(
@@ -43,7 +43,7 @@ class PostMapPage extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.r),
-          borderSide: BorderSide(color: colorPrimary),
+          borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 14.h),
         hintText: "장소를 검색하세요",
@@ -68,11 +68,11 @@ class PostMapPage extends StatelessWidget {
 
   _map() => Positioned(
     child: NaverMap(
-      initialCameraPosition: CameraPosition(
-          target: Get.find<UserController>().curPosition.value,
-      ),
-      markers: Get.find<PostPageViewController>().markers,
-      onMapCreated: Get.find<PostPageViewController>().onMapCreated,
+      // initialCameraPosition: CameraPosition(
+      //     target: Get.find<UserController>().curPosition.value,
+      // ),
+      // markers: Get.find<PostPageViewController>().markers,
+      onMapReady: Get.find<PostPageViewController>().onMapReady,
     ),
   );
 

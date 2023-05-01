@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myspot/utils/keyFiles.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 import 'api.dart';
 
 class CoorAndAddress{
   String? addressUpper;
   String? addressLower;
-  LatLng? coor;
+  NLatLng? coor;
 
   CoorAndAddress({
     this.addressUpper,
@@ -27,11 +27,11 @@ class CoorAndAddress{
 
   CoorAndAddress.CoordinateFromJSON(String json){
     Map<String, dynamic> result = Map<String, dynamic>.from(List<dynamic>.from(Map<String, dynamic>.from(jsonDecode(json))["addresses"])[0]);
-    coor = LatLng(double.parse(result["y"]), double.parse(result["x"]));
+    coor = NLatLng(double.parse(result["y"]), double.parse(result["x"]));
   }
 }
 
-Future<CoorAndAddress> GETCoorToAddJSON(LatLng coor) async {
+Future<CoorAndAddress> GETCoorToAddJSON(NLatLng coor) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
@@ -42,6 +42,8 @@ Future<CoorAndAddress> GETCoorToAddJSON(LatLng coor) async {
         "X-NCP-APIGW-API-KEY" : naverMapKey
       }
     );
+
+    print(utf8.decode(response.bodyBytes));
 
     switch (response.statusCode) {
       case 200:

@@ -8,7 +8,7 @@ import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 
 class SearchMapPage extends StatelessWidget {
@@ -32,11 +32,11 @@ class SearchMapPage extends StatelessWidget {
 
   _map() => Positioned(
     child: NaverMap(
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(35.89229637317734, 128.60856585746507)
-      ),
-      markers: Get.find<SearchPageViewController>().markers,
-      onMapCreated: Get.find<SearchPageViewController>().onMapCreated,
+      // initialCameraPosition: const CameraPosition(
+      //   target: LatLng(35.89229637317734, 128.60856585746507)
+      // ),
+      // markers: Get.find<SearchPageViewController>().markers,
+      onMapReady: Get.find<SearchPageViewController>().onMapReady,
     ),
   );
 

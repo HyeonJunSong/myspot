@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:myspot/pages/SignUpInPage/signin_page.dart';
 import 'package:myspot/pages/postMapPage/post_map_page.dart';
 import 'package:myspot/pages/searchMapPage/search_map_page.dart';
 import 'package:myspot/pages/searchPage/search_page.dart';
 import 'package:myspot/pages/myPage/my_page.dart';
 import 'package:myspot/pages/postPage/new_post_page.dart';
-import 'package:myspot/pages/signUpInPage/signin_page.dart';
 import 'package:myspot/pages/signUpInPage/signup_page.dart';
 import 'package:myspot/pages/signUpInPage/signupin_page.dart';
 import 'package:myspot/pages/mainPage/main_page.dart';
@@ -16,9 +16,11 @@ import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/sign_up_in_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'models/locations.dart';
 import 'package:myspot/utils/constants.dart';
+
 
 void main() {
   // runApp() 호출 전 Flutter SDK 초기화
@@ -40,10 +42,11 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/SignUpIn",
+            initialRoute: "/Main",
             initialBinding: BindingsBuilder(() {
               Get.put(UserController());
               Get.put(CityViewController());
+              Get.put(SignUpInPageController());
             }),
             getPages: [
               // GetPage(name: "/Load", page: () => LoadingPage(), transition: Transition.fadeIn, binding: BindingsBuilder(

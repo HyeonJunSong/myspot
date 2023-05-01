@@ -12,7 +12,7 @@ import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/drop_down_set_location_city.dart';
 import 'package:myspot/widgets/drop_down_set_location_gu.dart';
 import 'package:myspot/widgets/drop_down_set_location_dong.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class DialogLocationSetting extends StatelessWidget {
   const DialogLocationSetting({Key? key}) : super(key: key);
@@ -124,7 +124,7 @@ class DialogLocationSetting extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              LatLng coor = await Get.find<UserController>().getPosition();
+                              NLatLng coor = await Get.find<UserController>().getPosition();
                               Get.back(result: coor);
                             },
                             child: Row(

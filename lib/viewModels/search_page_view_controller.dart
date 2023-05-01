@@ -6,7 +6,7 @@ import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/user_controller.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class SearchPageViewController extends GetxController{
 
@@ -66,31 +66,31 @@ class SearchPageViewController extends GetxController{
 
   //map
   late NaverMapController mapController;
-  RxList<Marker> markers = <Marker>[].obs;
+  RxList<NMarker> markers = <NMarker>[].obs;
 
   void updateMarker(BuildContext context){
-    OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
-        markers(spotList().map((e) => Marker(
-            markerId: e.placeId,
-            position: e.coor,
-            icon: image,
-            height: 40,
-            width: 40,
-            onMarkerTab: (marker, map){
-              updateCurCamPostion(marker.position);
-            }
-        )).toList()
-        )
-    );
-    markers.refresh();
+    // OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
+    //     markers(spotList().map((e) => Marker(
+    //         markerId: e.placeId,
+    //         position: e.coor,
+    //         icon: image,
+    //         height: 40,
+    //         width: 40,
+    //         onMarkerTab: (marker, map){
+    //           updateCurCamPostion(marker.position);
+    //         }
+    //     )).toList()
+    //     )
+    // );
+    // markers.refresh();
   }
 
-  void onMapCreated(NaverMapController controller) {
+  void onMapReady(NaverMapController controller) {
     mapController = controller;
   }
 
-  void updateCurCamPostion(LatLng position){
-    mapController.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: position)));
+  void updateCurCamPostion(NLatLng position){
+    mapController.updateCamera(NCameraUpdate.fromCameraPosition(NCameraPosition(target: position, zoom: 15)));
   }
 
   //drawer

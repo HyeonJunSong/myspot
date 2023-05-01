@@ -1,7 +1,7 @@
 import 'dart:math';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
-int distanceInMBetweenEarthCoordinates(LatLng coor1, LatLng coor2) {
+int distanceInMBetweenEarthCoordinates(NLatLng coor1, NLatLng coor2) {
   const earthRadiusKm = 6371;
 
   var dLat = _degreesToRadians(coor2.latitude-coor1.latitude);

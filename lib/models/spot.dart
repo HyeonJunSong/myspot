@@ -8,21 +8,21 @@ import 'package:myspot/services/api.dart';
 import 'package:myspot/services/distance_calculate.dart';
 import 'package:myspot/utils/keyFiles.dart';
 import 'package:myspot/viewModels/user_controller.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class Spot{
   String placeName; // locationname
   late int distance;
   String address; // locationAddress
   int spotNum; // location_num
-  LatLng coor; // locationLatitude, locationLongitude
+  NLatLng coor; // locationLatitude, locationLongitude
   String placeId; // locationmapcode
 
   Spot({
     this.placeName = "",
     this.address = "",
     this.spotNum = 0,
-    this.coor = const LatLng(0, 0),
+    this.coor = const NLatLng(0, 0),
     this.placeId = ""
   }){
     distance = distanceInMBetweenEarthCoordinates(Get.find<UserController>().curPosition.value, coor);
@@ -40,7 +40,7 @@ class Spot{
           placeName: element["locationName"],
           address: element["locationAddress"],
           spotNum: int.parse(element["spotCount"]),
-          coor: LatLng(double.parse(element["locationLatitude"]), double.parse(element["locationLongitude"])),
+          coor: NLatLng(double.parse(element["locationLatitude"]), double.parse(element["locationLongitude"])),
           placeId: element["locationCode"]
         )
       );
@@ -66,7 +66,7 @@ Future<List<Spot>> GETSpotList({
   required String searchWord,
   required int categoryInd,
   required List<int> keyWordIndList,
-  required LatLng coor
+  required NLatLng coor
 }) async {
   ApiResponse apiResponse = ApiResponse();
 
