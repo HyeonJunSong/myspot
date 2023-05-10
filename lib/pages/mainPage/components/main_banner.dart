@@ -14,59 +14,64 @@ Widget buildMainBanner() {
       borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
     ),
     child: Padding(
-      padding: EdgeInsets.fromLTRB(40.w, 85.h, 40.w, 20.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: EdgeInsets.fromLTRB(40.w, 0.h, 40.w, 30.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          /* 위치 설정 및 주소*/
-          Obx(() => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                    // 위치 설정
-                    child: Text(
-                      "위치 설정",
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        decoration: TextDecoration.underline,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              /* 위치 설정 및 주소*/
+              Obx(() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        // 위치 설정
+                        child: Text(
+                          "위치 설정",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        onTap: () {
+                          Get.dialog(const DialogLocationSetting());
+                        },
                       ),
-                    ),
-                    onTap: () {
-                      Get.dialog(const DialogLocationSetting());
-                    },
-                  ),
-                  Text(
-                    // 주소
-                    "${Get.find<UserController>().setAddressUpper.value} ${Get.find<UserController>().setAddressLower.value}",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              )),
+                      Text(
+                        // 주소
+                        "${Get.find<UserController>().setAddressUpper.value} ${Get.find<UserController>().setAddressLower.value}",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )),
 
-          /* 프로필 */
-          GestureDetector(
-            onTap: () => Get.toNamed("/MyPage"),
-            child: SizedBox(
-              width: 44.w,
-              child: const Align(
-                alignment: Alignment.center,
-                child: CircleAvatar(
-                  radius: 22,
-                  // backgroundImage: NetworkImage(userAvatarUrl),
-                  backgroundColor: colorInactive,
-                  foregroundColor: Colors.white,
-                  child: Icon(Icons.person),
+              /* 프로필 */
+              GestureDetector(
+                onTap: () => Get.toNamed("/MyPage"),
+                child: SizedBox(
+                  width: 44.w,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 22,
+                      // backgroundImage: NetworkImage(userAvatarUrl),
+                      backgroundColor: colorInactive,
+                      foregroundColor: Colors.white,
+                      child: Icon(Icons.person),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),
