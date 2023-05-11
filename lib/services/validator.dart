@@ -13,7 +13,7 @@ class CheckValidate {
       return '• 잘못된 이메일 형식입니다.';
     } else if (check == true) {
       focusNode.requestFocus();
-      return '• 이미 사용중인 이메일입니다.';
+      return '• 중복을 확인해 주세요.';
     }
     return null;
   }
@@ -46,7 +46,7 @@ class CheckValidate {
       return '• 특수문자 제외 2~20자 이내로 입력해주세요.';
     } else if (check == true) {
       focusNode.requestFocus();
-      return '• 이미 사용중인 닉네임입니다!';
+      return '• 중복을 확인해 주세요.';
     }
     return null;
   }

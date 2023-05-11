@@ -42,7 +42,7 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/Main",
+            initialRoute: "/SignUpIn",
             initialBinding: BindingsBuilder(() {
               Get.put(UserController());
               Get.put(CityViewController());
@@ -57,11 +57,23 @@ class MySpotApp extends StatelessWidget {
                   getCityList();
                   return const MainPage();
                 },
-                transition: Transition.fadeIn,
+                transition: Transition.noTransition,
               ),
-              GetPage(name: '/SignUpIn', page: () => const SignUpInPage()),
-              GetPage(name: '/SignUp', page: () => const SignUpPage()),
-              GetPage(name: '/SignIn', page: () => const SignInPage()),
+              GetPage(
+                name: '/SignUpIn',
+                page: () => const SignUpInPage(),
+                transition: Transition.noTransition,
+              ),
+              GetPage(
+                name: '/SignUp',
+                page: () => const SignUpPage(),
+                transition: Transition.noTransition,
+              ),
+              GetPage(
+                name: '/SignIn',
+                page: () => const SignInPage(),
+                transition: Transition.noTransition,
+              ),
               GetPage(
                 name: '/Search',
                 page: () => const SearchPage(),
