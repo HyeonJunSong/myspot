@@ -39,8 +39,9 @@ class _dropDownSetLocationCityState extends State<dropDownSetLocationCity> {
 //        elevation: 16,
         style: TextStyle(
           color: colorBlack,
-          fontSize: 12.sp,
+          fontSize: 10.sp,
           fontWeight: FontWeight.w500,
+          overflow: TextOverflow.ellipsis,
         ),
         isExpanded: true,
         underline: const SizedBox(),
