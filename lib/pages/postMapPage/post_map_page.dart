@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:myspot/models/category_and_keyword.dart';
-import 'package:myspot/models/review.dart';
 import 'package:myspot/services/keyword_location_search.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
-import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
-import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class PostMapPage extends StatelessWidget {
@@ -73,6 +68,13 @@ class PostMapPage extends StatelessWidget {
       // ),
       // markers: Get.find<PostPageViewController>().markers,
       onMapReady: Get.find<PostPageViewController>().onMapReady,
+      options: NaverMapViewOptions(
+        mapType: NMapType.basic,
+        initialCameraPosition: NCameraPosition(
+          target: Get.find<UserController>().curPosition.value,
+          zoom: 16,
+        ),
+      ),
     ),
   );
 
@@ -129,7 +131,8 @@ class PostMapPage extends StatelessWidget {
 
   _resultBlock(LocationSearchResult result) => GestureDetector(
     onTap: (){
-      Get.find<PostPageViewController>().updateCurCamPostion(result.coor);
+      Get.find<PostPageViewController>().setDrawerMid();
+      Get.find<PostPageViewController>().updateCurCamPostion(NLatLng(result.coor.latitude - 0.0001, result.coor.longitude));
     },
     child: Container(
       width: 390.w,

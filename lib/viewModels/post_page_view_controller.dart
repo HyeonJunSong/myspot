@@ -66,7 +66,27 @@ class PostPageViewController extends GetxController{
   late NaverMapController mapController;
   RxList<NMarker> markers = <NMarker>[].obs;
 
-  void updateMarker(BuildContext context){
+  Future<void> updateMarker(BuildContext context) async {
+
+    final markerIcon = await NOverlayImage.fromAssetImage("assets/images/marker.png");
+
+    mapController.addOverlayAll(
+      Set<NMarker>.from(searchResult.map((e) {
+        NMarker newMarker = NMarker(
+          id: e.id,
+          position: e.coor,
+          icon: markerIcon,
+          size: Size(40.w, 40.h),
+        );
+
+        newMarker.setOnTapListener((overlay) {
+          setDrawerMid();
+          updateCurCamPostion(NLatLng(e.coor.latitude - 0.0001, e.coor.longitude));
+        });
+        return newMarker;
+      }))
+    );
+
     // OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
     //     markers(searchResult().map((e) => Marker(
     //       markerId: e.id,
@@ -83,12 +103,16 @@ class PostPageViewController extends GetxController{
     // refresh();
   }
 
+  void removeMarker(){
+    mapController.clearOverlays();
+  }
+
   void onMapReady(NaverMapController controller) {
     mapController = controller;
   }
 
   void updateCurCamPostion(NLatLng position){
-    mapController.updateCamera(NCameraUpdate.fromCameraPosition((NCameraPosition(target: position, zoom: 15))));
+    mapController.updateCamera(NCameraUpdate.fromCameraPosition((NCameraPosition(target: position, zoom: 18))));
   }
 
   ////LocationSearchResult
@@ -101,6 +125,7 @@ class PostPageViewController extends GetxController{
 
   void updateSearchResult(List<LocationSearchResult> result, BuildContext context){
     searchResult(result);
+    removeMarker();
     updateMarker(context);
   }
 

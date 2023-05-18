@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -22,10 +23,20 @@ import 'models/locations.dart';
 import 'package:myspot/utils/constants.dart';
 
 
-void main() {
+void main() async {
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
     nativeAppKey: kakaoLoginAPIKey,
+  );
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await NaverMapSdk
+      .instance
+      .initialize(
+        clientId: 'pgcr5t7242',
+        onAuthFailed: (ex) {
+          print("********* 네이버맵 인증오류 : $ex *********");
+        },
   );
   
   runApp(const MySpotApp());

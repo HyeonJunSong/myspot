@@ -68,7 +68,26 @@ class SearchPageViewController extends GetxController{
   late NaverMapController mapController;
   RxList<NMarker> markers = <NMarker>[].obs;
 
-  void updateMarker(BuildContext context){
+  void updateMarker(BuildContext context) async {
+    final markerIcon = await NOverlayImage.fromAssetImage("assets/images/marker.png");
+
+    mapController.addOverlayAll(
+        Set<NMarker>.from(spotList.map((e) {
+          NMarker newMarker = NMarker(
+            id: e.placeId,
+            position: e.coor,
+            icon: markerIcon,
+            size: Size(40.w, 40.h),
+          );
+
+          newMarker.setOnTapListener((overlay) {
+            setDrawerMid();
+            updateCurCamPostion(NLatLng(e.coor.latitude - 0.0001, e.coor.longitude));
+          });
+          return newMarker;
+        }))
+    );
+
     // OverlayImage.fromAssetImage(assetName: "assets/images/marker.png", context: context).then((image) =>
     //     markers(spotList().map((e) => Marker(
     //         markerId: e.placeId,
