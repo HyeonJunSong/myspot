@@ -259,14 +259,15 @@ class _NewPostPageState extends State<NewPostPage> {
             width: 310.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: Get.find<PostPageViewController>().categoryInd.value == -1 ? []
+              : [
                 Text("키워드 선택", style: TextStyle(
                   color: colorBlack,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),),
                 SizedBox(height: 16.sp,),
-                Get.find<PostPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+                Wrap(
                     children: List<Widget>.from(keyWordList[Get.find<PostPageViewController>().categoryInd.value].map((keyWord) =>
                         GestureDetector(
                           child: keyWordBlock(
