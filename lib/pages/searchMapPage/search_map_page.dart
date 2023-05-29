@@ -6,6 +6,7 @@ import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -16,7 +17,7 @@ class SearchMapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<SearchPageViewController>().updateMarker(context);
+    Get.find<SearchPageViewController>().searchSpots();
     return Obx( () => Scaffold(
       extendBodyBehindAppBar: true,
       appBar: searchMapPageAppbar(),
@@ -32,11 +33,14 @@ class SearchMapPage extends StatelessWidget {
 
   _map() => Positioned(
     child: NaverMap(
-      // initialCameraPosition: const CameraPosition(
-      //   target: LatLng(35.89229637317734, 128.60856585746507)
-      // ),
-      // markers: Get.find<SearchPageViewController>().markers,
       onMapReady: Get.find<SearchPageViewController>().onMapReady,
+      options: NaverMapViewOptions(
+        mapType: NMapType.basic,
+        initialCameraPosition: NCameraPosition(
+          target: Get.find<UserController>().curPosition.value,
+          zoom: 16,
+        ),
+      ),
     ),
   );
 
@@ -151,15 +155,14 @@ class SearchMapPage extends StatelessWidget {
             cursorColor: colorInactive,
             controller: Get.find<SearchPageViewController>().searchWordTextEditController,
             onSubmitted: (value){
-              Get.find<SearchPageViewController>().searchSpots()
-                  .then((value) => value ? Get.find<SearchPageViewController>().updateMarker(context) : null);
+              Get.find<SearchPageViewController>().searchSpots();
             },
           ),
         ),
         GestureDetector(
           child: Image.asset("assets/images/search.png", width: 14.w, height: 14.h, color: colorInactive,),
           onTap: (){
-            Get.find<SearchPageViewController>().searchSpots().then((value) => value ? Get.find<SearchPageViewController>().updateMarker(context) : null);
+            Get.find<SearchPageViewController>().searchSpots();
           },
         )
       ],
