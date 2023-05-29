@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:myspot/models/category_and_keyword.dart';
 import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
@@ -44,6 +43,7 @@ class SearchPageViewController extends GetxController{
 
   void updateSpotList(List<Spot> newSpotList){
     spotList(newSpotList);
+    updateMarker();
   }
 
   Future<bool> searchSpots() async {
@@ -68,11 +68,14 @@ class SearchPageViewController extends GetxController{
   late NaverMapController mapController;
   RxList<NMarker> markers = <NMarker>[].obs;
 
-  void updateMarker(BuildContext context) async {
+  void updateMarker() async {
     final markerIcon = await NOverlayImage.fromAssetImage("assets/images/marker.png");
+    print("here~~!");
 
     mapController.addOverlayAll(
         Set<NMarker>.from(spotList.map((e) {
+          print(e.placeId);
+          print(e.coor);
           NMarker newMarker = NMarker(
             id: e.placeId,
             position: e.coor,

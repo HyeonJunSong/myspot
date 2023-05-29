@@ -46,6 +46,7 @@ class PostPageViewController extends GetxController{
 
   //Post
   Future<bool> post() async {
+    print(Get.find<UserController>().email);
     return POSTnewReview(
       Review(
         user_email: Get.find<UserController>().email,

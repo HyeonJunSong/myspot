@@ -129,14 +129,15 @@ _keyWordBox() => Container(
   width: 310.w,
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
+    children: Get.find<SearchPageViewController>().categoryInd.value == -1 ? []
+    : [
       Text("키워드 선택", style: TextStyle(
         color: colorBlack,
         fontSize: 16.sp,
         fontWeight: FontWeight.w700,
       ),),
       SizedBox(height: 16.sp,),
-      Get.find<SearchPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
+      Wrap(
         children: List<Widget>.from(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].map((keyWord) =>
           GestureDetector(
             child: keyWordBlock(
@@ -156,11 +157,7 @@ _keyWordBox() => Container(
 
 _button() => ElevatedButton(
     onPressed: (){
-      Get.find<SearchPageViewController>().searchSpots().then((value) {
-        if(value) {
-          Get.toNamed("/SearchMap");
-        }
-      });
+      Get.toNamed("/SearchMap");
     },
     style: ElevatedButton.styleFrom(
       fixedSize: Size(275.w, 42.h),
