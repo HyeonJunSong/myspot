@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,13 +18,13 @@ class _MyPageState extends State<MyPage> {
         appBar: buildAppbar('계정'),
         body: Column(
           children: [
-            _buildProfile('yanyanzzi', 'ooner19991214@gmail.com'),
+            _buildProfile(),
           ],
         ));
   }
 }
 
-Widget _buildProfile(String nickname, String email) {
+Widget _buildProfile() {
   return Container(
     decoration: BoxDecoration(
       color: Colors.white,
@@ -52,7 +54,7 @@ Widget _buildProfile(String nickname, String email) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                nickname,
+                Get.find<UserController>().user.value.nickname ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 24.sp,
@@ -68,7 +70,7 @@ Widget _buildProfile(String nickname, String email) {
                   ),
                   SizedBox(width: 5.w),
                   Text(
-                    email,
+                    Get.find<UserController>().user.value.email ?? '',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,
