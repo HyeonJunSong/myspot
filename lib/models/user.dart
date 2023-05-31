@@ -14,14 +14,17 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
-    this.email,
-    this.nickname,
+    required this.email,
+    required this.nickname,
   });
 
-  String? email;
-  String? nickname;
+  String email;
+  String nickname;
 
-  User.nullInit();
+  User.nullInit({
+    this.email = "",
+    this.nickname = ""
+  });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     email: json["user_email"],

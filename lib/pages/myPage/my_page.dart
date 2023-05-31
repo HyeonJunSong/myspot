@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myspot/viewModels/my_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,13 +15,19 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: buildAppbar('계정'),
-        body: Column(
-          children: [
-            _buildProfile(),
-          ],
-        ));
+    return Obx(() => Scaffold(
+      appBar: buildAppbar('계정'),
+      body: Column(
+        children: [
+          _buildProfile(),
+          SizedBox(height: 46.h),
+
+          Divider(),
+          _mySpots(),
+          Divider(),
+        ],
+      )
+    ));
   }
 }
 
@@ -87,3 +94,34 @@ Widget _buildProfile() {
   );
 }
 
+Widget _mySpots(){
+  return Column(
+    children: [
+      Container(
+        width: 390.w,
+        height: 73.h,
+        padding: EdgeInsets.symmetric(horizontal: 26.w),
+        child: Row(
+          children: [
+            Text(
+              '${Get.find<UserController>().user.value.nickname}님의 mySpot',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16.sp,
+              ),
+            ),
+            SizedBox(width: 4.w),
+            GestureDetector(
+              onTap: (){
+                Get.find<MyPageViewController>().toggleMySpot();
+              },
+              child: Get.find<MyPageViewController>().mySpotToggle.value
+                  ? Icon(Icons.keyboard_arrow_up, color: Colors.black,)
+                  : Icon(Icons.keyboard_arrow_down, color: Colors.black,),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
