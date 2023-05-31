@@ -12,8 +12,8 @@ Future<User?> getKakaoUser() async {
         '\n이메일: ${kuser.kakaoAccount?.email}'
         '\n닉네임: ${kuser.kakaoAccount?.profile?.nickname}');
 
-    user?.email = kuser.kakaoAccount?.email;
-    user?.nickname = kuser.kakaoAccount?.profile?.nickname;
+    user?.email = kuser.kakaoAccount!.email!;
+    user?.nickname = kuser.kakaoAccount!.profile!.nickname!;
 
     return user;
 

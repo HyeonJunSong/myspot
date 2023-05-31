@@ -15,6 +15,7 @@ import 'package:myspot/pages/mainPage/main_page.dart';
 import 'package:myspot/utils/keyFiles.dart';
 import 'package:myspot/pages/spotPage/spot_detail_page.dart';
 import 'package:myspot/viewModels/city_view_controller.dart';
+import 'package:myspot/viewModels/my_page_view_controller.dart';
 import 'package:myspot/viewModels/post_page_view_controller.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/viewModels/sign_up_in_controller.dart';
@@ -88,15 +89,21 @@ class MySpotApp extends StatelessWidget {
               GetPage(
                 name: '/Search',
                 page: () => const SearchPage(),
-                  binding: BindingsBuilder(() {
-                    Get.put(SearchPageViewController());
-                  })
+                binding: BindingsBuilder(() {
+                  Get.put(SearchPageViewController());
+                })
               ),
               GetPage(
                 name: '/SearchMap',
                 page: () => const SearchMapPage(),
               ),
-              GetPage(name: '/MyPage', page: () => const MyPage()),
+              GetPage(
+                name: '/MyPage',
+                page: () => const MyPage(),
+                binding: BindingsBuilder(() {
+                  Get.put(MyPageViewController());
+                }),
+              ),
               GetPage(
                 name: '/NewPost',
                 page: () => const NewPostPage(),
