@@ -14,7 +14,10 @@ class UserController extends GetxController{
   }
 
   ////
-  Rx<User> user = User().obs;
+  Rx<User> user = User(
+    email: "test@google.com",
+    nickname: "yanyanzzi",
+  ).obs;
   String email = "test@google.com";
 
   void updateUser(User newUser){
