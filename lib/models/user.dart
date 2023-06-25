@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myspot/models/review.dart';
+import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/api.dart';
 
 import '../utils/keyFiles.dart';
@@ -68,17 +71,6 @@ class User {
       debugPrint(response.body);
       debugPrint(response.statusCode.toString());
       return response.statusCode;
-      // switch (response.statusCode) {
-      //   case 200:
-      //     // apiResponse.data = "회원가입이 성공되었습니다 ~ 🥳";
-      //     break;
-      //   case 400:
-      //     // apiResponse.apiError = ApiError(error: "회원가입이 실패했습니다.\n 다시 시도해주세요.");
-      //     break;
-      //   default:
-      //     // apiResponse.apiError = ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      //     break;
-      // }
     } on SocketException {
       // apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
     }
@@ -94,15 +86,6 @@ class User {
       await http.get(Uri.parse('${baseUrl}user/checkEmail?email=$email'));
 
       return response.statusCode;
-
-      switch (response.statusCode) {
-        // case 200:
-        //   apiResponse.data = "사용 가능한 이메일입니다☺️";
-        //   break;
-        // default:
-        //   apiResponse.apiError = ApiError(error: "이미 사용중인 이메일이네요😅");
-        //   break;
-      }
     } on SocketException {
       // apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
     }
@@ -118,15 +101,6 @@ class User {
       await http.get(Uri.parse('${baseUrl}user/checkName?name=$nickname'));
 
       return response.statusCode;
-
-      switch (response.statusCode) {
-        // case 200:
-        //   apiResponse.data = "사용 가능한 이메일입니다☺️";
-        //   break;
-        // default:
-        //   apiResponse.apiError = ApiError(error: "이미 사용중인 이메일이네요😅");
-        //   break;
-      }
     } on SocketException {
       // apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
     }
@@ -150,21 +124,6 @@ class User {
       );
 
       return response.statusCode;
-
-      // switch (response.statusCode) {
-      //   case 200:
-      //     apiResponse.data = "success";
-      //     // apiResponse.data = User.fromJson(jsonDecode(utf8.decode(response.bodyBytes))); //한글깨짐 방지
-      //     break;
-      //   case 401:
-      //     apiResponse.apiError =
-      //         ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      //     break;
-      //   default:
-      //     apiResponse.apiError =
-      //         ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      //     break;
-      // }
     } on SocketException {
       apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
     }
@@ -188,26 +147,52 @@ class User {
       );
 
       return response.statusCode;
-
-      // switch (response.statusCode) {
-      //   case 200:
-      //     apiResponse.data = "success";
-      //     // apiResponse.data = User.fromJson(jsonDecode(utf8.decode(response.bodyBytes))); //한글깨짐 방지
-      //     break;
-      //   case 401:
-      //     apiResponse.apiError =
-      //         ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      //     break;
-      //   default:
-      //     apiResponse.apiError =
-      //         ApiError.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      //     break;
-      // }
     } on SocketException {
       apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
     }
     return 0;
   }
 
+  //////////////////////////////////////////////////////////////////////////////[GET] get user's spot and review
+  static Future<(List<Spot>, List<Review>)> getUserSpotReview(String email) async {
+    final response = await http.get(
+      Uri.parse('${baseUrl}user/info?email=$email'),
+    );
+
+    switch(response.statusCode){
+      case 200:
+        return parseUserSpotReview((utf8.decode(response.bodyBytes)));
+    }
+
+    return (<Spot>[], <Review>[]);
+  }
+
+  static (List<Spot>, List<Review>) parseUserSpotReview(String json) {
+    List<Spot> spotList = [];
+    List<Review> reviewList = [];
+
+    Map<String, dynamic> result = Map<String, dynamic>.from(jsonDecode(json));
+    List<dynamic>.from(result["mySpotList"]).forEach((element) {
+      spotList.add(
+        Spot(
+          placeName: element["spotName"],
+          address: element["address"],
+          spotNum: element["spotCount"],
+          coor: NLatLng(double.parse(element["latitude"]), double.parse(element["longitude"])),
+          placeId: element["key"].toString(),
+        )
+      );
+    });
+    List<dynamic>.from(result["mySpotReviewList"]).forEach((element) {
+      reviewList.add(
+        Review(
+          image: element["image"],
+          comment: element["comment"],
+          reviewedDate: element["reviewDate"],
+        )
+      );
+    });
+    return (spotList, reviewList);
+  }
 
 }
