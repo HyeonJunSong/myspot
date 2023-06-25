@@ -28,8 +28,7 @@ class UserController extends GetxController{
   Rx<NLatLng> curPosition = NLatLng(0, 0).obs;
 
   Future<NLatLng> getPosition() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position curPos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position curPos = await getCurrentLocation();
     curPosition(NLatLng(curPos.latitude, curPos.longitude));
     print(curPos);
     setAddress(await GETCoorToAddJSON(NLatLng(curPos.latitude, curPos.longitude)));
