@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/services/coor_address_transition.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:myspot/services/get_current_location.dart';
 
 class UserController extends GetxController{
 
