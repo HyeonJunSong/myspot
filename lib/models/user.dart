@@ -159,6 +159,8 @@ class User {
       Uri.parse('${baseUrl}user/info?email=$email'),
     );
 
+    print(response.body);
+
     switch(response.statusCode){
       case 200:
         return parseUserSpotReview((utf8.decode(response.bodyBytes)));
@@ -186,7 +188,7 @@ class User {
     List<dynamic>.from(result["mySpotReviewList"]).forEach((element) {
       reviewList.add(
         Review(
-          image: element["image"],
+          photo: element["photo"] == null ? [] : List<String>.from(element["photo"]),
           comment: element["comment"],
           reviewedDate: element["reviewDate"],
         )
