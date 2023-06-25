@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:myspot/models/user.dart';
 import 'package:myspot/services/coor_address_transition.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:myspot/services/get_current_location.dart';
 
 class UserController extends GetxController{
 
@@ -28,8 +28,7 @@ class UserController extends GetxController{
   Rx<NLatLng> curPosition = NLatLng(0, 0).obs;
 
   Future<NLatLng> getPosition() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position curPos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position curPos = await getCurrentLocation();
     curPosition(NLatLng(curPos.latitude, curPos.longitude));
     print(curPos);
     setAddress(await GETCoorToAddJSON(NLatLng(curPos.latitude, curPos.longitude)));

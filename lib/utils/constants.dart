@@ -21,6 +21,12 @@ Map<int, Color> materialPrimary = {
   900: Color.fromRGBO(9, 51, 134, 1),
 };
 
+spotColor(int likes){
+  if(likes > 1000) return const Color(0xFFEA5252);
+  if(likes >  500) return const Color(0xFF2BAE5F);
+  if(likes >    0) return const Color(0xFF0789E8);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 const double drawer_bottom = 805;
 const double drawer_mid = 485;

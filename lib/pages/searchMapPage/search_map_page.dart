@@ -10,6 +10,7 @@ import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:myspot/widgets/list_element_spot.dart';
 
 
 class SearchMapPage extends StatelessWidget {
@@ -233,7 +234,7 @@ class SearchMapPage extends StatelessWidget {
         _orderBolck(),
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
-        (element) => _resultBlock(element)
+        (element) => listElementSpot(element)
       ).toList())
       + [
         SizedBox(
@@ -283,77 +284,5 @@ class SearchMapPage extends StatelessWidget {
       ],
     ),
   );
-
-  _resultBlock(Spot spot) => GestureDetector(
-    onTap: () async{
-      if(await Get.find<SearchPageViewController>().searchReview(spot.placeId)){
-        Get.toNamed(
-            '/SpotDetail',
-            arguments: spot
-        );
-      }
-    },
-    child: Container(
-      width: 390.w,
-      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFFE5E5E5),
-            width: 1.h,
-          ),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(spot.placeName, style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16.sp
-          ),),
-          SizedBox(height: 6.h,),
-          Row(
-            children: [
-              Text('${spot.distance}m', style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF737373),
-                  fontSize: 14.sp
-              ),),
-              Container(
-                width: 1.w,
-                height : 20.h,
-                margin: EdgeInsets.symmetric(horizontal: 8.w),
-                color: const Color(0xFFBDBDBD),
-              ),
-              Text(spot.address, style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF737373),
-                  fontSize: 14.sp
-              ),),
-            ],
-          ),
-          SizedBox(height: 6.h,),
-          Row(
-            children: [
-              Icon(Icons.circle, color: _spotColor(spot.spotNum), size: 11.w,),
-              SizedBox(width: 10.w,),
-              Text(NumberFormat("###,###,###").format(spot.spotNum), style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: _spotColor(spot.spotNum),
-                  fontSize: 14.sp
-              ),),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-
-  _spotColor(int likes){
-    if(likes > 1000) return const Color(0xFFEA5252);
-    if(likes >  500) return const Color(0xFF2BAE5F);
-    if(likes >    0) return const Color(0xFF0789E8);
-  }
-
 }
 

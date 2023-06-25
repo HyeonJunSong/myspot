@@ -7,6 +7,7 @@ import 'package:myspot/viewModels/search_page_view_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:myspot/widgets/list_element_review.dart';
 
 class SpotDetailPage extends StatefulWidget {
   const SpotDetailPage({Key? key}) : super(key: key);
@@ -142,47 +143,7 @@ Widget _buildDetail(Spot spot) {
 
 Widget _reviewList(){
   return Get.find<SearchPageViewController>().reviewList.isEmpty ? Container() : Column(
-    children: List<Widget>.from(Get.find<SearchPageViewController>().reviewList.map((e) => _reviewBlock(e)))
-  );
-}
-
-Widget _reviewBlock(Review post){
-  return Container(
-    width: double.infinity,
-    padding: EdgeInsets.symmetric(horizontal: 21.w, vertical: 20.h),
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Text(
-                post.comment.isEmpty ? "리뷰가 없습니다." : post.comment,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-            SizedBox(width: 16.w,),
-            Column(
-              children: [
-                Text(post.user_email, style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xFF737373),
-                    fontSize: 12.sp
-                ),),
-                Text("2023.02.03. 14:30", style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xFF737373),
-                    fontSize: 12.sp
-                ),),
-              ],
-            )
-          ]
-        ),
-      ],
-    ),
+    children: List<Widget>.from(Get.find<SearchPageViewController>().reviewList.map((e) => listElementReview(e)))
   );
 }
 
