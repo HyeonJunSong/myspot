@@ -10,6 +10,7 @@ import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:myspot/widgets/category_keyword_block.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:myspot/widgets/list_element_spot.dart';
 
 
 class SearchMapPage extends StatelessWidget {
@@ -233,7 +234,7 @@ class SearchMapPage extends StatelessWidget {
         _orderBolck(),
       ]
       + List<Widget>.from(Get.find<SearchPageViewController>().spotList.map(
-        (element) => _resultBlock(element)
+        (element) => listElementSpot(element)
       ).toList())
       + [
         SizedBox(
