@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myspot/pages/myPage/widgetMySpotList.dart';
+import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/my_page_view_controller.dart';
 import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'widgetMyReviewList.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -17,15 +21,30 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
       appBar: buildAppbar('계정'),
-      body: Column(
-        children: [
-          _buildProfile(),
-          SizedBox(height: 46.h),
-
-          Divider(),
-          _mySpots(),
-          Divider(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildProfile(),
+            SizedBox(height: 46.h),
+            Divider(
+              height: 1.h,
+              thickness: 1.h,
+              color: colorInactive,
+            ),
+            mySpotList(),
+            Divider(
+              height: 1.h,
+              thickness: 1.h,
+              color: colorInactive,
+            ),
+            myReviewList(),
+            Divider(
+              height: 1.h,
+              thickness: 1.h,
+              color: colorInactive,
+            ),
+          ],
+        ),
       )
     ));
   }
@@ -91,37 +110,5 @@ Widget _buildProfile() {
         ],
       ),
     ),
-  );
-}
-
-Widget _mySpots(){
-  return Column(
-    children: [
-      Container(
-        width: 390.w,
-        height: 73.h,
-        padding: EdgeInsets.symmetric(horizontal: 26.w),
-        child: Row(
-          children: [
-            Text(
-              '${Get.find<UserController>().user.value.nickname}님의 mySpot',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 16.sp,
-              ),
-            ),
-            SizedBox(width: 4.w),
-            GestureDetector(
-              onTap: (){
-                Get.find<MyPageViewController>().toggleMySpot();
-              },
-              child: Get.find<MyPageViewController>().mySpotToggle.value
-                  ? Icon(Icons.keyboard_arrow_up, color: Colors.black,)
-                  : Icon(Icons.keyboard_arrow_down, color: Colors.black,),
-            ),
-          ],
-        ),
-      ),
-    ],
   );
 }
