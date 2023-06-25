@@ -18,13 +18,21 @@ Widget listElementReview(Review post){
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        post.image == "" ?
-          Container() :
-          Container(
-            margin: EdgeInsets.only(bottom: 10.h),
-            height: 120.h,
-            child: Image.network(post.image),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: post.photo.map((image) {
+              return Container(
+                padding: EdgeInsets.only(right: 20.w),
+                height: 120.h,
+                child: Image.network(
+                  image,
+                  fit: BoxFit.fitHeight,
+                )
+              );
+            }).toList(),
           ),
+        ),
         Row(
           children: [
             Container(

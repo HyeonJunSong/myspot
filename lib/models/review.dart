@@ -23,7 +23,7 @@ class Review {
   String spotFolder;    //폴더
   List<String> spotTag; //키워드
   String reviewedDate;  //리뷰 작성일
-  String image;
+  List<String> photo;
 
   Review({
     this.user_email = "",
@@ -37,7 +37,7 @@ class Review {
     this.spotFolder = "none",
     this.spotTag = const [],
     this.reviewedDate = "",
-    this.image = "",
+    this.photo = const [],
   });
 
   static List<Review> ReviewListFromJSON(String json){
