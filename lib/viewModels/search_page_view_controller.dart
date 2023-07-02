@@ -81,6 +81,7 @@ class SearchPageViewController extends GetxController{
             icon: markerIcon,
             size: Size(40.w, 40.h),
           );
+          newMarker.setCaption(NOverlayCaption(text: e.placeName));
 
           newMarker.setOnTapListener((overlay) {
             setDrawerMid();
@@ -171,6 +172,26 @@ class SearchPageViewController extends GetxController{
   }
 
   //////////////////////////////////////////////////////////////////////////////search detail page
+
+  //selected tab
+  RxInt selectedTab = 0.obs;
+  void changeSelectedTab(int newTab){
+    selectedTab(newTab);
+  }
+
+  void detailPageMapInit(){
+    mapController.clearOverlays();
+    mapController.addOverlay(
+      NMarker(
+        id: selectedSpot.value.placeId,
+        position: selectedSpot.value.coor,
+        icon: NOverlayImage.fromAssetImage("assets/images/marker.png"),
+        size: Size(40.w, 40.h),
+        caption: NOverlayCaption(text: selectedSpot.value.placeName),
+      )
+    );
+  }
+
   //cur selected spot
   Rx<Spot> selectedSpot = Spot().obs;
   void updateSelectedSpot(Spot newSpot){
@@ -197,6 +218,7 @@ class SearchPageViewController extends GetxController{
 
   //go to Search Page
   void goToSearchPage(){
+    detailPageMapInit();
     Get.toNamed(
         '/SpotDetail',
     );
