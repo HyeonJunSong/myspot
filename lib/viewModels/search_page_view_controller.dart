@@ -112,7 +112,7 @@ class SearchPageViewController extends GetxController{
   }
 
   void updateCurCamPostion(NLatLng position){
-    mapController.updateCamera(NCameraUpdate.fromCameraPosition(NCameraPosition(target: position, zoom: 15)));
+    mapController.updateCamera(NCameraUpdate.fromCameraPosition(NCameraPosition(target: position, zoom: 18)));
   }
 
   //drawer
