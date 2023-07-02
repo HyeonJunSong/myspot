@@ -2,10 +2,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:myspot/services/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:myspot/utils/keyFiles.dart';
+
+import "package:http_parser/http_parser.dart";
 
 class Review {
   //사용자 관련
@@ -62,36 +65,46 @@ Future<bool> POSTnewReview(Review review) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
-    final response = await http.post(
-      Uri.parse('${baseUrl}${spotPostUrl}'),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
-        "user_email" : review.user_email,
-        "locationMapCode" : review.placeId,
-        "locationAddress" : review.address,
-        "locationLongitude" : review.locationLongtitude.toString(),
-        "locationLatitude" : review.locationLatitude.toString(),
-        "locationName" : review.placeName,
-        "spotCategory" : review.category,
-        "spotComment" : review.comment,
-        "spotFolder" : review.spotFolder,
-        "spotTag" : review.spotTag,
-      })
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl$spotPostUrl'));
+    // var request = http.MultipartRequest('POST', Uri.http("3.232.20.72:8080", spotPostUrl));
+    // request.headers.addAll({
+    //   "Content-Type": "multipart/form-data"
+    // });
+    request.fields.addAll({
+      "user_email": review.user_email,
+      "locationMapCode": review.placeId,
+      "locationAddress": review.address,
+      "locationLongitude": review.locationLongtitude.toString(),
+      "locationLatitude": review.locationLatitude.toString(),
+      "locationName": review.placeName,
+      "spotCategory": "",
+      // "spotCategory": review.category,
+      "spotComment": review.comment,
+      "spotFolder": "",
+      // "spotFolder": review.spotFolder,
+      "spotTag" : "",
+      // "spotTag" : review.spotTag.toString()
+    });
+
+    print("image path --> " + review.photo[0]);
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'spotImg',
+        review.photo[0],
+        // contentType: MediaType('image', 'jpg'),
+      )
     );
 
-    print(utf8.decode(response.bodyBytes));
-    switch (response.statusCode) {
+    print("ready to send");
+    var response = await request.send();
+    print(await response.stream.bytesToString());
+    switch(response.statusCode){
       case 200:
         return true;
-      case 401:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
-        break;
       default:
-        apiResponse.apiError = ApiError.fromJson(json.decode(response.body));
-        break;
+        return false;
     }
+
   } on SocketException {
     apiResponse.apiError = ApiError(error: "Server error. Please retry");
   }
