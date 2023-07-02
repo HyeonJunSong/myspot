@@ -44,6 +44,20 @@ class PostPageViewController extends GetxController{
     keyWordIndList.refresh();
   }
 
+  //Image Path list
+  //나중에 review로 묶으셈
+  List<String> imagePathList = <String>[].obs;
+
+  void updateImagePathList(List<String> newImagePathList){
+    imagePathList = newImagePathList;
+  }
+
+  //Comment
+  String comment = "";
+  void updateComment(String newComment){
+    comment = newComment;
+  }
+
   //Post
   Future<bool> post() async {
     print(Get.find<UserController>().email);
@@ -55,8 +69,9 @@ class PostPageViewController extends GetxController{
         locationLongtitude: location.value.coor.longitude.toString(),
         locationLatitude: location.value.coor.latitude.toString(),
         placeName: location.value.placeName,
-        comment: "",
+        comment: comment,
         spotTag: [],
+        photo: imagePathList,
       )
     );
   }

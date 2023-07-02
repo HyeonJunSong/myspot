@@ -218,6 +218,9 @@ class _NewPostPageState extends State<NewPostPage> {
               hintText: "한줄평을 입력하세요. (최대20자)",
               hintStyle: TextStyle(fontSize: 14.sp),
             ),
+            onChanged: (value) {
+              Get.find<PostPageViewController>().updateComment(value);
+            },
           ),
         ],
       ),
@@ -337,6 +340,7 @@ class _NewPostPageState extends State<NewPostPage> {
       final List<XFile> pickedFileList = await _picker.pickMultiImage();
       setState(() {
         _imageFileList = pickedFileList;
+        Get.find<PostPageViewController>().updateImagePathList(pickedFileList.map((e) => e.path).toList());
       });
     } catch (e) {
       setState(() {
