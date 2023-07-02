@@ -340,6 +340,7 @@ class _NewPostPageState extends State<NewPostPage> {
       final List<XFile> pickedFileList = await _picker.pickMultiImage();
       setState(() {
         _imageFileList = pickedFileList;
+        Get.find<PostPageViewController>().updateImagePathList(pickedFileList.map((e) => e.path).toList());
       });
     } catch (e) {
       setState(() {
