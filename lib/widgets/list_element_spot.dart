@@ -8,12 +8,8 @@ import 'package:myspot/viewModels/search_page_view_controller.dart';
 
 Widget listElementSpot(Spot spot) => GestureDetector(
   onTap: () async{
-    if(await Get.find<SearchPageViewController>().searchReview(spot.placeId)){
-      Get.toNamed(
-          '/SpotDetail',
-          arguments: spot
-      );
-    }
+    Get.find<SearchPageViewController>().updateSelectedSpot(spot);
+    Get.find<SearchPageViewController>().searchReview();
   },
   child: Container(
     width: 390.w,

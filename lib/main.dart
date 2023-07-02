@@ -91,11 +91,13 @@ class MySpotApp extends StatelessWidget {
                 page: () => const SearchPage(),
                 binding: BindingsBuilder(() {
                   Get.put(SearchPageViewController());
-                })
+                }),
+                transition: Transition.noTransition,
               ),
               GetPage(
                 name: '/SearchMap',
                 page: () => const SearchMapPage(),
+                transition: Transition.noTransition,
               ),
               GetPage(
                 name: '/MyPage',
@@ -103,6 +105,7 @@ class MySpotApp extends StatelessWidget {
                 binding: BindingsBuilder(() {
                   Get.put(MyPageViewController());
                 }),
+                transition: Transition.noTransition,
               ),
               GetPage(
                 name: '/NewPost',
@@ -110,9 +113,18 @@ class MySpotApp extends StatelessWidget {
                 binding: BindingsBuilder(() {
                   Get.put(PostPageViewController());
                 }),
+                transition: Transition.noTransition,
               ),
-              GetPage(name: '/PostMap', page: () => PostMapPage(),),
-              GetPage(name: '/SpotDetail', page: () => SpotDetailPage()),
+              GetPage(
+                name: '/PostMap',
+                page: () => PostMapPage(),
+                transition: Transition.noTransition,
+              ),
+              GetPage(
+                name: '/SpotDetail',
+                page: () => SpotDetailPage(),
+                transition: Transition.noTransition,
+              ),
             ],
           theme: ThemeData(
             fontFamily: 'Noto_Sans_KR',

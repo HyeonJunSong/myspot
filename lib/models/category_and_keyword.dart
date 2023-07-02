@@ -21,10 +21,14 @@ List<Category> categoryList = [
 
 List<List<KeyWord>> keyWordList = [
   [
-    KeyWord("✨", "한식"),
-    KeyWord("💸", "양식"),
-    KeyWord("✨", "중식"),
-    KeyWord("💸", "일식"),
+    KeyWord("🥘", "한식"),
+    KeyWord("🍣", "일식"),
+    KeyWord("🍝", "양식"),
+    KeyWord("🥟", "중식"),
+    KeyWord("🍜", "아시안"),
+    KeyWord("🤑", "갓성비"),
+    KeyWord("💕", "분위기"),
+    KeyWord("🍚", "푸짐한")
   ],
   [
     KeyWord("✨", "분위기"),

@@ -39,7 +39,7 @@ class MyPageViewController extends GetxController{
 
   //get review and spot list
   void getMyReviewAndSpotList() async {
-    var result = await User.getUserSpotReview(Get.find<UserController>().email);
+    var result = await User.GETUserSpotReview(Get.find<UserController>().email);
     updateSpotList(result.$1);
     updateReviewList(result.$2);
   }

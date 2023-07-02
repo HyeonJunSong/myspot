@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/intl.dart';
-import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
+import 'package:myspot/viewModels/user_controller.dart';
 import 'package:myspot/widgets/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,22 +20,35 @@ class SpotDetailPage extends StatefulWidget {
 class _SpotDetailPageState extends State<SpotDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final Spot spot = Get.arguments as Spot;
-    print(spot.distance);
-    return Scaffold(
+    return Obx(() => Scaffold(
       // backgroundColor: Colors.white,
-      appBar: buildAppbar(spot.placeName),
+      appBar: buildAppbar(Get.find<SearchPageViewController>().selectedSpot.value.placeName),
       body: Column(
         children: [
-          _spotSection(spot),
+          _spotSection(),
           SizedBox(height: 20.h),
-          _reviewList(),
+          Get.find<SearchPageViewController>().selectedTab.value == 0
+          ? _reviewList()
+          : _miniMap(),
         ],
       ),
-    );
+    ));
   }
+}
 
-  _spotSection(Spot spot) => Column(
+Widget _spotSection() => Container(
+  width: double.infinity,
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 5.r,
+      ),
+    ],
+  ),
+  child: Column(
     children: [
       Container(
         height: 167.h,
@@ -45,25 +59,20 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
           ),
         ),
       ),
-      _buildDetail(spot),
+      _buildDetail(Get.find<SearchPageViewController>().selectedSpot.value),
+      Container(
+        color: colorPrimary,
+        width: double.infinity,
+        height: 2.h,
+      ),
+      _buildTab(),
     ],
-  );
-}
+  ),
+);
 
 Widget _buildDetail(Spot spot) {
   return Container(
-    width: double.infinity,
     padding: EdgeInsets.all(21.w),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 5.r,
-        ),
-      ],
-    ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -137,6 +146,86 @@ Widget _buildDetail(Spot spot) {
           ],
         ),
       ],
+    ),
+  );
+}
+
+Widget _buildTab(){
+  return Container(
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: (){
+            Get.find<SearchPageViewController>().changeSelectedTab(0);
+          },
+          child: Container(
+            width: 195.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              color: Get.find<SearchPageViewController>().selectedTab.value == 0
+                  ? colorPrimary
+                  : colorWhite,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r)),
+            ),
+            alignment: Alignment.center,
+            child: Text("리뷰", style: TextStyle(
+              color: Get.find<SearchPageViewController>().selectedTab.value == 0
+                  ? colorWhite
+                  : colorPrimary,
+              fontSize: 16.sp,
+            ),),
+          ),
+        ),
+        GestureDetector(
+          onTap: (){
+            Get.find<SearchPageViewController>().changeSelectedTab(1);
+          },
+          child: Container(
+            width: 195.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              color: Get.find<SearchPageViewController>().selectedTab.value == 1
+                  ? colorPrimary
+                  : colorWhite,
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(20.r)),
+            ),
+            alignment: Alignment.center,
+            child: Text("지도", style: TextStyle(
+              color: Get.find<SearchPageViewController>().selectedTab.value == 1
+                  ? colorWhite
+                  : colorPrimary,
+              fontSize: 16.sp,
+            ),),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _miniMap(){
+  return Container(
+    height: 350.h,
+    width: 350.w,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.r),
+      border: Border.all(
+        color: colorPrimary,
+        width: 5.w,
+      ),
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(20.r),
+      child: NaverMap(
+        onMapReady: Get.find<SearchPageViewController>().onMapReady,
+        options: NaverMapViewOptions(
+          mapType: NMapType.basic,
+          initialCameraPosition: NCameraPosition(
+            target: Get.find<SearchPageViewController>().selectedSpot.value.coor,
+            zoom: 18,
+          ),
+        ),
+      ),
     ),
   );
 }

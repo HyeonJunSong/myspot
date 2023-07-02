@@ -70,7 +70,6 @@ class SearchPageViewController extends GetxController{
 
   void updateMarker() async {
     final markerIcon = await NOverlayImage.fromAssetImage("assets/images/marker.png");
-    print("here~~!");
 
     mapController.addOverlayAll(
         Set<NMarker>.from(spotList.map((e) {
@@ -82,10 +81,14 @@ class SearchPageViewController extends GetxController{
             icon: markerIcon,
             size: Size(40.w, 40.h),
           );
+          newMarker.setCaption(NOverlayCaption(text: e.placeName));
 
           newMarker.setOnTapListener((overlay) {
             setDrawerMid();
-            updateCurCamPostion(NLatLng(e.coor.latitude - 0.0001, e.coor.longitude));
+            updateSelectedSpot(e);
+            searchReview();
+            goToSearchPage();
+            // updateCurCamPostion(NLatLng(e.coor.latitude - 0.0001, e.coor.longitude));
           });
           return newMarker;
         }))
@@ -112,7 +115,7 @@ class SearchPageViewController extends GetxController{
   }
 
   void updateCurCamPostion(NLatLng position){
-    mapController.updateCamera(NCameraUpdate.fromCameraPosition(NCameraPosition(target: position, zoom: 15)));
+    mapController.updateCamera(NCameraUpdate.fromCameraPosition(NCameraPosition(target: position, zoom: 18)));
   }
 
   //drawer
@@ -168,6 +171,33 @@ class SearchPageViewController extends GetxController{
     });
   }
 
+  //////////////////////////////////////////////////////////////////////////////search detail page
+
+  //selected tab
+  RxInt selectedTab = 0.obs;
+  void changeSelectedTab(int newTab){
+    selectedTab(newTab);
+  }
+
+  void detailPageMapInit(){
+    mapController.clearOverlays();
+    mapController.addOverlay(
+      NMarker(
+        id: selectedSpot.value.placeId,
+        position: selectedSpot.value.coor,
+        icon: NOverlayImage.fromAssetImage("assets/images/marker.png"),
+        size: Size(40.w, 40.h),
+        caption: NOverlayCaption(text: selectedSpot.value.placeName),
+      )
+    );
+  }
+
+  //cur selected spot
+  Rx<Spot> selectedSpot = Spot().obs;
+  void updateSelectedSpot(Spot newSpot){
+    selectedSpot(newSpot);
+  }
+
   //Review List
   RxList<Review> reviewList = <Review>[].obs;
 
@@ -175,13 +205,22 @@ class SearchPageViewController extends GetxController{
     reviewList(newReviewList);
   }
 
-  Future<bool> searchReview(String placeId) async{
-    List<Review> newReviewList = await GETReviewList(placeId: placeId);
+  Future<bool> searchReview() async{
+    List<Review> newReviewList = await GETReviewList(placeId: selectedSpot.value.placeId);
     if(newReviewList.isEmpty) {
       return false;
     } else {
       updateReviewList(newReviewList);
+      goToSearchPage();
       return true;
     }
+  }
+
+  //go to Search Page
+  void goToSearchPage(){
+    detailPageMapInit();
+    Get.toNamed(
+        '/SpotDetail',
+    );
   }
 }
