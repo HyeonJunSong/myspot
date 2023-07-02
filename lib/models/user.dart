@@ -154,7 +154,7 @@ class User {
   }
 
   //////////////////////////////////////////////////////////////////////////////[GET] get user's spot and review
-  static Future<(List<Spot>, List<Review>)> getUserSpotReview(String email) async {
+  static Future<(List<Spot>, List<Review>)> GETUserSpotReview(String email) async {
     final response = await http.get(
       Uri.parse('${baseUrl}user/info?email=$email'),
     );

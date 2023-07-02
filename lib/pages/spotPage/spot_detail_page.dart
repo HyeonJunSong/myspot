@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/utils/constants.dart';
 import 'package:myspot/viewModels/search_page_view_controller.dart';
@@ -19,14 +18,12 @@ class SpotDetailPage extends StatefulWidget {
 class _SpotDetailPageState extends State<SpotDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final Spot spot = Get.arguments as Spot;
-    print(spot.distance);
     return Scaffold(
       // backgroundColor: Colors.white,
-      appBar: buildAppbar(spot.placeName),
+      appBar: buildAppbar(Get.find<SearchPageViewController>().selectedSpot.value.placeName),
       body: Column(
         children: [
-          _spotSection(spot),
+          _spotSection(),
           SizedBox(height: 20.h),
           _reviewList(),
         ],
@@ -34,7 +31,7 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
     );
   }
 
-  _spotSection(Spot spot) => Column(
+  _spotSection() => Column(
     children: [
       Container(
         height: 167.h,
@@ -45,7 +42,7 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
           ),
         ),
       ),
-      _buildDetail(spot),
+      _buildDetail(Get.find<SearchPageViewController>().selectedSpot.value),
     ],
   );
 }

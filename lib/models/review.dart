@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:myspot/services/api.dart';
@@ -50,10 +51,16 @@ class Review {
         Review(
           user_email: element["useremail"],
           placeId: element["locationnum"].toString(),
+          address: "",
+          locationLongtitude: "",
+          locationLatitude: "",
           placeName: element["spot_name"],
+          category: element["spot_category"],
           comment: element["spot_Comment"],
           spotFolder: element["spot_Folder"],
+          spotTag: const [],
           reviewedDate: element["spot_date"] != null ? DateFormat("yyyy.MM.dd HH:mm").format(DateTime.parse(element["spot_date"])).toString() : "",
+          // photo: element["spot_Photo"] != null ? List<String>.from(List<dynamic>.from(jsonDecode(element["spot_Photo"]))) : [],
         )
       );
     });
@@ -123,6 +130,7 @@ Future<List<Review>> GETReviewList(
       Uri.parse('$baseUrl$reviewSearchUrl?locationCode=$placeId'),
     );
 
+    print("GETReviewList");
     print(utf8.decode(response.bodyBytes));
     switch (response.statusCode) {
       case 200:
