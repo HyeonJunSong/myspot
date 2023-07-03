@@ -44,21 +44,18 @@ class SpotSlider extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 13.h),
         /* spot 슬라이드뷰 */
         CarouselSlider(
           options: CarouselOptions(
-            height: 129.h,
-            aspectRatio: 166.w / 129.h,
-            viewportFraction: 0.43,
-            autoPlay: false,
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
+            autoPlay: true,
           ),
           items: spots.map((s) {
             return Builder(builder: (BuildContext context) {
               return Container(
-                height: 129.h,
-                width: 166.w,
-                margin: EdgeInsets.only(right: 10.w),
+                margin: EdgeInsets.symmetric(vertical: 5.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   boxShadow: [
@@ -80,26 +77,26 @@ class SpotSlider extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(5.w),
+                        padding: EdgeInsets.all(8.w),
                         width: double.infinity,
-                        height: 47.h,
+                        height: 80.h,
                         color: Colors.white,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "스타벅스 경북대북문점",
                               style: TextStyle(
-                                fontSize: 10.sp,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             Text(
                               "220m | 산격동 1399-1",
                               style: TextStyle(
-                                fontSize: 8.sp,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ],

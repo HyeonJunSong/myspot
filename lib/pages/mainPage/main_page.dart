@@ -21,6 +21,7 @@ class MainPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(20.w),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   /* spot 등록 및 검색으로 이동 */
                   Column(
@@ -30,7 +31,6 @@ class MainPage extends StatelessWidget {
                       buildSearchSpotButton(),
                     ],
                   ),
-                  SizedBox(height: 25.h),
                   /* 내주변 인기 spot */
                   buildPopularSpot(),
                 ],

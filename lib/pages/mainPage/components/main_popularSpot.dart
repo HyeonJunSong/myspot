@@ -29,12 +29,6 @@ Widget buildPopularSpot() {
             tag: '#Spot 100회 이상',
             tagColors: const [Color(0xFF3763FF), Color(0xFFFF5CE5)],
           ),
-          SizedBox(height: 18.h),
-          SpotSlider(
-            spots: List.filled(4, Spot()),
-            tag: '#현 위치에서 500m 이내',
-            tagColors: const [Color(0xFF9BDB49), Color(0xFFFF5858)],
-          ),
         ],
       ),
     ],
