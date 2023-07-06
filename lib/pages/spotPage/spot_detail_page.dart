@@ -23,14 +23,16 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
     return Obx(() => Scaffold(
       // backgroundColor: Colors.white,
       appBar: buildAppbar(Get.find<SearchPageViewController>().selectedSpot.value.placeName),
-      body: Column(
-        children: [
-          _spotSection(),
-          SizedBox(height: 20.h),
-          Get.find<SearchPageViewController>().selectedTab.value == 0
-          ? _reviewList()
-          : _miniMap(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _spotSection(),
+            SizedBox(height: 20.h),
+            Get.find<SearchPageViewController>().selectedTab.value == 0
+            ? _reviewList()
+            : _miniMap(),
+          ],
+        ),
       ),
     ));
   }
@@ -217,7 +219,7 @@ Widget _miniMap(){
     child: ClipRRect(
       borderRadius: BorderRadius.circular(20.r),
       child: NaverMap(
-        onMapReady: Get.find<SearchPageViewController>().onMapReady,
+        onMapReady: Get.find<SearchPageViewController>().onMiniMapReady,
         options: NaverMapViewOptions(
           mapType: NMapType.basic,
           initialCameraPosition: NCameraPosition(
