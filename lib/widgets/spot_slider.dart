@@ -44,11 +44,11 @@ class SpotSlider extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 13.h),
+        SizedBox(height: 15.h),
         /* spot 슬라이드뷰 */
         CarouselSlider(
           options: CarouselOptions(
-            aspectRatio: 2.0,
+            aspectRatio: 1.5,
             enlargeCenterPage: true,
             autoPlay: true,
           ),

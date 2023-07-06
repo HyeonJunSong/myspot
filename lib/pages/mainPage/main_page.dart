@@ -33,6 +33,7 @@ class MainPage extends StatelessWidget {
                   ),
                   /* 내주변 인기 spot */
                   buildPopularSpot(),
+                  SizedBox(height: 3.h)
                 ],
               ),
             ),
