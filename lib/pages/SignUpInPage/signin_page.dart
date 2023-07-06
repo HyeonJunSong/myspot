@@ -111,61 +111,58 @@ Widget _submitButton(BuildContext context){
 }
 
 Widget _footer(){
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 25.w),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(
-          onPressed: () => Get.toNamed('/SignUp'),
-          child: Text(
-            '이메일 회원가입',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.black54,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Text(
-          '|',
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      TextButton(
+        onPressed: () => Get.toNamed('/SignUp'),
+        child: Text(
+          '이메일 회원가입',
           style: TextStyle(
             fontSize: 12.sp,
-            color: Colors.black45,
+            color: Colors.black54,
             fontWeight: FontWeight.w500,
           ),
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            '이메일 찾기',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.black54,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+      ),
+      Text(
+        '|',
+        style: TextStyle(
+          fontSize: 12.sp,
+          color: Colors.black45,
+          fontWeight: FontWeight.w500,
         ),
-        Text(
-          '|',
+      ),
+      TextButton(
+        onPressed: () {},
+        child: Text(
+          '이메일 찾기',
           style: TextStyle(
             fontSize: 12.sp,
-            color: Colors.black45,
+            color: Colors.black54,
             fontWeight: FontWeight.w500,
           ),
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            '비밀번호 찾기',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.black54,
-              fontWeight: FontWeight.w500,
-            ),
+      ),
+      Text(
+        '|',
+        style: TextStyle(
+          fontSize: 12.sp,
+          color: Colors.black45,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      TextButton(
+        onPressed: () {},
+        child: Text(
+          '비밀번호 찾기',
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: Colors.black54,
+            fontWeight: FontWeight.w500,
           ),
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
