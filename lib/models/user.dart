@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/api.dart';
+import 'package:myspot/services/secure_storage.dart';
 
 import '../utils/keyFiles.dart';
 
@@ -47,9 +48,15 @@ class User {
   }
 
   //////////////////////////////////////////////////////////////////////////////try auto login
-  // static Future<User> autoLogin() async {
-  //
-  // }
+  static Future<int> autoLogin() async {
+    String email = await storageReadEmail() ?? "";
+    String password = await storageReadPassword() ?? "";
+
+    if(email != "" && password != "") {
+      return signIn(email, password);
+    }
+    return 0;
+  }
 
   //////////////////////////////////////////////////////////////////////////////[POST] try signUP
   static Future<int> signUp({
@@ -151,6 +158,11 @@ class User {
           'userEmail': email,
         },
       );
+
+      if(response.statusCode == 200){
+        storageSaveEmail(email);
+        storageSavePassword(password);
+      }
 
       return response.statusCode;
     } on SocketException {
