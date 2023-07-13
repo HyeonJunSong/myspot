@@ -54,7 +54,7 @@ class MySpotApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'MySpot',
-            initialRoute: "/SignUpIn",
+            initialRoute: "/Main",
             initialBinding: BindingsBuilder(() {
               Get.put(UserController());
               Get.put(CityViewController());
