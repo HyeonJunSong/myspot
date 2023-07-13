@@ -173,23 +173,28 @@ class SearchPageViewController extends GetxController{
 
   //////////////////////////////////////////////////////////////////////////////search detail page
 
+  //mini map controller
+  late NaverMapController miniMapController;
+  void onMiniMapReady(NaverMapController controller) {
+    miniMapController = controller;
+    miniMapController.addOverlay(
+        NMarker(
+          id: selectedSpot.value.placeId,
+          position: selectedSpot.value.coor,
+          icon: NOverlayImage.fromAssetImage("assets/images/marker.png"),
+          size: Size(40.w, 40.h),
+          caption: NOverlayCaption(text: selectedSpot.value.placeName),
+        )
+    );
+  }
+
   //selected tab
   RxInt selectedTab = 0.obs;
   void changeSelectedTab(int newTab){
     selectedTab(newTab);
   }
-
-  void detailPageMapInit(){
-    mapController.clearOverlays();
-    mapController.addOverlay(
-      NMarker(
-        id: selectedSpot.value.placeId,
-        position: selectedSpot.value.coor,
-        icon: NOverlayImage.fromAssetImage("assets/images/marker.png"),
-        size: Size(40.w, 40.h),
-        caption: NOverlayCaption(text: selectedSpot.value.placeName),
-      )
-    );
+  void initSelectedTab(){
+    selectedTab(0);
   }
 
   //cur selected spot
@@ -218,7 +223,6 @@ class SearchPageViewController extends GetxController{
 
   //go to Search Page
   void goToSearchPage(){
-    detailPageMapInit();
     Get.toNamed(
         '/SpotDetail',
     );
