@@ -26,7 +26,8 @@ class SearchMapPage extends StatelessWidget {
       body: Stack(
         children: [
           _map(),
-          _drawer(context)
+          _drawer(context),
+          _categoryAndKeywordRow(),
         ],
       ),
     ));
@@ -41,6 +42,28 @@ class SearchMapPage extends StatelessWidget {
           target: Get.find<UserController>().curPosition.value,
           zoom: 16,
         ),
+      ),
+    ),
+  );
+
+  _categoryAndKeywordRow() => Positioned(
+    top: 110.h,
+    child: Container(
+      width: 390.w,
+      color: Colors.transparent,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Get.find<SearchPageViewController>().categoryInd.value != -1 ?
+        Row(
+          children: <Widget>[
+            SizedBox(width: 20.w,),
+            CategoryBlock.fromCategoryIndActivated(Get.find<SearchPageViewController>().categoryInd.value),
+          ]
+          + List.generate(
+            Get.find<SearchPageViewController>().keyWordIndList.length,
+            (index) => KeyWordBlock.fromKeyWordIndActivated(Get.find<SearchPageViewController>().keyWordIndList[index]),
+          )
+        ): Container(),
       ),
     ),
   );
@@ -66,8 +89,8 @@ class SearchMapPage extends StatelessWidget {
               child: Container(
                 child: Column(
                   children: [
-                    _searchBoxAndTags(context),
-                    Divider(thickness: 1.h,),
+                    // _searchBoxAndTags(context),
+                    // Divider(thickness: 1.h,),
                     _searchResultList(),
                   ],
                 ),
@@ -184,10 +207,10 @@ class SearchMapPage extends StatelessWidget {
         Wrap(
             children: List<Widget>.from(categoryList.map((category) =>
                 GestureDetector(
-                  child: categoryBlock(
-                      Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
-                      category.emoji,
-                      category.categoryName
+                  child: CategoryBlock(
+                    ifActivated: Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                    emoji: category.emoji,
+                    categoryName: category.categoryName,
                   ),
                   onTapUp: (value){
                     Get.find<SearchPageViewController>().categoryChange(categoryList.indexOf(category));
@@ -213,10 +236,10 @@ class SearchMapPage extends StatelessWidget {
         Get.find<SearchPageViewController>().categoryInd.value == -1 ? Container() : Wrap(
             children: List<Widget>.from(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].map((keyWord) =>
                 GestureDetector(
-                  child: keyWordBlock(
-                      Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
-                      keyWord.emoji,
-                      keyWord.keyWordName
+                  child: KeyWordBlock(
+                      ifActivated: Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
+                      emoji: keyWord.emoji,
+                      keyWordName: keyWord.keyWordName
                   ),
                   onTapUp: (value){
                     Get.find<SearchPageViewController>().keyWordChange(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord));
