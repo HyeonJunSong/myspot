@@ -6,7 +6,12 @@ import 'package:myspot/viewModels/user_controller.dart';
 
 class SignUpInPageController extends GetxController{
 
-  //////////////////////////////////////////////////////////////////////////////SignUpInPage
+  //////////////////////////////////////////////////////////////////////////////try auto login
+  Future<int> autoLogin() async {
+    return await User.autoLogin();
+  }
+
+    //////////////////////////////////////////////////////////////////////////////SignUpInPage
   Future<bool> userKakaoLogin() async{
     User user = await kakaoLogin();
     if(user.email == null){

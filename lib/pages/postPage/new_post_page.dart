@@ -244,10 +244,10 @@ class _NewPostPageState extends State<NewPostPage> {
               Wrap(
                   children: List<Widget>.from(categoryList.map((category) =>
                       GestureDetector(
-                        child: categoryBlock(
-                            Get.find<PostPageViewController>().categoryInd.value == categoryList.indexOf(category),
-                            category.emoji,
-                            category.categoryName
+                        child: CategoryBlock(
+                          ifActivated: Get.find<PostPageViewController>().categoryInd.value == categoryList.indexOf(category),
+                          emoji: category.emoji,
+                          categoryName: category.categoryName
                         ),
                         onTapUp: (value){
                           Get.find<PostPageViewController>().categoryChange(categoryList.indexOf(category));
@@ -273,10 +273,10 @@ class _NewPostPageState extends State<NewPostPage> {
                 Wrap(
                     children: List<Widget>.from(keyWordList[Get.find<PostPageViewController>().categoryInd.value].map((keyWord) =>
                         GestureDetector(
-                          child: keyWordBlock(
-                              Get.find<PostPageViewController>().keyWordIndList.contains(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord)),
-                              keyWord.emoji,
-                              keyWord.keyWordName
+                          child: KeyWordBlock(
+                            ifActivated: Get.find<PostPageViewController>().keyWordIndList.contains(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord)),
+                            emoji: keyWord.emoji,
+                            keyWordName: keyWord.keyWordName
                           ),
                           onTapUp: (value){
                             Get.find<PostPageViewController>().keyWordChange(keyWordList[Get.find<PostPageViewController>().categoryInd.value].indexOf(keyWord));

@@ -5,9 +5,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/api.dart';
+import 'package:myspot/services/secure_storage.dart';
 
 import '../utils/keyFiles.dart';
 
@@ -43,6 +45,17 @@ class User {
   void printProperties() {
     debugPrint("email: $email\n");
     debugPrint("nickname: $nickname\n");
+  }
+
+  //////////////////////////////////////////////////////////////////////////////try auto login
+  static Future<int> autoLogin() async {
+    String email = await storageReadEmail() ?? "";
+    String password = await storageReadPassword() ?? "";
+
+    if(email != "" && password != "") {
+      return signIn(email, password);
+    }
+    return 0;
   }
 
   //////////////////////////////////////////////////////////////////////////////[POST] try signUP
@@ -146,6 +159,11 @@ class User {
         },
       );
 
+      if(response.statusCode == 200){
+        storageSaveEmail(email);
+        storageSavePassword(password);
+      }
+
       return response.statusCode;
     } on SocketException {
       apiResponse.apiError = ApiError(error: "서버 오류입니다.\n 다시 시도해주세요.");
@@ -188,9 +206,9 @@ class User {
     List<dynamic>.from(result["mySpotReviewList"]).forEach((element) {
       reviewList.add(
         Review(
-          photo: element["photo"] == null ? [] : List<String>.from(element["photo"]),
+          photo: (element["spot_Photo"] == null || element["spot_Photo"][0] == "") ? [] : List<String>.from(element["spot_Photo"]),
           comment: element["comment"],
-          reviewedDate: element["reviewDate"],
+          reviewedDate: element["reviewDate"] != null ? DateFormat("yyyy.MM.dd HH:mm").format(DateTime.parse(element["reviewDate"])).toString() : "",
         )
       );
     });

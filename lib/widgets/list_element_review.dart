@@ -52,7 +52,7 @@ Widget listElementReview(Review post){
                     color: Color(0xFF737373),
                     fontSize: 12.sp
                 ),),
-                Text("2023.02.03. 14:30", style: TextStyle(
+                Text(post.reviewedDate, style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Color(0xFF737373),
                     fontSize: 12.sp
