@@ -73,8 +73,6 @@ class SearchPageViewController extends GetxController{
 
     mapController.addOverlayAll(
         Set<NMarker>.from(spotList.map((e) {
-          print(e.placeId);
-          print(e.coor);
           NMarker newMarker = NMarker(
             id: e.placeId,
             position: e.coor,
@@ -119,7 +117,7 @@ class SearchPageViewController extends GetxController{
   }
 
   //drawer
-  RxDouble drawer_topSpace = drawer_bottom.h.obs;
+  RxDouble drawer_topSpace = drawer_mid.h.obs;
 
   void updateDrawerTopSpace(double newVal) {
     drawer_topSpace(newVal);

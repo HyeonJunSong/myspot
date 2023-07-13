@@ -93,7 +93,6 @@ Future<bool> POSTnewReview(Review review) async {
       // "spotTag" : review.spotTag.toString()
     });
 
-    print("image path --> " + review.photo[0]);
     request.files.add(
       await http.MultipartFile.fromPath(
         'spotImg',
@@ -102,7 +101,6 @@ Future<bool> POSTnewReview(Review review) async {
       )
     );
 
-    print("ready to send");
     var response = await request.send();
     print(await response.stream.bytesToString());
     switch(response.statusCode){
