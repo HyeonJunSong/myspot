@@ -13,31 +13,33 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      body: Column(
-        children: <Widget>[
-          /*  배너: 위치 및 프로필 */
-          buildMainBanner(),
-          Expanded(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            /*  배너: 위치 및 프로필 */
+            buildMainBanner(),
+            Padding(
               padding: EdgeInsets.all(20.w),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   /* spot 등록 및 검색으로 이동 */
                   Column(
                     children: [
                       buildAddSpotButton(),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 11.h),
                       buildSearchSpotButton(),
                     ],
                   ),
-                  SizedBox(height: 25.h),
+                  SizedBox(height: 29.h,),
                   /* 내주변 인기 spot */
                   buildPopularSpot(),
+                  SizedBox(height: 3.h)
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

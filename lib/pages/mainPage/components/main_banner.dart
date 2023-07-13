@@ -8,7 +8,8 @@ import '../../../widgets/dialog_location_setting.dart';
 
 Widget buildMainBanner() {
   return Container(
-    height: 150.h,
+    height: 180.h,
+    // padding: EdgeInsets.only(top: 50.h),
     decoration: BoxDecoration(
       color: colorPrimary,
       borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
