@@ -47,20 +47,21 @@ class Review {
   static List<Review> ReviewListFromJSON(String json){
     List<Review> newReviewList = [];
     List<dynamic>.from(Map<String, dynamic>.from(jsonDecode(json))["data"]).forEach((element) {
+      print(element);
       newReviewList.add(
         Review(
           user_email: element["useremail"],
-          placeId: element["locationnum"].toString(),
+          placeId: element["location_num"].toString(),
           address: "",
           locationLongtitude: "",
           locationLatitude: "",
-          placeName: element["spot_name"],
-          category: element["spot_category"],
-          comment: element["spot_Comment"],
-          spotFolder: element["spot_Folder"],
+          placeName: element["spotName"],
+          category: element["spotcategory"],
+          comment: element["spotComment"],
+          spotFolder: element["spotFolder"],
           spotTag: const [],
-          reviewedDate: element["spot_date"] != null ? DateFormat("yyyy.MM.dd HH:mm").format(DateTime.parse(element["spot_date"])).toString() : "",
-          // photo: element["spot_Photo"] != null ? List<String>.from(List<dynamic>.from(jsonDecode(element["spot_Photo"]))) : [],
+          reviewedDate: element["spotDate"] != null ? DateFormat("yyyy.MM.dd HH:mm").format(DateTime.parse(element["spotDate"])).toString() : "",
+          photo: element["spotPhoto"][0] == "" ? [] : List<String>.from(element["spotPhoto"]),
         )
       );
     });
@@ -84,22 +85,21 @@ Future<bool> POSTnewReview(Review review) async {
       "locationLongitude": review.locationLongtitude.toString(),
       "locationLatitude": review.locationLatitude.toString(),
       "locationName": review.placeName,
-      "spotCategory": "",
-      // "spotCategory": review.category,
+      "spotCategory": review.category,
       "spotComment": review.comment,
-      "spotFolder": "",
-      // "spotFolder": review.spotFolder,
-      "spotTag" : "",
-      // "spotTag" : review.spotTag.toString()
+      "spotFolder": review.spotFolder,
+      "spotTag" : review.spotTag.join(","),
     });
 
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'spotImg',
-        review.photo[0],
-        // contentType: MediaType('image', 'jpg'),
-      )
-    );
+    if(review.photo.isNotEmpty) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'spotImg',
+          review.photo[0],
+          // contentType: MediaType('image', 'jpg'),
+        )
+      );
+    }
 
     var response = await request.send();
     print(await response.stream.bytesToString());

@@ -70,7 +70,8 @@ class PostPageViewController extends GetxController{
         locationLatitude: location.value.coor.latitude.toString(),
         placeName: location.value.placeName,
         comment: comment,
-        spotTag: [],
+        category: categoryList[categoryInd.value].categoryName,
+        spotTag: keyWordIndList.map((e) => keyWordList[categoryInd.value][e].keyWordName).toList(),
         photo: imagePathList,
       )
     );

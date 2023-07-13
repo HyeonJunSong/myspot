@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:myspot/models/review.dart';
 import 'package:myspot/models/spot.dart';
 import 'package:myspot/services/api.dart';
@@ -44,6 +45,11 @@ class User {
     debugPrint("email: $email\n");
     debugPrint("nickname: $nickname\n");
   }
+
+  //////////////////////////////////////////////////////////////////////////////try auto login
+  // static Future<User> autoLogin() async {
+  //
+  // }
 
   //////////////////////////////////////////////////////////////////////////////[POST] try signUP
   static Future<int> signUp({
@@ -188,9 +194,9 @@ class User {
     List<dynamic>.from(result["mySpotReviewList"]).forEach((element) {
       reviewList.add(
         Review(
-          photo: element["photo"] == null ? [] : List<String>.from(element["photo"]),
+          photo: (element["spot_Photo"] == null || element["spot_Photo"][0] == "") ? [] : List<String>.from(element["spot_Photo"]),
           comment: element["comment"],
-          reviewedDate: element["reviewDate"],
+          reviewedDate: element["reviewDate"] != null ? DateFormat("yyyy.MM.dd HH:mm").format(DateTime.parse(element["reviewDate"])).toString() : "",
         )
       );
     });
