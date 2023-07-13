@@ -110,10 +110,10 @@ _categoryBox() => Container(
       Wrap(
         children: List<Widget>.from(categoryList.map((category) =>
           GestureDetector(
-            child: categoryBlock(
-              Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
-                category.emoji,
-                category.categoryName
+            child: CategoryBlock(
+              ifActivated: Get.find<SearchPageViewController>().categoryInd.value == categoryList.indexOf(category),
+              emoji: category.emoji,
+              categoryName: category.categoryName
             ),
             onTapUp: (value){
               Get.find<SearchPageViewController>().categoryChange(categoryList.indexOf(category));
@@ -140,10 +140,10 @@ _keyWordBox() => Container(
       Wrap(
         children: List<Widget>.from(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].map((keyWord) =>
           GestureDetector(
-            child: keyWordBlock(
-              Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
-                keyWord.emoji,
-                keyWord.keyWordName
+            child: KeyWordBlock(
+              ifActivated: Get.find<SearchPageViewController>().keyWordIndList.contains(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord)),
+              emoji: keyWord.emoji,
+              keyWordName: keyWord.keyWordName
             ),
             onTapUp: (value){
               Get.find<SearchPageViewController>().keyWordChange(keyWordList[Get.find<SearchPageViewController>().categoryInd.value].indexOf(keyWord));
